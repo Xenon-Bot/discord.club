@@ -1,0 +1,9 @@
+.navbar-dropdown.dropdown-right {
+    left: calc(-100% + 4px);
+ }
+
+.popup {
+    bottom: 30px;
+    right: 30px;
+    position: fixed;
+}

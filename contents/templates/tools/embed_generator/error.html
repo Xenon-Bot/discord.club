@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <section class="hero">
+        <div class="hero-body">
+            <h1 class="title">Something went wrong ...</h1>
+            <h2 class="subtitle">{{ error }}</h2>
+        </div>
+    </section>
+</div>
+<script src="/static/send_back.js"></script>
+{% endblock content %}

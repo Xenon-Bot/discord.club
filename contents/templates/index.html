@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+{% block content %}
+{% set ns = namespace() %}
+<div class="hero is-primary is-medium">
+    <div class="hero-body has-text-centered">
+        <h1 class="title is-large has-text-weight-bold is-capitalized">Magic Bots</h1>
+        <h2 class="subtitle">Discord Bots and more</h2>
+        <div class="columns has-text-centered is-centered">
+            <div class="column is-half">
+                <a href="/discord" class="button is-info"><span class="icon is-small"><i class="fab fa-discord"></i></span><span>Join our Discord</span></a>
+                <a href="/donate" class="button is-success"><span class="icon is-small"><i class="fas fa-dollar-sign"></i></span><span>Support Us</span></a>
+            </div>
+        </div>
+        <br>
+    </div>
+</div>
+<div class="section">
+    <div class="container">
+        <br><br><br>
+        <div class="columns">
+            <div class="column is-two-thirds">
+                <div class="content">
+                    <h1>About</h1>
+                    <p>
+                        <strong>Magic Bots</strong> is a community based around bots. We provide support for bots created by our team and discord support in general.
+                        <br>
+                        We are trying to provide new bots & tools to make your discord experience better.
+                        <br>
+                        We are open for new ideas and suggestions and want to provide the best experience possible.
+                        <br><br>
+                        If you need help or want someone to talk to, feel free to join.
+                    </p>
+                </div>
+                <br><br>
+
+                <ins class="adsbygoogle"
+                     style="display:block; text-align:center;"
+                     data-ad-layout="in-article"
+                     data-ad-format="fluid"
+                     data-ad-client="ca-pub-6803521419893828"
+                     data-ad-slot="7259718471">
+                </ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+
+            </div>
+            <div class="column">
+                <iframe class="is-pulled-right is-hidden-mobile" src="https://discordapp.com/widget?id=410488579140354049&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="section has-background-white-ter">
+
+    <!-- Main Page - side -->
+    <ins class="adsbygoogle is-hidden-mobile is-pulled-right"
+         style="display:inline-block;width:160px;height:600px"
+         data-ad-client="ca-pub-6803521419893828"
+         data-ad-slot="4785598378">
+    </ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+
+    <div class="container">
+        <div class="has-text-centered">
+            <h1 class="title">Bots & Tools</h1>
+        </div>
+        <br><br>
+        <div class="columns">
+            {% set ns.bot_counter = 0 %}
+            {% for bot in app.bots %}
+                {% set ns.bot_counter = ns.bot_counter + 1 %}
+                {% if ns.bot_counter == 3 %}
+                    {% set ns.bot_counter = 1 %}
+                    </div>
+                    <div class="columns">
+                {% endif %}
+                <div class="column">
+                    <div class="media box">
+                        <figure class="media-left">
+                            <img class="image is-64x64" src="{{ bot.logo }}">
+                        </figure>
+                        <div class="media-content">
+                            <p>
+                                <strong>{{ bot.name }}</strong>
+                                <br>
+                                {{ bot.description }}
+                            </p>
+                        </div>
+                        <nav class="media-right level">
+                            <div class="level-left">
+                                {% for link in bot.links %}
+                                <div class="level-item">
+                                    <a href="{{ link.url }}" title="{{ link.title }}" class="icon is-small"><i class="{{ link.icon }}"></i></a>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <br><br><br><br><br><br><br><br><br>
+        <nav class="level box is-hidden-mobile">
+            <div class="level-item has-text-centered"><div>
+                <p class="heading">Servers</p>
+                <p class="title">6.6k</p>
+            </div>
+            </div>
+            <div class="level-item has-text-centered"><div>
+                <p class="heading">Users</p>
+                <p class="title">750k</p>
+            </div>
+            </div>
+            <div class="level-item has-text-centered"><div>
+                <p class="heading">Embeds Sent</p>
+                <p class="title">3.5k</p>
+            </div>
+            </div>
+            <div class="level-item has-text-centered"><div>
+                <p class="heading">Commands Used</p>
+                <p class="title">789</p>
+            </div>
+            </div>
+        </nav>
+    </div>
+</div>
+<div class="section">
+    <div class="container">
+        <div class="has-text-centered">
+            <h1 class="title">Feedback</h1>
+        </div>
+        <br><br>
+        <div class="columns">
+            {% set ns.fb_counter = 0 %}
+            {% for fb in app.feedback %}
+                {% set ns.fb_counter = ns.fb_counter + 1 %}
+                {% if ns.fb_counter == 4 %}
+                    {% set ns.fb_counter = 1 %}
+                    </div>
+                    <div class="columns">
+                {% endif %}
+                <div class="column">
+                    <div class="media">
+                        <div class="media box">
+                            <figure class="media-left">
+                                <img class="image is-64x64" src="{{ fb.avatar }}">
+                            </figure>
+                            <div class="media-content">
+                                <p>
+                                    <strong>{{ fb.user }}</strong><small>{{ fb.discri }}</small>
+                                    <br>
+                                    {{ fb.message }}
+                                </p>
+                            </div>
+                            <nav class="media-right level">
+                                <div class="level-left">
+                                    {% for link in fb.links %}
+                                    <div class="level-item">
+                                        <a href="{{ link.url }}" title="{{ link.title }}" class="icon is-small"><i class="{{ link.icon }}"></i></a>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="column is-hidden-desktop">
+                <!-- Main Page - Feedback -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-format="fluid"
+                     data-ad-layout-key="-fo-2j-4d-87+1fl"
+                     data-ad-client="ca-pub-6803521419893828"
+                     data-ad-slot="4382451300">
+                </ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

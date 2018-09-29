@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero is-medium has-text-centered" style="background: url('/static/error.gif');">
+    <div class="hero-body has-text-white">
+        <h1 style="font-size: 20vw;">{{ status }}</h1>
+        <h3 style="font-size: 2vw;">{{ message }}</h3>
+    </div>
+</div>
+{% endblock content %}

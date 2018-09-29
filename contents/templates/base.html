@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Discord bots, tools and more">
+    <meta name="keywords" content="Discord, Club, Discord Club, Discord Bots, Magic Bots, Magic, Bots, Embed Generator, Xenon, Discord Backups, Backups">
+    <meta name="author" content="Merlintor">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block title %}
+        <title>Magic Bots</title>
+    {% endblock title %}
+
+    <link type="text/css" rel="stylesheet" href="/static/bulma.css">
+    <link type="text/css" rel="stylesheet" href="/static/custom.css">
+    <link rel="shortcut icon" href="/static/favicon.ico"/>
+    <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-126203847-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-126203847-1');
+    </script>
+
+    {% block css %}
+    {% endblock css %}
+</head>
+<body class="has-navbar-fixed-top">
+{% include '/components/navbar.html' %}
+
+{% block content %}
+{% endblock content %}
+
+{% include '/components/footer.html' %}
+
+<script>
+function burgerMenu() {
+    var burger = document.getElementById("navbarBurger");
+    var menu = document.getElementById("navbarMenu");
+    burger.classList.toggle("is-active");
+    menu.classList.toggle("is-active");
+}
+
+</script>
+<!-- https://www.adblockanalytics.com/dashboard/ -->
+<script type="text/javascript">(function(){id='bwPd1L6KiN9u-qkExGmt7gisV';function l(u){var e=document.createElement('script');e.type='text/javascript';e.src='https://www.adblockanalytics.com/'+u;e.async=0;var x=document.getElementsByTagName('script')[0];x.parentNode.insertBefore(e,x);}l('ads.js');l('analyze.js');})();</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+[
+  {
+    "user": "Braintac",
+    "discri": "#8818",
+    "avatar": "https://cdn.discordapp.com/avatars/293022133347549184/04f9235668e518c5115d58bfa8e7e1e8.webp?size=64",
+    "links": [],
+    "message": "I just tried Xenon bot! and I swear it's the best bot I've ever came across so far! it's a bit sad for me that i found it too late! after i had an awful long time to setup my own server! but am happy i finally found it. late better than nothing. thanks for making Xenon Bot. and keep making some awesome bots like this plz."
+  },
+  {
+    "user": "Xastreh",
+    "discri": "#2525",
+    "avatar": "https://cdn.discordapp.com/avatars/269867791128068107/f00b7c0c8416df961a673b14f3172a98.png?size=64",
+    "links": [
+      {"icon": "fab fa-youtube", "url": "https://www.youtube.com/channel/UCycafmI2sIbbMKZTwxpBaAw", "title": "Youtube"},
+      {"icon": "fab fa-twitch", "url": "https://steamcommunity.com/id/xastreh/", "title": "Twitch"}
+    ],
+    "message": "The Embed Generator bot is really good. I love not having to go to a website that I usually go to that has the Discord rich embed JSON code and then having to send it through Postman. Such a hassle. This bot makes it ten times easier. Also for Xenon that's a really unique bot as well. The ability to copy MOST things from one server to another is fabulous."
+  },
+  {
+    "user": "buthed010203",
+    "discri": "#9405",
+    "avatar": "https://cdn.discordapp.com/avatars/244966266845134858/ceb6a70ceca1bdc2e8829c11f8855185.webp?size=64",
+    "links": [],
+    "message": "Xenon is amazing but I think it should be able to escape special mentions such as roles and @everyone when loading messages as it can cause you to be pinged a bunch (maybe also add an option to escape all mentions as well as they get spammy)."
+  },
+  {
+    "user": "snowy",
+    "discri": "#9439",
+    "avatar": "https://cdn.discordapp.com/avatars/194510483536085003/b26c83f739c997586dd80bb9c714acd8.webp?size=2048",
+    "links": [],
+    "message": "I have been using Xenon for a bit now and I love it, though I got some suggestions. It seems to backup the text channel permissions but not the voice channel one's. It also doesn't seem to copy the afk and welcome channels. (don't know if it's possible) Thank you so much for making Xenon, cheers."
+  },
+  {
+    "user": "andrexyy",
+    "discri": "#0666",
+    "avatar": "https://cdn.discordapp.com/avatars/372114640773054474/a_749ee9ffb4a355c92c96eb92dc3cf32a.png?size=64",
+    "links": [],
+    "message": "100/10 Useful, simple & awesome bots! Good job Merlin!"
+  },
+  {
+    "user": "Lance",
+    "discri": "#2150",
+    "avatar": "https://cdn.discordapp.com/avatars/473378394298384385/3c20d202c89de537f3c624d27923609d.webp?size=2048",
+    "links": [],
+    "message": "I have been around discord for quiet some time. What i think your doing here with Xenon and Embed Generator is amazing. Though i don't believe people should be able to just jumb on your server and grab a template, you could offer them as a sort of reward system. Though that in its self makes your job that much harder. Overall great bots though the embed generator in my own opinion needs a bit of updating."
+  }
+]
