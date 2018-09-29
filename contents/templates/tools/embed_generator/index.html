@@ -16,7 +16,7 @@
     <div class="container">
         <h1 class="title has-text-centered">Embed Generator</h1>
         <br><br>
-        <form action="/tools/embed-generator/process" method="post" id="form" class="section box" onchange="updatePreviews();" oninput="updateJson();">
+        <form action="/tools/embed-generator/process" method="post" id="form" class="section box" onchange="updatePreviews(); updateJson();" oninput="updateJson();">
             <!-- Webhook Setting -->
             <div class="field">
                 <label class="label">Webhook</label>
