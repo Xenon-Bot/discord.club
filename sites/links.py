@@ -10,7 +10,7 @@ async def discord(request):
 
 @routes.get("/git")
 async def git(request):
-    raise web.HTTPFound("https://gitlab.com/magicbots")
+    raise web.HTTPFound("https://github.com/Magic-Bots")
 
 @routes.get("/donate")
 async def donate(request):
