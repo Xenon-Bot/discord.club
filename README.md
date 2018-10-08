@@ -37,7 +37,7 @@ These are steps to host this website yourself.
   - Save the file
   
 - Open the cmd, navigate in the directory of the website and run the following commands:
-  - `python -m pip install requirements.txt`
+  - `python -m pip install -r requirements.txt`
   
 - Run the web.py file with the `python web.py` command.
 
