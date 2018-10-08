@@ -19,8 +19,9 @@ The secrets.py file mentioned in [web.py](https://github.com/Merlintor/Discord.c
 
 - embed_log -> webhook url for the embed log 
 
-## Hosting (windows)
+## Hosting
 
+## Windows
 These are steps to host this website yourself.
 
 - Install [Python](https://www.python.org/downloads/) 3.6 or higher (including pip)
@@ -40,3 +41,6 @@ These are steps to host this website yourself.
   - `python -m pip install requirements.txt`
   
 - Run the web.py file with the `python web.py` command.
+
+## Linux & Mac
+Should be easy to adapt from the windows guide.
