@@ -31,7 +31,7 @@ These are steps to host this website yourself.
 - Navigate to the extracted folder and add a file called `secrets.py` and put in the following lines. (Replace <webhook_url> with a valid discord webhook url)
   - `embed_log = "<webhook_url>"`
   
-- If you don't have a seperate server (e.g. nginx):
+- If you don't have a seperate server (e.g. nginx) to host the static files:
   - Open the web.py file
   - Uncomment line 31 (remove the `#`)
   - Save the file
