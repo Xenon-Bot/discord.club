@@ -21,7 +21,7 @@ The secrets.py file mentioned in [web.py](https://github.com/Merlintor/Discord.c
 
 ## Hosting
 
-## Windows
+### Windows
 These are steps to host this website yourself.
 
 - Install [Python](https://www.python.org/downloads/) 3.6 or higher (including pip)
@@ -42,5 +42,5 @@ These are steps to host this website yourself.
   
 - Run the web.py file with the `python web.py` command.
 
-## Linux & Mac
+### Linux & Mac
 Should be easy to adapt from the windows guide.
