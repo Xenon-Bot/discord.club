@@ -29,7 +29,7 @@ These are steps to host this website yourself.
 - Clone this repository or download it as a zip and extract it
 
 - Navigate to the extracted folder and add a file called `secrets.py` and put in the following lines. (Replace <webhook_url> with a valid discord webhook url)
-  - `embed_log = <webhook_url>`
+  - `embed_log = "<webhook_url>"`
   
 - If you don't have a seperate server (e.g. nginx):
   - Open the web.py file
