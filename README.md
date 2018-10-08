@@ -23,7 +23,7 @@ The secrets.py file mentioned in [web.py](https://github.com/Merlintor/Discord.c
 
 These are steps to host this website yourself.
 
-- Install Python 3.6 or higher (including pip)
+- Install [Python](https://www.python.org/downloads/) 3.6 or higher (including pip)
   - Be sure to select "customize installation" and select "Add Python to evironment variables"
   
 - Clone this repository or download it as a zip and extract it
