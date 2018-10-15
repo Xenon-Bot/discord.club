@@ -2,6 +2,7 @@ from aiohttp import web
 import aiohttp_jinja2 as jinja2
 import discord
 import json
+import aioauth_client
 
 routes = web.RouteTableDef()
 base = "/tools/embed-generator"
@@ -26,7 +27,18 @@ async def index_slash(request):
 
 @routes.get(base)
 async def index(request):
-    return jinja2.render_template("/tools/embed_generator/index.html", request, {})
+    context = {}
+    if request.query.get("code") is not None:
+        try:
+            oauth_client = aioauth_client.DiscordClient(client_id=410138706490425344,
+                                                        client_secret="fzWI5PQ_381Nr5hp486KR_MjdcVd-1yV")
+            token, data = await oauth_client.get_access_token(code=request.query.get("code"),
+                                                              redirect_uri="http://localhost:8081/tools/embed-generator")
+            context["webhook"] = "/".join(data["webhook"]["url"].split("/")[-2:])
+        except:
+            pass
+
+    return jinja2.render_template("/tools/embed_generator/index.html", request, context)
 
 
 @routes.post(base + "/process")
