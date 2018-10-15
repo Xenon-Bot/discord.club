@@ -33,7 +33,7 @@ async def index(request):
             oauth_client = aioauth_client.DiscordClient(client_id=410138706490425344,
                                                         client_secret="fzWI5PQ_381Nr5hp486KR_MjdcVd-1yV")
             token, data = await oauth_client.get_access_token(code=request.query.get("code"),
-                                                              redirect_uri="http://localhost:8081/tools/embed-generator")
+                                                              redirect_uri="https://discord.club/tools/embed-generator")
             context["webhook"] = "/".join(data["webhook"]["url"].split("/")[-2:])
         except:
             pass
