@@ -29,8 +29,7 @@ These are steps to host this website yourself.
   
 - Clone this repository or download it as a zip and extract it
 
-- Navigate to the extracted folder and add a file called `secrets.py` and put in the following lines. (Replace <webhook_url> with a valid discord webhook url)
-  - `embed_log = "<webhook_url>"`
+- Navigate to the extracted folder and rename the file called `secrets.example.py` to `secrets.py`and change the values of the variables.
   
 - If you don't have a seperate server (e.g. nginx) to host the static files:
   - Open the web.py file
@@ -38,7 +37,7 @@ These are steps to host this website yourself.
   - Save the file
   
 - Open the cmd, navigate in the directory of the website and run the following commands:
-  - `python -m pip install requirements.txt`
+  - `python -m pip install -r requirements.txt`
   
 - Run the web.py file with the `python web.py` command.
 
