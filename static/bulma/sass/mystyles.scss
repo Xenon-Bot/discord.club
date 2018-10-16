@@ -1,0 +1,10 @@
+@charset "utf-8";
+
+$blue: #7289DA;
+$primary: $blue;
+$grey-light: #99AAB5;
+$grey-dark: #2C2F33;
+$black: #23272A;
+$text: $black;
+
+@import "../bulma-0.7.2/bulma.sass";
