@@ -18,6 +18,7 @@ The static files are separately hosted on nginx, by default. If you want aiohttp
 The secrets.py file mentioned in [web.py](https://github.com/Merlintor/Discord.club/edit/master/web.py#L6) contains:
 
 - embed_log -> webhook url for the embed log 
+- client_secret -> The client-secret of the bot you want to use for oauth (you oviously also need to change the id and redirect in the specific files)
 
 ## Hosting
 

@@ -3,6 +3,7 @@ import aiohttp_jinja2 as jinja2
 import discord
 import json
 import aioauth_client
+import secrets
 
 routes = web.RouteTableDef()
 base = "/tools/embed-generator"
@@ -31,7 +32,7 @@ async def index(request):
     if request.query.get("code") is not None:
         try:
             oauth_client = aioauth_client.DiscordClient(client_id=410138706490425344,
-                                                        client_secret="fzWI5PQ_381Nr5hp486KR_MjdcVd-1yV")
+                                                        client_secret=secrets.client_secret)
             token, data = await oauth_client.get_access_token(code=request.query.get("code"),
                                                               redirect_uri="https://discord.club/tools/embed-generator")
             context["webhook"] = "/".join(data["webhook"]["url"].split("/")[-2:])
