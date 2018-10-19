@@ -2,14 +2,16 @@ var field_count = 0;
 var form = document.forms["form"];
 
 function VBColorToHEX(i) {
-    var bbggrr =  ("000000" + i.toString(16)).slice(-6);
-    var rrggbb = bbggrr.substr(4, 2) + bbggrr.substr(2, 2) + bbggrr.substr(0, 2);
-    return "#" + rrggbb;
+    var ret = "#000000";
+    var rrggbb = i.toString(16);
+    return ret.substring(0,7 - rrggbb.length) + rrggbb;
 }
 
 function HEXToVBColor(rrggbb) {
-    var bbggrr = rrggbb.substr(4, 2) + rrggbb.substr(2, 2) + rrggbb.substr(0, 2);
-    return parseInt(bbggrr, 16);
+    if (rrggbb.startsWith("#")) {
+        rrggbb = rrggbb.substring(1);
+    }
+    return parseInt(rrggbb, 16);
 }
 
 function updatePreviews() {
