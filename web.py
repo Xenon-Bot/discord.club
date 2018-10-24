@@ -4,11 +4,11 @@ import os
 import json
 
 import secrets
-from sites import index, links, docs, errors
+from sites import index, links, docs, errors, legal
 from sites.tools import embed_generator
 
 
-startup_sites = [index, links, docs, embed_generator, errors]
+startup_sites = [index, links, docs, embed_generator, errors, legal]
 
 
 async def prepare(app):
