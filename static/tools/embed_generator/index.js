@@ -85,6 +85,45 @@ function removeFields() {
 }
 
 function updateJson() {
+    var json = {};
+    function setKey(path, value) {
+        if (value == "" || value === undefined) {
+            return;
+        }
+
+        var schema = json;  // a moving reference to internal objects within obj
+        var pList = path.split('.');
+        var len = pList.length;
+        for(var i = 0; i < len-1; i++) {
+            var elem = pList[i];
+            if( !schema[elem] ) schema[elem] = {}
+            schema = schema[elem];
+        }
+
+        schema[pList[len-1]] = value;
+    }
+
+
+    var keys = {
+        "content": "content",
+        "embed.title": "title",
+        "embed.description": "description",
+        "embed.url": "url",
+        "embed.thumbnail.url": "thumbnail",
+        "embed.image.url": "image",
+        "embed.author.name": "author_name",
+        "embed.author.url": "author_url",
+        "embed.author.icon_url": "author_icon",
+        "embed.footer.text": "footer_text",
+        "embed.footer.icon_url": "footer_icon"
+    };
+
+    for (key in keys) {
+        setKey(key, form.elements[keys[key]].value);
+    }
+
+    setKey("embed.color", HEXToVBColor(form.elements["color"].value));
+
     var fields = [];
     for (i = 0; i < field_count; i++) {
         fields.push({
@@ -93,37 +132,14 @@ function updateJson() {
             "inline": document.getElementsByName("field_" + i.toString() + "_inline")[0].checked,
         });
     }
-    var json = {
-        "content": form.elements["content"].value,
-        "embed": {
-            "title": form.elements["title"].value,
-            "description": form.elements["description"].value,
-            "url": form.elements["url"].value,
-            "color": HEXToVBColor(form.elements["color"].value),
-            "fields": fields,
-            "thumbnail": {
-                "url": form.elements["thumbnail"].value
-            },
-            "image": {
-                "url": form.elements["image"].value
-            },
-            "author": {
-                "name": form.elements["author_name"].value,
-                "url": form.elements["author_url"].value,
-                "icon_url": form.elements["author_icon"].value
-            },
-            "footer": {
-                "text": form.elements["footer_text"].value,
-                "icon_url": form.elements["footer_icon"].value
-            }
-        }
-    };
+    setKey("embed.fields", fields);
 
     document.forms["json_form"].elements["json"].value = JSON.stringify(json);
 }
 
 function updateForm() {
     var object = JSON.parse(document.forms["json_form"].elements["json"].value);
+
     function getValue(...names) {
         var value = object;
         for (var i in names) {
