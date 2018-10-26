@@ -124,20 +124,31 @@ function updateJson() {
 
 function updateForm() {
     var object = JSON.parse(document.forms["json_form"].elements["json"].value);
-    form.elements["content"].value = object.content;
-    form.elements["title"].value = object.embed.title;
-    form.elements["description"].value = object.embed.description;
-    form.elements["url"].value = object.embed.url;
-    form.elements["color"].value = VBColorToHEX(object.embed.color);
-    form.elements["thumbnail"].value = object.embed.thumbnail.url;
-    form.elements["image"].value = object.embed.image.url;
-    form.elements["author_name"].value = object.embed.author.name;
-    form.elements["author_url"].value = object.embed.author.url;
-    form.elements["author_icon"].value = object.embed.author.icon_url;
-    form.elements["footer_text"].value = object.embed.footer.text;
-    form.elements["footer_icon"].value = object.embed.footer.icon_url;
+    function getValue(...names) {
+        var value = object;
+        for (var i in names) {
+            value = value[names[i]];
+            if (value === undefined) {
+                return "";
+            }
+        }
+        return value;
+    }
+
+    form.elements["content"].value = getValue("content");
+    form.elements["title"].value = getValue("embed", "title");
+    form.elements["description"].value = getValue("embed", "description");
+    form.elements["url"].value = getValue("embed", "url");
+    form.elements["color"].value = VBColorToHEX(getValue("embed", "color"));
+    form.elements["thumbnail"].value = getValue("embed", "thumbnail", "url");
+    form.elements["image"].value = getValue("embed", "image", "url")
+    form.elements["author_name"].value = getValue("embed", "author", "name");
+    form.elements["author_url"].value = getValue("embed", "author", "url");
+    form.elements["author_icon"].value = getValue("embed", "author", "icon_url");
+    form.elements["footer_text"].value = getValue("embed", "footer", "text");
+    form.elements["footer_icon"].value = getValue("embed", "footer", "icon_url");
     removeFields();
-    for (i in object.embed.fields) {
+    for (var i in getValue("embed", "fields")) {
         addField();
         field = object.embed.fields[i];
         form.elements["field_" + i.toString() + "_name"].value = field.name;
