@@ -62,6 +62,7 @@
                 <label class="label">Unembedded</label>
                 <div class="field-body">
                     <div class="field">
+                        {% include '/components/markdown_edit.html' %}
                         <div class="control">
                             <textarea name="content" class="textarea" placeholder="What a cool message!"></textarea>
                         </div>
@@ -89,6 +90,7 @@
             <div class="field">
                 <div class="field-body">
                     <div class="field">
+                        {% include '/components/markdown_edit.html' %}
                         <div class="control">
                             <textarea name="description" class="textarea" placeholder="Description"></textarea>
                         </div>
@@ -238,6 +240,7 @@
             </div>
         </form>
         <script src="/static/tools/embed_generator/index.js"></script>
+        <script src="/static/tools/markdown_edit.js"></script>
     </div>
 </div>
 <div style="display: none;" id="adblockPopup">{% include '/components/adblock_popup.html' %}</div>
