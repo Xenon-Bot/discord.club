@@ -22,7 +22,7 @@ async def xenon(request):
 
 @routes.get("/invite/embed-generator")
 async def embed_generator(request):
-    raise web.HTTPFound("https://discordapp.com/api/oauth2/authorize?client_id=410138706490425344&permissions=536882176&redirect_uri=http%3A%2F%2Fwww.embed-generator.com%2Findex.php&scope=bot")
+    raise web.HTTPFound("https://discordapp.com/api/oauth2/authorize?client_id=410138706490425344&permissions=0&redirect_uri=https%3A%2F%2Fdiscord.club%2Ftools%2Fembed-generator&response_type=code&scope=bot%20messages.read")
 
 
 async def setup(application):
