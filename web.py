@@ -1,5 +1,6 @@
 from aiohttp import web, ClientSession
-import aiohttp_jinja2, jinja2
+import aiohttp_jinja2
+import jinja2
 import os
 import json
 
@@ -28,6 +29,9 @@ async def prepare(app):
 
 app = web.Application()
 app.on_startup.append(prepare)
-#app.router.add_static('/static', "./static")
-aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader("./contents/templates"))
+# app.router.add_static('/static', "./static")
+aiohttp_jinja2.setup(
+    app,
+    loader=jinja2.FileSystemLoader("./contents/templates")
+)
 web.run_app(app, port=8081)
