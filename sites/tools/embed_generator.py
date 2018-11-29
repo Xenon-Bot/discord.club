@@ -1,7 +1,6 @@
 from aiohttp import web
 import aiohttp_jinja2 as jinja2
 import discord
-import json
 import aioauth_client
 import secrets
 
@@ -13,7 +12,9 @@ app = None
 def HTMLColorToRGB(colorstring):
     """ convert #RRGGBB to an (R, G, B) tuple """
     colorstring = colorstring.strip()
-    if colorstring[0] == '#': colorstring = colorstring[1:]
+    if colorstring[0] == '#':
+        colorstring = colorstring[1:]
+
     if len(colorstring) != 6:
         raise ValueError("input #%s is not in #RRGGBB format" % colorstring)
     r, g, b = colorstring[:2], colorstring[2:4], colorstring[4:]
@@ -80,6 +81,10 @@ async def process(request):
     raw_embed = embed.to_dict()
     raw_embed.update(embed_data)
     embed = discord.Embed.from_data(raw_embed)
+    if embed.description == "" and embed.title == "" and embed.author.name == "" and \
+            len(embed.fields) == 0 and embed.thumbnail.url == "" and \
+            embed.image.url == "" and embed.footer.text == "":
+        embed = None
 
     try:
         adapter = discord.AsyncWebhookAdapter(app["http_session"])
