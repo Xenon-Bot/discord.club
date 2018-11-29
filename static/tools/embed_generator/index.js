@@ -4,7 +4,7 @@ var form = document.forms["form"];
 function VBColorToHEX(i) {
     var ret = "#000000";
     var rrggbb = i.toString(16);
-    return ret.substring(0,7 - rrggbb.length) + rrggbb;
+    return ret.substring(0, 7 - rrggbb.length) + rrggbb;
 }
 
 function HEXToVBColor(rrggbb) {
@@ -27,7 +27,7 @@ function evaluateWebhookUrl() {
     var input = element.value;
     if (input.startsWith("https://discordapp.com/api/webhooks/")) {
         var segments = input.split("/");
-        element.value = segments[segments.length-2] + "/" + segments[segments.length-1];
+        element.value = segments[segments.length - 2] + "/" + segments[segments.length - 1];
     }
 }
 
@@ -86,21 +86,22 @@ function removeFields() {
 
 function updateJson() {
     var json = {};
+
     function setKey(path, value) {
         if (value == "" || value === undefined) {
             return;
         }
 
-        var schema = json;  // a moving reference to internal objects within obj
+        var schema = json; // a moving reference to internal objects within obj
         var pList = path.split('.');
         var len = pList.length;
-        for(var i = 0; i < len-1; i++) {
+        for (var i = 0; i < len - 1; i++) {
             var elem = pList[i];
-            if( !schema[elem] ) schema[elem] = {}
+            if (!schema[elem]) schema[elem] = {}
             schema = schema[elem];
         }
 
-        schema[pList[len-1]] = value;
+        schema[pList[len - 1]] = value;
     }
 
 
@@ -163,6 +164,7 @@ function updateForm() {
     form.elements["author_icon"].value = getValue("embed", "author", "icon_url");
     form.elements["footer_text"].value = getValue("embed", "footer", "text");
     form.elements["footer_icon"].value = getValue("embed", "footer", "icon_url");
+
     removeFields();
     for (var i in getValue("embed", "fields")) {
         addField();
@@ -175,7 +177,12 @@ function updateForm() {
 
 document.addEventListener("DOMContentLoaded", function(event) {
     if (document.forms["json_form"].elements["json"].value == "") {
-        updateJson();
+        if (window.location.hash != "") {
+            document.forms["json_form"].elements["json"].value = decodeURIComponent(window.location.hash.substring(1));
+            updateForm();
+        } else {
+            updateJson();
+        }
     } else {
         updateForm();
     }
