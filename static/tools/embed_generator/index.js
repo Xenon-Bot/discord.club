@@ -164,11 +164,7 @@ function updateForm() {
     form.elements["author_icon"].value = getValue("embed", "author", "icon_url");
     form.elements["footer_text"].value = getValue("embed", "footer", "text");
     form.elements["footer_icon"].value = getValue("embed", "footer", "icon_url");
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> c8d60aa84caacd7a3a86524cebd2a9be3b9f1e54
     removeFields();
     for (var i in getValue("embed", "fields")) {
         addField();
@@ -181,10 +177,6 @@ function updateForm() {
 
 document.addEventListener("DOMContentLoaded", function(event) {
     if (document.forms["json_form"].elements["json"].value == "") {
-<<<<<<< HEAD
-=======
-        console.log(window.location.hash);
->>>>>>> c8d60aa84caacd7a3a86524cebd2a9be3b9f1e54
         if (window.location.hash != "") {
             document.forms["json_form"].elements["json"].value = decodeURIComponent(window.location.hash.substring(1));
             updateForm();
