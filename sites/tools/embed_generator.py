@@ -60,6 +60,7 @@ async def process(request):
         "title": content["title"],
         "description": content["description"],
         "url": content["url"],
+        "timestamp": content["timestamp"],
         "footer": {
             "text": content["footer_text"],
             "icon_url": content["footer_icon"]
