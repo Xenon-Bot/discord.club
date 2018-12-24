@@ -178,9 +178,14 @@
                     </div>
                     <div class="field">
                         <div class="field-body">
-                            <div class="field">
+                            <div class="field  has-addons">
                                 <div class="control is-expanded">
-                                    <input name="timestamp" class="input" type="datetime-local" step="1">
+                                    <input name="timestamp" class="input" type="datetime-local" step="0.001">
+                                </div>
+                                <div class="control is-hidden-mobile">
+                                    <button type="button" class="button" onclick="$('input[name=\'timestamp\']')[0].valueAsNumber = new Date().getTime();">
+                                        Now
+                                    </button>
                                 </div>
                             </div>
                         </div>
