@@ -116,7 +116,8 @@ function updateJson() {
         "embed.author.url": "author_url",
         "embed.author.icon_url": "author_icon",
         "embed.footer.text": "footer_text",
-        "embed.footer.icon_url": "footer_icon"
+        "embed.footer.icon_url": "footer_icon",
+        "embed.timestamp": "timestamp"
     };
 
     for (key in keys) {
@@ -164,6 +165,8 @@ function updateForm() {
     form.elements["author_icon"].value = getValue("embed", "author", "icon_url");
     form.elements["footer_text"].value = getValue("embed", "footer", "text");
     form.elements["footer_icon"].value = getValue("embed", "footer", "icon_url");
+    var timestamp = getValue("embed", "timestamp");
+    form.elements["timestamp"].value = timestamp.substring(0, timestamp.length - 1);
 
     removeFields();
     for (var i in getValue("embed", "fields")) {
