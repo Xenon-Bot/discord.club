@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <section id="about">
+        <div class="jumbotron my-0 bg-light">
+            <br><br><br><br><br>
+            <div class="container">
+                <h1 class="display-4">Magic Bots</h1>
+                <p class="lead">Useful bots and services for discord</p>
+                <hr class="my-4">
+                <p class="lead">
+                    <a class="btn btn-primary btn-md" href="/discord" role="button"><i class="fab fa-discord pr-1"></i>
+                        Join Our Discord</a>
+                    <a class="btn btn-success btn-md" href="/donate" role="button"><i
+                            class="fas fa-money-bill-wave pr-1"></i> Support Us</a>
+                </p>
+            </div>
+            <br><br><br><br><br>
+        </div>
+    </section>
+
+    <section id="services" class="bg-dark text-white-50">
+        <div id="divider1"></div>
+        <div id="serviceCarousel" class="carousel slide" data-ride="carousel" data-interval="20000" data-pause="hover">
+            <div class="carousel-inner">
+                {% for service in services %}
+                    {% if service.display_front %}
+                        <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %} py-5" style="height: 75vh; overflow-y: hidden;">
+                            <div class="container">
+                                <h1 class="display-1 text-center">{{ service.name }}</h1>
+                                <hr>
+                                <div class="float-right">
+                                    {% for link in service.link %}
+                                        <a href="{{ link.url }}" class="btn btn-primary">{{ link.name }}</a>
+                                    {% endfor %}
+                                </div>
+                                <div class="row py-5">
+                                    <div class="col-12 col-md-4">
+                                        <ul class="py-5">
+                                            {% for line in service.bullet_points.splitlines %}
+                                                <li class="py-2">{{ line }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <img src="{% static 'home/img/'|add:service.image_name %}" alt="{{ service.name }}" class="img-fluid">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <a class="carousel-control-prev" href="#serviceCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#serviceCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+        <div id="divider2"></div>
+    </section>
+
+    <section id="feedback">
+        <br><br><br><br><br>
+        <div class="container">
+            <h1 class="display-3">Feedback</h1>
+            <hr class="my-4">
+
+            {% if feedback %}
+                <div class="text-center font-weight-light font-italic">
+                    <div class="row py-2 justify-content-center">
+                        {% for fb in feedback %}
+                            <div class="col-auto p-1">
+                                <div class="card">
+                                    <div class="card-body">
+                                        {{ fb.text }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                Not feedback availabel 😥
+            {% endif %}
+        </div>
+        <br><br><br><br><br>
+    </section>
+
+    <style>
+        #services {
+            text-shadow: 2px 2px 3px #000000;
+        }
+
+        #services img {
+            box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+    </style>
+
+    <script src="{% static 'svg-dividers.js' %}"></script>
+    <script>
+        createSVGDivicer('#divider2', '#343a40', true);
+        createSVGDivicer('#divider1', '#343a40', false);
+        createSVGDivicer('#divider3', '#343a40', false);
+    </script>
+{% endblock %}

@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+{% block content %}
+    {% csrf_token %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'embedg/discord.css' %}">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/default.min.css">
+
+    <div id="divider1"></div>
+    <section class="container py-5">
+        <div class="card shadow-sm my-5">
+            <div class="card-header">
+                <h3 class="card-title" style="display: inline;">Embed Generator </h3>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>Webhook</label>
+                    <div class="input-group">
+                        <input id="webh-url" type="url" class="form-control"
+                               placeholder="https://discordapp.com/api/webhooks/423157583646294017/nsFEJfuNKVBRcKcgj0JX3TygdvhX-ItEJhrWVWadw7shUXXuIRwsJHUS_XbDDSA_ILKN"
+                               required>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-light" id="create-webhook">Create one</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row pb-3">
+                    <div class="form-group col">
+                        <input id="webh-name" type="text" class="form-control" placeholder="Name">
+                    </div>
+                    <div class="form-group col">
+                        <input id="webh-avatar-url" type="url" class="form-control" placeholder="Avatar-Url">
+                    </div>
+                </div>
+                <form id="form" class="py-2">
+                    <div class="form-group pb-3">
+                        <label>Unembedded</label>
+                        <textarea id="content" rows="5" class="form-control" placeholder="Content"></textarea>
+                    </div>
+
+                    <label>Basics</label>
+                    <div class="form-row">
+                        <div class="form-group col-10">
+                            <input id="embed-title" type="text" class="form-control" placeholder="Title">
+                        </div>
+                        <div class="form-group col-2">
+                            <input id="embed-color" type="color" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="embed-description" rows="5" class="form-control"
+                                  placeholder="Description"></textarea>
+                    </div>
+                    <div class="form-group pb-3">
+                        <input id="embed-url" type="url" class="form-control" placeholder="Url">
+                    </div>
+
+                    <label>Author</label>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <input id="embed-author-name" type="text" class="form-control" placeholder="Name">
+                        </div>
+                        <div class="form-group col">
+                            <input id="embed-author-icon_url" type="url" class="form-control" placeholder="Icon-Url">
+                        </div>
+                    </div>
+                    <div class="form-group pb-3">
+                        <input id="embed-author-url" type="text" class="form-control" placeholder="Url">
+                    </div>
+
+                    <label>Images</label>
+                    <div class="form-group">
+                        <input id="embed-thumbnail-url" type="url" class="form-control" placeholder="Thumbnail-Url">
+                    </div>
+                    <div class="form-group pb-3">
+                        <input id="embed-image-url" type="url" class="form-control" placeholder="Image-Url">
+                    </div>
+
+                    <label>Footer</label>
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <input id="embed-footer-text" type="text" class="form-control" placeholder="Text">
+                        </div>
+                        <div class="form-group col">
+                            <input id="embed-timestamp" type="datetime-local" class="form-control" step="0.001">
+                        </div>
+                    </div>
+                    <div class="form-group pb-3">
+                        <input id="embed-footer-icon_url" type="url" class="form-control" placeholder="Icon-Url">
+                    </div>
+
+                    <label>Fields</label>
+                    <div id="fields"></div>
+                    <button id="field-add" type="button" class="btn btn-success"><i class="fas fa-plus"></i></button>
+                    <button id="fields-delete" type="button" class="btn btn-danger"><i class="fas fa-trash-alt"></i>
+                    </button>
+
+                    <br>
+                    <div id="submit-alerts" class="my-3"></div>
+                    <button class="btn btn-success float-right" id="submit" type="button">Send Embed</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow-sm my-5">
+            <div class="card-body">
+                <div class="form-group">
+                    <label>Json Code</label>
+                    <div class="float-right row pb-2">
+                        <div class="col-2">
+                            <button type="button" class="btn" id="save-embed"><i class="fas fa-save"></i></button>
+                        </div>
+                        <div class="col-10">
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle" type="button" id="load-embed"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Select to load
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"
+                                     id="available-embeds"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="parse-error" style="display: none;" class="alert alert-danger" role="alert">
+                        Error while parsing the json string
+                    </div>
+                    <textarea id="json" rows="10" class="form-control"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm my-5">
+            <div class="card-body">
+                <label>Preview</label>
+                <div id="preview">
+                    <div class="w-100 h-100 br2 flex flex-column white overflow-hidden bg-discord-dark shadow-sm"
+                         style="border-radius: 10px;">
+                        <div class="w-100 h-100 overflow-auto pa2 discord-view">
+                            <div class="flex-vertical whitney theme-dark">
+                                <div class="chat flex-vertical flex-spacer">
+                                    <div class="content flex-spacer flex-horizontal">
+                                        <div class="flex-spacer flex-vertical messages-wrapper">
+                                            <div class="scroller-wrap">
+                                                <div class="scroller messages">
+                                                    <div class="message-group hide-overflow ">
+                                                        <div class="avatar-large animate"
+                                                             style="background-image: url(&quot;https://cdn.discordapp.com/embed/avatars/0.png&quot;);"></div>
+                                                        <div class="comment">
+                                                            <div class="message first">
+                                                                <h2 style="line-height: 16px;">
+                                                                    <span class="username-wrapper v-btm"><strong
+                                                                            class="user-name">Webhook</strong><span
+                                                                            class="bot-tag">BOT</span></span><span
+                                                                        class="highlight-separator"> - </span><span
+                                                                        class="timestamp">Today at 7:36 PM</span></h2>
+                                                                <div class="message-text markup"></div>
+                                                                <div class="accessory">
+                                                                    <div class="embed-wrapper">
+                                                                        <div class="embed-color-pill"></div>
+                                                                        <div class="embed embed-rich">
+                                                                            <div class="embed-content">
+                                                                                <div class="embed-content-inner">
+                                                                                    <div class="_author"></div>
+                                                                                    <div class="_title"></div>
+                                                                                    <div class="embed-description markup"></div>
+                                                                                    <div class="embed-fields"></div>
+                                                                                </div>
+                                                                                <img src="" role="presentation"
+                                                                                     class="embed-rich-thumb"
+                                                                                     style="max-width: 80px; max-height: 80px;">
+                                                                            </div>
+                                                                            <a class="embed-thumbnail embed-thumbnail-rich">
+                                                                                <img class="image" role="presentation"
+                                                                                     src="">
+                                                                            </a>
+                                                                            <div>
+                                                                                <img src="" alt=""
+                                                                                     class="embed-footer-icon"
+                                                                                     role="presentation" width="20"
+                                                                                     height="20">
+                                                                                <span class="embed-footer"><span
+                                                                                        class="embed-footer-text"></span><span
+                                                                                        class="embed-footer-timestamp"></span></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <style>
+            #preview p, pre {
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+    </section>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.4.2/markdown-it.min.js"></script>
+    <script src="{% static 'embedg/fields.js' %}"></script>
+    <script src="{% static 'embedg/preview.js' %}"></script>
+    <script src="{% static 'embedg/json_code.js' %}"></script>
+    <script src="{% static 'embedg/save_retrieve.js' %}"></script>
+    <script src="{% static 'embedg/webhooks.js' %}"></script>
+{% endblock %}

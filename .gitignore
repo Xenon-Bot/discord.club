@@ -1,6 +1,5 @@
 # Project Specific
-secrets.py
-bulma-*/
+secret_key.txt
 
 # Byte-compiled / optimized / DLL files
 .idea/
