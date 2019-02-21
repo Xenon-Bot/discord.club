@@ -60,7 +60,6 @@ def webhook(request):
     }
 
     resp = requests.post('https://discordapp.com/api/oauth2/token', data=data, timeout=1)
-    print(resp.status_code, resp.json())
     if resp.status_code != 200:
         return HttpResponseBadRequest()
 
