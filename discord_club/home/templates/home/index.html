@@ -30,8 +30,8 @@
                                 <h1 class="display-1 text-center">{{ service.name }}</h1>
                                 <hr>
                                 <div class="float-right">
-                                    {% for link in service.link %}
-                                        <a href="{{ link.url }}" class="btn btn-primary">{{ link.name }}</a>
+                                    {% for link in service.link_set.all %}
+                                        <a href="{{ link.url }}" target="_blank" class="btn btn-primary">{{ link.name }}</a>
                                     {% endfor %}
                                 </div>
                                 <div class="row py-5">

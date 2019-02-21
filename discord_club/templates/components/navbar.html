@@ -25,10 +25,12 @@
             {% for service in services %}
                 {% if service.active %}
                     {% for link in service.link_set.all %}
-                        <li class="nav-item"><a href="{{ link.url }}" target="_blank" class="nav-link">{{ link.name }}</a></li>
+                        <li class="nav-item"><a href="{{ link.url }}" target="_blank"
+                                                class="nav-link">{{ link.name }}</a></li>
                     {% endfor %}
                 {% endif %}
             {% endfor %}
+            <li class="nav-item"><a href="/discord" target="_blank" class="nav-link">Support</a></li>
         </ul>
     </div>
 </nav>
