@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Feedback, Link, Service
+from .models import Feedback, Link, Service, Supporter
 
 
 class LinkInline(admin.TabularInline):
@@ -15,3 +15,4 @@ class ServiceAdmin(admin.ModelAdmin):
 
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(Feedback)
+admin.site.register(Supporter)

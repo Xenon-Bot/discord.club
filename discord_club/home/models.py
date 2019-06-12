@@ -1,5 +1,19 @@
 from django.db import models
-from django.urls import reverse
+
+
+class Supporter(models.Model):
+    name = models.CharField(max_length=50)
+    patreon_name = models.CharField(max_length=100)
+    avatar = models.URLField()
+
+    instagram = models.URLField(blank=True)
+    discord = models.URLField(blank=True)
+    twitter = models.URLField(blank=True)
+    youtube = models.URLField(blank=True)
+    twitch = models.URLField(blank=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Feedback(models.Model):

@@ -1,11 +1,12 @@
 from django.shortcuts import render
 
-from .models import Feedback
+from .models import Feedback, Supporter
 
 
 def index(request):
     context = {
-        'feedback': Feedback.objects.all()
+        'feedback': Feedback.objects.all(),
+        'supporters': Supporter.objects.all()
     }
     return render(request, 'home/index.html', context)
 

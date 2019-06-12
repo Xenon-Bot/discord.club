@@ -25,13 +25,15 @@
             <div class="carousel-inner">
                 {% for service in services %}
                     {% if service.display_front %}
-                        <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %} py-5" style="height: 75vh; overflow-y: hidden;">
+                        <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %} py-5"
+                             style="height: 75vh; overflow-y: hidden;">
                             <div class="container">
                                 <h1 class="display-1 text-center">{{ service.name }}</h1>
                                 <hr>
                                 <div class="float-right">
                                     {% for link in service.link_set.all %}
-                                        <a href="{{ link.url }}" target="_blank" class="btn btn-primary">{{ link.name }}</a>
+                                        <a href="{{ link.url }}" target="_blank"
+                                           class="btn btn-primary">{{ link.name }}</a>
                                     {% endfor %}
                                 </div>
                                 <div class="row py-5">
@@ -43,7 +45,8 @@
                                         </ul>
                                     </div>
                                     <div class="col-md-8">
-                                        <img src="{% static 'home/img/'|add:service.image_name %}" alt="{{ service.name }}" class="img-fluid">
+                                        <img src="{% static 'home/img/'|add:service.image_name %}"
+                                             alt="{{ service.name }}" class="img-fluid">
                                     </div>
                                 </div>
                             </div>
@@ -88,7 +91,58 @@
                 Not feedback availabel 😥
             {% endif %}
         </div>
-        <br><br><br><br><br>
+        <br><br>
+    </section>
+
+    <section id="supporters">
+        <br><br><br>
+        <div class="container">
+            <h1 class="display-3 text-right">Special People</h1>
+            <hr class="my-4">
+
+            {% if supporters %}
+                <div class="font-weight-light">
+                    <div class="row py-2 justify-content-center">
+                        {% for sp in supporters %}
+                            <div class="col-12 col-md-6 col-lg-4 p-1">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="media">
+                                            <img style="height: 8em;" class="mr-3 shadow" src="{{ sp.avatar }}"
+                                                 alt="Avatar of {{ sp.name }}">
+                                            <div class="media-body">
+                                                <h5 class="mt-0">{{ sp.name }}</h5>
+                                                <hr class="my-1">
+                                                <span>
+                                                    {% if sp.instagram %}
+                                                        <a href="{{ sp.instagram }}"><i class="fab fa-instagram"></i></a>
+                                                    {% endif %}
+                                                    {% if sp.discord %}
+                                                        <a href="{{ sp.discord }}"><i class="fab fa-discord"></i></a>
+                                                    {% endif %}
+                                                    {% if sp.twitter %}
+                                                        <a href="{{ sp.twitter }}"><i class="fab fa-twitter"></i></a>
+                                                    {% endif %}
+                                                    {% if sp.youtube %}
+                                                        <a href="{{ sp.youtube }}"><i class="fab fa-youtube"></i></a>
+                                                    {% endif %}
+                                                    {% if sp.twitch %}
+                                                        <a href="{{ sp.twitch }}"><i class="fab fa-twitch"></i></a>
+                                                    {% endif %}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                Nobody here yet 😥
+            {% endif %}
+        </div>
+        <br><br><br><br><br><br><br>
     </section>
 
     <style>
