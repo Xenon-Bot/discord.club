@@ -11,6 +11,7 @@ class Supporter(models.Model):
     twitter = models.URLField(blank=True)
     youtube = models.URLField(blank=True)
     twitch = models.URLField(blank=True)
+    website = models.URLField(blank=True)
 
     def __str__(self):
         return self.name
