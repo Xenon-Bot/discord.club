@@ -21,7 +21,7 @@ def callback(request):
         'client_secret': settings.CLIENT_SECRET,
         'grant_type': 'authorization_code',
         'scopes': ' '.join(settings.SCOPES),
-        'redirect_uri': request.build_absolute_uri(reverse('oauth:callback')),
+        'redirect_uri': settings.REDIRECT_URI,
         'code': code
     }
 

@@ -9,7 +9,7 @@ from . import settings
 def redirect_to_discord(request, state='/'):
     return redirect(f'https://discordapp.com/api/oauth2/authorize?response_type=code&client_id={settings.CLIENT_ID}'
                     f'&scope={"%20".join(settings.SCOPES)}&state={urlquote_plus(state)}'
-                    f'&redirect_uri={urlquote_plus(request.build_absolute_uri(reverse("oauth:callback")))}')
+                    f'&redirect_uri={urlquote_plus(settings.REDIRECT_URI)}')
 
 
 def requires_ouath_user(handler):

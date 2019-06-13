@@ -3,7 +3,6 @@ from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 import json
 import requests
-from django.shortcuts import reverse
 
 from oauth.shortcuts import requires_ouath_user
 from .models import Embed
@@ -55,13 +54,13 @@ def webhook(request):
         'client_secret': oauth.CLIENT_SECRET,
         'grant_type': 'authorization_code',
         'scopes': 'webhook.incoming',
-        'redirect_uri': request.build_absolute_uri(reverse('embedg:webhook')),
+        'redirect_uri': "https://discord.club/embedg/webhook/",
         'code': code
     }
 
     resp = requests.post('https://discordapp.com/api/oauth2/token', data=data, timeout=1)
     if resp.status_code != 200:
-        return HttpResponseBadRequest()
+        return HttpResponseBadRequest(content=resp.text)
 
     return render(request, 'embedg/create_webhook.html', {'webhook': json.dumps(resp.json()['webhook']['url'])})
 
