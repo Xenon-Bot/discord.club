@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
 
     'embedg.apps.EmbedgConfig',
+    'invites.apps.InvitesConfig'
 ]
 
 MIDDLEWARE = [

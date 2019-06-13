@@ -22,5 +22,6 @@ urlpatterns = [
     path('', include('home.urls')),
     path('oauth/', include('oauth.urls')),
 
-    path('embedg/', include('embedg.urls'))
+    path('embedg/', include('embedg.urls')),
+    path('i/', include('invites.urls'))
 ]
