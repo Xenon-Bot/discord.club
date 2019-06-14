@@ -91,10 +91,18 @@ WSGI_APPLICATION = 'discord_club.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'djongo',
+        'NAME': 'discord_club',
+    },
+    'xenon': {
+        'ENGINE': 'djongo',
+        'NAME': 'xenon'
     }
 }
+
+DATABASE_ROUTERS = [
+    "discord_club.dbrouters.ModelSpecificRouter"
+]
 
 
 # Password validation
