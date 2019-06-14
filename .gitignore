@@ -1,5 +1,6 @@
 # Project Specific
 secret_key.txt
+migrations/
 
 # Byte-compiled / optimized / DLL files
 .idea/
