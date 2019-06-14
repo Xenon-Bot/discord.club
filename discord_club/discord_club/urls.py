@@ -23,5 +23,6 @@ urlpatterns = [
     path('oauth/', include('oauth.urls')),
 
     path('embedg/', include('embedg.urls')),
-    path('i/', include('invites.urls'))
+    path('i/', include('invites.urls')),
+    path('xenon/', include('xenon.urls'))
 ]

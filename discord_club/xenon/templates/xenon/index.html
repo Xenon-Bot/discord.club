@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container my-5">
+        <div class="row text-center">
+            <div class="col-12 col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class='numscroller display-1' data-min='0' data-max='{{ shards|length }}' data-delay='1' data-increment='1'>{{ shards|length }}</h1>
+                        <span class="lead">shards</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class='numscroller display-1' data-min='0' data-max='{{ guilds }}' data-delay='5' data-increment='100'>{{ guilds }}</h1>
+                        <span class="lead">guilds</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class='numscroller display-1' data-min='0' data-max='{{ users }}' data-delay='5' data-increment='10000'>{{ users }}</h1>
+                        <span class="lead">users</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% load static %}
+    <script src="{% static 'num_scroller.js' %}"></script>
+{% endblock %}
