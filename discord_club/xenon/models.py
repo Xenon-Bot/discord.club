@@ -1,4 +1,6 @@
 from django.db import models
+from datetime import datetime
+import pytz
 
 
 class Shard(models.Model):
@@ -8,8 +10,11 @@ class Shard(models.Model):
         managed = False
         db_table = "shards"
 
-    _id = models.IntegerField(primary_key=True)
+    id = models.IntegerField(primary_key=True, db_column="_id")
     guilds = models.BigIntegerField()
     users = models.BigIntegerField()
     latency = models.FloatField()
     seen = models.DateTimeField()
+
+    def is_online(self):
+        return (datetime.now(pytz.utc) - self.seen).seconds < 3 * 60
