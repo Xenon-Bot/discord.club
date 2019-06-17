@@ -18,3 +18,46 @@ class Shard(models.Model):
 
     def is_online(self):
         return (datetime.now(pytz.utc) - self.seen).seconds < 3 * 60
+
+
+class Template(models.Model):
+    _db = "xenon"
+
+    class Meta:
+        managed = False
+        db_table = "templates"
+
+    name = models.CharField(max_length=2000, primary_key=True, db_column="_id")
+    creator = models.BigIntegerField()
+    used = models.IntegerField()
+    featured = models.BooleanField()
+    approved = models.BooleanField()
+    original = models.CharField(max_length=16)
+    description = models.TextField()
+
+
+class Backup(models.Model):
+    _db = "xenon"
+
+    class Meta:
+        managed = False
+        db_table = "backups"
+
+    id = models.CharField(max_length=16, primary_key=True, db_column="_id")
+    creator = models.BigIntegerField()
+    timestamp = models.DateTimeField()
+
+
+class Interval(models.Model):
+    _db = "xenon"
+
+    class Meta:
+        managed = False
+        db_table = "intervals"
+
+    guild = models.BigIntegerField(primary_key=True, db_column="_id")
+    chatlog = models.IntegerField()
+    interval = models.IntegerField()
+    next = models.DateTimeField()
+
+
