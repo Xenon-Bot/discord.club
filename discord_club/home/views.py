@@ -3,7 +3,7 @@ from django.shortcuts import render
 from .models import Feedback, Supporter
 
 
-def handler404(request):
+def handler404(request, exception):
     return render(request, '404.html', status=404)
 
 
