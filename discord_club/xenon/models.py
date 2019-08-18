@@ -21,10 +21,10 @@ class Shard(models.Model):
 
     def get_latency(self) -> str:
         if self.is_online():
-            return str(round(self.latency * 1000, 1))
+            return str(round(self.latency * 1000, 1)) + " ms"
 
         else:
-            return "offline"
+            return "offline?"
 
 
 class Template(models.Model):
