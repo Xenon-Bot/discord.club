@@ -16,8 +16,15 @@ class Shard(models.Model):
     latency = models.FloatField()
     seen = models.DateTimeField()
 
-    def is_online(self):
+    def is_online(self) -> bool:
         return (datetime.now(pytz.utc) - self.seen).seconds < 3 * 60
+
+    def get_latency(self) -> str:
+        if self.is_online():
+            return str(round(self.latency * 1000, 1))
+
+        else:
+            return "offline"
 
 
 class Template(models.Model):

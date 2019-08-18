@@ -43,7 +43,8 @@
             <div class="row my-3 justify-content-center text-center">
                 {% for shard in shards %}
                     <div class="col-auto p-1">
-                        <div class="card {% if shard.is_online %}bg-success{% else %}bg-danger{% endif %}">
+                        <div class="card {% if shard.is_online %}bg-success{% else %}bg-danger{% endif %}"
+                             title="{{ shard.get_latency }}">
                             <div class="card-body">
                                 {{ shard.id }}
                             </div>
