@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from os import environ as env
 
 # Deployment / Security
 DEBUG = True
@@ -90,14 +91,22 @@ WSGI_APPLICATION = 'discord_club.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+DATABASE_SERVER = {
+    "HOST": env.get('DB_HOST') or "localhost",
+    "USER":  env.get('DB_USER'),
+    "PASSWORD": env.get('DB_PASSWORD')
+}
+
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'discord_club',
+        **DATABASE_SERVER
     },
     'xenon': {
         'ENGINE': 'djongo',
-        'NAME': 'xenon'
+        'NAME': 'xenon',
+        **DATABASE_SERVER
     }
 }
 
