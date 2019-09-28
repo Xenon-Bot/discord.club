@@ -9,8 +9,9 @@ def meta(request):
             "name": "magicbots",
             "author": "Merlin Fuchs",
             "title": "Magic Bots",
-            "description": "",
-            "keywords": ""
+            "description": "Useful bots and services for discord. Including discord backups and rich embed generation.",
+            "keywords": "xenon bot,discord backups,embed generator,embed visualizer,discord embed visualizer,"
+                        "discord embeds,discord rich embeds,embed in discord,discord bots"
         }
     }
 
