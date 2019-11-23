@@ -107,17 +107,17 @@ $(function () {
         if (json.embed) {
             embeds = [json.embed];
         }
-        $.post(
-            $('#webh-url').val(),
-            JSON.stringify({
+        $.post({
+            url: $('#webh-url').val(),
+            data: JSON.stringify({
                 'username': $('#webh-name').val(),
                 'avatar_url': $('#webh-avatar-url').val(),
                 'content': json.content,
                 'embeds': embeds,
             }),
-            null,
-            'json'
-        ).done(function (data) {
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json'
+        }).done(function () {
             $('#submit-alerts').html(`
           <div class="alert alert-success alert-dismissible fade show" role="alert">
             <h4 class="alert-heading">Successfully sent embed</h4>
