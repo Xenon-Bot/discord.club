@@ -1,7 +1,7 @@
 image: docker
 
 branches:
-  - master
+  - django
 
 deploy:
   - docker login reg.merlin.gg -u $REG_USER -p $REG_PASSWD
