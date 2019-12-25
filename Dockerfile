@@ -7,4 +7,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY discord_club/ .
 
-CMD [ "gunicorn", "discord_club.wsgi" ]
+CMD [ "gunicorn", "discord_club.wsgi", "-b", "0.0.0.0:8000"]
