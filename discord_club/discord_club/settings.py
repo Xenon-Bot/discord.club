@@ -15,7 +15,7 @@ from os import environ as env
 
 # Deployment / Security
 DEBUG = True
-ALLOWED_HOSTS = ['localhost', 'discord.club', 'www.discord.club']
+ALLOWED_HOSTS = ['localhost', 'discord.club', '.discord.club']
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
