@@ -10,7 +10,7 @@ from oauth.shortcuts import requires_ouath_user
 
 
 def _validate_invite(name: str, code: str):
-    if len(name.strip()) < 5 or len(name.strip()) > 50:
+    if len(name.strip()) < 4 or len(name.strip()) > 50:
         return "Name must be between 4 and 50 in length."
 
     if len(code.strip()) < 3 or len(code.strip()) > 32:
