@@ -1,4 +1,4 @@
-package util
+package discord
 
 import (
 	"fmt"
@@ -26,7 +26,7 @@ type OauthUser struct {
 	Avatar        string `json:"avatar"`
 }
 
-func (u *OauthUser) avatarUrl() string {
+func (u *OauthUser) AvatarUrl() string {
 	if u.Avatar == "" {
 		i, err := strconv.Atoi(u.Discriminator)
 		if err != nil {
@@ -49,7 +49,7 @@ func ExchangeToken(authCode string) (TokenData, error) {
 	req.Param("scope", "identify")
 	req.Header("Content-Type", "application/x-www-form-urlencoded")
 
-	var resp TokenData
+	resp := TokenData{}
 	err := req.ToJSON(&resp)
 	return resp, err
 }
@@ -58,7 +58,7 @@ func GetOauthUser(accessToken string) (OauthUser, error) {
 	req := httplib.Get(discordApi + "/users/@me")
 	req.Header("Authorization", "Bearer "+accessToken)
 
-	var resp OauthUser
+	resp := OauthUser{}
 	err := req.ToJSON(&resp)
 	return resp, err
 }

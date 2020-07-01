@@ -1,7 +1,7 @@
 package routers
 
 import (
-	. "github.com/Xenon-Bot/discord.club/util"
+	"github.com/Xenon-Bot/discord.club/discord"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
@@ -20,14 +20,14 @@ func init() {
 				return
 			}
 
-			tokenData, err := ExchangeToken(authCode)
+			tokenData, err := discord.ExchangeToken(authCode)
 			if err != nil || tokenData.AccessToken == "" {
 				ctx.Abort(400, "Token exchange failed")
 				return
 			}
 			ctx.Output.Session("token", tokenData)
 
-			user, err := GetOauthUser(tokenData.AccessToken)
+			user, err := discord.GetOauthUser(tokenData.AccessToken)
 			if err != nil || user.Id == "" {
 				ctx.Abort(400, "Fetching the oauth user failed")
 				return
