@@ -1,9 +1,0 @@
-image: docker
-
-branches:
-  - django
-
-deploy:
-  - docker login reg.merlin.gg -u $REG_USER -p $REG_PASSWD
-  - docker build -t reg.merlin.gg/discord-club:$ABSTRUSE_BRANCH .
-  - docker push reg.merlin.gg/discord-club:$ABSTRUSE_BRANCH
