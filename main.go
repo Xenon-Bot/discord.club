@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	_ "github.com/Xenon-Bot/discord.club/routers"
+	"github.com/Xenon-Bot/discord.club/services"
 	_ "github.com/astaxie/beego/session/redis"
 
 	"github.com/astaxie/beego"
@@ -25,6 +26,16 @@ func main() {
 	o := orm.NewOrm()
 	o.Using("default")
 	orm.Debug = true
+
+	serviceManager := services.ServiceManager{}
+	serviceManager.Init()
+	serviceManager.RegisterService(&services.TwitchService{})
+	go func() {
+		for update := range serviceManager.Updates {
+			fmt.Println("out")
+			fmt.Println(update)
+		}
+	}()
 
 	beego.Run()
 }
