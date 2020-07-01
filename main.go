@@ -1,8 +1,9 @@
 package main
 
 import (
-	_ "discord_club/routers"
 	"fmt"
+
+	_ "github.com/Xenon-Bot/discord.club/routers"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"

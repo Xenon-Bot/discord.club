@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"discord_club/controllers"
-	. "discord_club/util"
+	"github.com/Xenon-Bot/discord.club/controllers"
+	. "github.com/Xenon-Bot/discord.club/util"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
