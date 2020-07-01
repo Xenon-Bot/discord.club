@@ -1,4 +1,4 @@
-module discord_club
+module github.com/Xenon-Bot/discord.club
 
 go 1.14
 
