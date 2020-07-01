@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	_ "github.com/Xenon-Bot/discord.club/routers"
+	_ "github.com/astaxie/beego/session/redis"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
