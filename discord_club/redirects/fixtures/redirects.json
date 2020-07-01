@@ -1,1 +1,0 @@
-[{"model": "redirects.redirect", "pk": 1, "fields": {"path": "xenon/invite", "permanent": false, "url": "https://discordapp.com/oauth2/authorize?client_id=416358583220043796&permissions=8"}}, {"model": "redirects.redirect", "pk": 2, "fields": {"path": "discord", "permanent": false, "url": "https://discord.gg/Ty3cpWb"}}]
