@@ -1,8 +1,0 @@
-{{ template "dashboard/layout.html" . }}
-
-{{ define "content" }}
-<div class="container">
-  <h1>{{ .User.Username }}#{{ .User.Discriminator }}</h1>
-  <img src="{{ .User.AvatarUrl }}" style="border-radius: 50%">
-</div>
-{{ end }}
