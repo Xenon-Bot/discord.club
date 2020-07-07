@@ -1,0 +1,187 @@
+.preview {
+    padding: 20px;
+    border-radius: 15px;
+    background-color: #35393f;
+    color: #d2d3d4;
+    font-family: Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
+    line-height: 1.375rem;
+    font-size: 1rem;
+    overflow-y: auto;
+}
+
+.previewAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    float: left;
+    cursor: pointer;
+}
+
+.previewBody {
+    height: 500px;
+    margin-left: 55px;
+}
+
+.previewName {
+    color: white;
+    font-weight: 500;
+    vertical-align: baseline;
+    cursor: pointer;
+}
+
+.previewName:hover {
+    text-decoration: underline;
+}
+
+.previewBotTag {
+    color: white;
+    background-color: #778ddb;
+    height: 1rem;
+    padding: .1rem .275rem;
+    border-radius: .1875rem;
+    font-size: .7rem;
+    vertical-align: top;
+}
+
+.previewContent {
+    color: #d2d3d4;
+}
+
+.previewAttachment {
+    display: block;
+    border-radius: 3px;
+    margin: 4px 0;
+    max-width: 100%;
+    cursor: pointer;
+}
+
+.previewEmbeds {
+    max-width: 100%;
+}
+
+.previewEmbed {
+    background-color: #2f3137;
+    border-radius: 3px;
+    margin: 4px 0;
+    border-left: 4px solid #202225;
+    display: inline-block;
+}
+
+.previewEmbedContent {
+    padding: .5rem 1rem 1rem .75rem;
+    display: inline-grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+}
+
+.previewEmbedAuthor {
+    grid-column: 1/1;
+    display: flex;
+    align-items: center;
+}
+
+.previewEmbedAuthorIcon {
+    margin-right: 8px;
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+.previewEmbedAuthorName {
+    word-break: break-word;
+    text-decoration: none;
+    cursor: pointer;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.previewEmbedAuthorName:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+.previewEmbedTitle {
+    color: white;
+    font-weight: 500;
+    display: inline-block;
+    grid-column: 1/1;
+    margin-top: 8px;
+    font-size: 1rem;
+}
+
+.previewEmbedDescription {
+    font-size: 0.875rem;
+    line-height: 1.125rem;
+    font-weight: 400;
+    grid-column: 1/1;
+    margin-top: 8px;
+}
+
+.previewEmbedFields {
+    display: grid;
+    grid-column: 1/1;
+    margin-top: 8px;
+    grid-gap: 8px;
+}
+
+.previewEmbedField {
+    grid-column: 1/13;
+}
+
+.previewEmbedFieldName {
+    color: white;
+    font-weight: 500;
+    margin-bottom: 2px;
+    font-size: 0.875rem;
+    line-height: 1.125rem;
+}
+
+.previewEmbedFieldValue {
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.125rem;
+}
+
+.previewEmbedImage {
+    margin-top: 12px;
+    width: 300px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.previewEmbedThumbnail {
+    width: 80px;
+    height: 80px;
+    grid-row: 1/8;
+    grid-column: 2/2;
+    margin-left: 16px;
+    margin-top: 8px;
+    justify-self: end;
+    flex-shrink: 0;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.previewEmbedFooter {
+    grid-column: 1/3;
+    display: flex;
+    grid-row: auto/auto;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.previewEmbedFooterIcon {
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: contain;
+}
+
+.peviewEmbedFooterText {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
+}

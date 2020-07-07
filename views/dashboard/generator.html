@@ -7,9 +7,7 @@
                 <label>Webhook Settings</label>
                 <div class="form-group">
                     <div class="input-group">
-                        <input id="webhookUrl" type="url" class="form-control"
-                            placeholder="https://discordapp.com/api/webhooks/423157583646294017/nsFEJfuNKVBRcKcgj0JX3TygdvhX-ItEJhrWVWadw7shUXXuIRwsJHUS_XbDDSA_ILKN"
-                            required>
+                        <input id="webhookUrl" type="url" class="form-control" placeholder="https://discordapp.com/api/webhooks/423157583646294017/nsFEJfuNKVBRcKcgj0JX3TygdvhX-ItEJhrWVWadw7shUXXuIRwsJHUS_XbDDSA_ILKN" required>
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary" id="create-webhook" type="button">Create
                                 one</button>
@@ -27,8 +25,7 @@
 
                 <label>Message Content</label>
                 <div class="form-group pb-3">
-                    <textarea id="content" rows="5" class="form-control" placeholder="Content"
-                        maxlength="2000"></textarea>
+                    <textarea id="content" rows="5" class="form-control" placeholder="Content" maxlength="2000"></textarea>
                 </div>
 
                 <label>Files</label>
@@ -66,9 +63,9 @@
         Send Embed
     </button>
 
-    <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel" aria-hidden="true">
+        <link rel="stylesheet" href="/static/css/dashboard/preview.css">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="previewModalLabel">Preview</h5>
@@ -77,7 +74,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    <div id="preview" class="preview"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

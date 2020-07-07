@@ -123,11 +123,12 @@ function updateForm() {
 
     deleteEmbeds();
     if (dataClone.embeds) {
+        let embedIndex = 0;
         for (let embed of dataClone.embeds) {
-            const embedDom = addEmbed(false);
+            const embedDom = addEmbed(embedIndex === 0);
             for (let embedPath in embedAttributes) {
                 embedDom.find(embedAttributes[embedPath]).val(getPathInObject(embed, embedPath));
-                if (embed.color !== null || embed.color !== undefined) {
+                if (embed.color !== null || embed.color !== undefined) {
                     embedDom.find(".embedColor").val("#" + embed.color.toString(16))
                 }
             }
@@ -143,6 +144,8 @@ function updateForm() {
                     }
                 }
             }
+
+            embedIndex++;
         }
     }
 
