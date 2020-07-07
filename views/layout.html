@@ -3,53 +3,79 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Discord.Club</title>
-  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
-  <link rel="stylesheet" href="/static/css/layout.css">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  {{ block "head" . }}{{ end }}
+    <title>Discord.Club</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/static/css/layout.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> {{ block "head" . }}{{ end }}
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a class="navbar-brand" id="navbarBrand" href="/">Home</a>
-    <script>
-      if (location.pathname === "/") document.getElementById("navbarBrand").style.display = "none";
-    </script>
-    <div class="ml-auto">
-      <ul class="navbar-nav">
-        {{ if .User }}
-        <li class="nav-item dropdown">
-          <a href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">
-            <img src="{{ .User.AvatarUrl }}" class="navbarAvatar" alt="">
-          </a>
-          <div class="dropdown-menu dropdown-menu-right" style="position: absolute;" aria-labelledby="navbarDropdown">
-            <h6 class="dropdown-header">Dashboard</h6>
-            <a class="dropdown-item" href="/db/embedg">Embed Generator</a>
-            <a class="dropdown-item" href="/db/auto">Auto Posting</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/oauth/logout">Logout</a>
-          </div>
-        </li>
-        {{ else }}
-        <li class="nav-item">
-          <a class="nav-link" href="/db">Dashboard</a>
-        </li>
-        {{ end }}
-      </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" id="navbarBrand" href="/">Home</a>
+        <script>
+            if (location.pathname === "/") document.getElementById("navbarBrand").style.display = "none";
+        </script>
+        <div class="ml-auto">
+            <ul class="navbar-nav">
+                {{ if .User }}
+                <li class="nav-item dropdown">
+                    <a href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="{{ .User.AvatarUrl }}" class="navbarAvatar" alt="">
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" style="position: absolute;" aria-labelledby="navbarDropdown">
+                        <h6 class="dropdown-header">Dashboard</h6>
+                        <a class="dropdown-item" href="/db/embedg">Embed Generator</a>
+                        <a class="dropdown-item" href="/db/live">Live Posting</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/oauth/logout">Logout</a>
+                    </div>
+                </li>
+                {{ else }}
+                <li class="nav-item">
+                    <a class="nav-link" href="/db">Dashboard</a>
+                </li>
+                {{ end }}
+            </ul>
+        </div>
+    </nav>
+    {{ block "content" . }}{{ end }}
+    <div class="bg-dark footer text-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-auto mr-auto">
+                    <h2 class="footerTitle">
+                        Links
+                    </h2>
+                    <div class="footerLinks">
+                        <a href="/discord">Discord</a>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <h2 class="footerTitle">
+                        Legal
+                    </h2>
+                    <div class="footerLinks">
+                        <a href="/privacy">Privacy Policy</a>
+                        <a href="/cookies">Cookie Policy</a>
+                        <a href="/terms">Terms of Service</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footerSeparator"></div>
+            <div class="text-center">
+                Copyright © 2020 Merlin Fuchs
+            </div>
+        </div>
     </div>
-  </nav>
-  {{ block "content" . }}{{ end }}
-  <script src="/static/js/jquery.min.js"></script>
-  <script src="/static/js/popper.min.js"></script>
-  <script src="/static/js/bootstrap.min.js"></script>
-  {{ block "script" . }}{{ end }}
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/popper.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    {{ block "script" . }}{{ end }}
 </body>
 
 </html>

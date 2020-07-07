@@ -1,0 +1,20 @@
+.section {
+    padding: 150px 0;
+}
+
+.sectionImg {
+    border-radius: 7px;
+    width: 100%;
+}
+
+.sectionTitle {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 4rem;
+}
+
+.sectionText {
+    font-size: 1.2rem;
+    font-weight: 300;
+    line-height: 1.9rem;
+}

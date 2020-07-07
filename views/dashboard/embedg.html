@@ -1,19 +1,93 @@
-{{ template "dashboard/layout.html" . }}
-
-{{ define "head" }}
+{{ template "dashboard/layout.html" . }} {{ define "head" }}
 <link rel="stylesheet" href="/static/css/dashboard/embedg.css">
-{{ end }}
+<link rel="stylesheet" href="/static/css/dashboard/generator.css"> {{ end }} {{ define "content" }}
+<div class="container mb-5 py-5">
+    <form id="form">
+        <h4>Message</h4>
+        <div class="card my-3 mb-5">
+            <div class="card-body">
+                <label>Webhook Settings</label>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input id="webhookUrl" type="url" class="form-control" placeholder="https://discordapp.com/api/webhooks/423157583646294017/nsFEJfuNKVBRcKcgj0JX3TygdvhX-ItEJhrWVWadw7shUXXuIRwsJHUS_XbDDSA_ILKN" required>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-secondary" id="create-webhook" type="button">Create one</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row pb-3">
+                    <div class="form-group col">
+                        <input id="webhookName" type="text" class="form-control" placeholder="Name">
+                    </div>
+                    <div class="form-group col">
+                        <input id="webhookAvatar" type="url" class="form-control" placeholder="Avatar-Url">
+                    </div>
+                </div>
 
-{{ define "content" }}
-<div class="container py-5">
-  {{ template "dashboard/generator.html" . }}
+                <label>Message Content</label>
+                <div class="form-group pb-3">
+                    <textarea id="content" rows="5" class="form-control" placeholder="Content" maxlength="2000"></textarea>
+                </div>
+
+                <label>Files</label>
+                <div id="attachments"></div>
+                <button class="btn btn-sm btn-outline-success" onclick="addAttachment()" type="button">
+                  <i class="material-icons float-left text-success">add_circle</i>
+              </button>
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteAttachments()" type="button">
+                  <i class="material-icons float-left text-danger">delete</i>
+              </button>
+            </div>
+        </div>
+
+        <h4>Embeds</h4>
+        <div id="embeds"></div>
+        <div class="float-right">
+            <button class="btn btn-outline-danger" onclick="deleteEmbeds()" type="button">
+              <i class="material-icons float-left text-danger">delete</i>
+          </button>
+            <button class="btn btn-outline-success" onclick="addEmbed(false)" type="button">
+              <i class="material-icons float-left text-success">add_circle</i>
+          </button>
+        </div>
+        <div class="clearfix"></div>
+    </form>
+
+    <h4 class="mt-5">JSON Code</h4>
+    <div class="embed card my-3">
+        <div class="card-body">
+            <textarea id="json" rows="10" class="form-control"></textarea>
+        </div>
+    </div>
+
+    <button class="btn btn-lg btn-outline-primary float-right mb-5" type="button" onclick="sendMessage()">
+      Send Embed
+  </button>
+
+    <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel" aria-hidden="true">
+        <link rel="stylesheet" href="/static/css/dashboard/preview.css">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="previewModalLabel">Message Preview</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <div id="preview" class="preview"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="previewFab bg-primary" data-toggle="modal" data-target="#previewModal" onclick="makePreview()">
-  <i class="material-icons pr-2 text-light">visibility</i>
+    <i class="material-icons pr-2 text-light">visibility</i>
 </div>
-{{ end }}
-
-{{ define "script" }}
+{{ end }} {{ define "script" }}
 <script src="/static/js/dashboard/generator.js"></script>
 <script src="/static/js/dashboard/preview.js"></script>
 {{ end }}

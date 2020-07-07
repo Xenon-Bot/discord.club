@@ -105,10 +105,10 @@ function makePreview() {
 
     previewDom.append(`
         <div class="previewBody">
-            <div class="previewName">
+            <span class="previewName">
                 ${data.username ? data.username : "Captain Hook"}
-                <span class="previewBotTag">BOT</span>
-            </div>
+            </span>
+            <span class="previewBotTag">BOT</span>
             <div class="previewContent">
                 ${data.content ? data.content : ""}
             </div>

@@ -24,5 +24,5 @@ func (s *TwitchService) WebhookRoute() *WebhookRoute {
 
 func (s *TwitchService) handleWebhook(ctx *context.Context, result chan ServiceUpdate) {
 	// TODO handle webhook request by twitch and assemble ServiceUpdate
-	result <- ServiceUpdate{Service: "twitch", User: "merlintor", Data: &TwitchData{Status: "live"}}
+	result <- ServiceUpdate{Service: "twitch", Identifier: "merlintor", Data: &TwitchData{Status: "live"}}
 }

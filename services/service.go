@@ -5,9 +5,9 @@ import (
 )
 
 type ServiceUpdate struct {
-	Service string
-	User    string
-	Data    interface{}
+	Service    string
+	Identifier string
+	Data       interface{}
 }
 
 type WebhookRoute struct {

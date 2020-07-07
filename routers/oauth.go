@@ -34,7 +34,7 @@ func init() {
 			}
 			ctx.Output.Session("user", user)
 
-			ctx.Redirect(302, "/dashboard")
+			ctx.Redirect(302, "/db")
 		}),
 
 		beego.NSGet("/logout", func(ctx *context.Context) {
@@ -44,4 +44,25 @@ func init() {
 		}),
 	)
 	beego.AddNamespace(oauthNS)
+
+	// Expose the logged in User to the template
+	beego.InsertFilter("/*", beego.BeforeExec, func(ctx *context.Context) {
+		user, ok := ctx.Input.Session("user").(discord.OauthUser)
+		if ok {
+			ctx.Input.SetData("User", &user)
+		}
+	})
+
+	// Check if user is logged for dashboard
+	beego.InsertFilter("/db/*", beego.BeforeExec, func(ctx *context.Context) {
+		token, ok := ctx.Input.Session("token").(discord.TokenData)
+		if !ok {
+			// User is not logged in
+			ctx.Redirect(302, "/oauth/login")
+			return
+		}
+
+		// Expose access token to the frontend
+		ctx.Output.Cookie("token", token.AccessToken)
+	})
 }

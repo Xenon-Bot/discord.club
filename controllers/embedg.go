@@ -4,11 +4,11 @@ import (
 	"github.com/astaxie/beego"
 )
 
-type DashboardController struct {
+type EmbedGController struct {
 	beego.Controller
 }
 
-func (c *DashboardController) Get() {
+func (c *EmbedGController) Get() {
 	c.TplName = "dashboard/embedg.html"
 	c.Render()
 }
