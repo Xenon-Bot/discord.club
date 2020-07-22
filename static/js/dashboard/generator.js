@@ -1,4 +1,3 @@
-
 const msgAttributes = {
     "username": "#webhookName",
     "avatar_url": "#webhookAvatar",
@@ -188,7 +187,7 @@ function addEmbed(show) {
                     <div class="card-body">
                         <div class="form-row">
                             <div class="form-group col-10">
-                                <input type="text" class="form-control embedTitle" placeholder="Title">
+                                <input type="text" class="form-control embedTitle" placeholder="Title" maxlength="256">
                             </div>
                             <div class="form-group col-2">
                                 <input type="color" class="form-control embedColor" value="#1f2225">
@@ -196,7 +195,7 @@ function addEmbed(show) {
                         </div>
                         <div class="collapse${show ? ' show' : ''}">
                             <div class="form-group">
-                                <textarea rows="5" class="form-control embedDescription" placeholder="Description" spellcheck="false"></textarea>
+                                <textarea rows="5" class="form-control embedDescription" placeholder="Description" spellcheck="false" maxlength="2048"></textarea>
                             </div>
                             <div class="form-group pb-3">
                                 <input type="url" class="form-control embedUrl" placeholder="Url">
@@ -205,7 +204,7 @@ function addEmbed(show) {
                             <label>Author</label>
                             <div class="form-row">
                                 <div class="form-group col">
-                                    <input type="text" class="form-control embedAuthorName" placeholder="Name" data-kwimpalastatus="alive" data-kwimpalaid="1590524180388-1">
+                                    <input type="text" class="form-control embedAuthorName" placeholder="Name" maxlength="256">
                                 </div>
                                 <div class="form-group col">
                                     <input type="url" class="form-control embedAuthorIcon" placeholder="Icon-Url">
@@ -226,7 +225,7 @@ function addEmbed(show) {
                             <label>Footer</label>
                             <div class="form-row">
                                 <div class="form-group col">
-                                    <input type="text" class="form-control embedFooterText" placeholder="Text">
+                                    <input type="text" class="form-control embedFooterText" placeholder="Text" maxlength="2048">
                                 </div>
                                 <div class="form-group col">
                                     <input type="datetime-local" class="form-control embedTimestamp" step="0.001">
@@ -288,7 +287,7 @@ function deleteEmbeds() {
 function addField(it) {
     const embedDom = $(it).closest(".embed");
     const fieldDom = embedDom.find(".embedFields");
-    if (fieldDom.children().length >= 10) {
+    if (fieldDom.children().length >= 25) {
         showAlert("You can't add more than 10 fields per embed", "danger");
         return;
     }
@@ -296,10 +295,10 @@ function addField(it) {
     fieldDom.append(`
                 <div class="form-row embedField">
                     <div class="form-group col">
-                        <input type="text" class="form-control embedFieldName" placeholder="Name">
+                        <input type="text" class="form-control embedFieldName" placeholder="Name" maxlength="256">
                     </div>
                     <div class="form-group col">
-                        <textarea rows="1" class="form-control embedFieldValue" placeholder="Value"></textarea>
+                        <textarea rows="1" class="form-control embedFieldValue" placeholder="Value" maxlength="1024"></textarea>
                     </div>
                     <div class="form-group col-auto">
                         <div class="form-check">
@@ -330,7 +329,88 @@ function deleteFields(it) {
     updateJSON();
 }
 
+function validateMessage() {
+    const urlExpression = new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gi);
+
+    if (data.content && content.length > 2000) {
+        console.log("content > 2000")
+        return false;
+    }
+
+    if (data.avatar_url && !data.avatar_url.match(urlExpression)) {
+        console.log("invalid avatar url")
+        return false;
+    }
+
+    if (data.embeds) {
+        let embedNumber = 1;
+        for (let embed of data.embeds) {
+            let totalLength = 0;
+
+            function validateLength(value, name, maxLength) {
+                if (value == undefined || value == null) return true;
+
+                totalLength += value.length;
+                if (value.length > maxLength) {
+                    alert("embbed " + embedNumber + " - " + name + " > " + maxLength);
+                    return false;
+                }
+                return true;
+            }
+
+            function validateUrl(value, name) {
+                if (value && !value.match(urlExpression)) {
+                    alert("embbed " + embedNumber + " - " + name + " is an invalid url")
+                    return false;
+                }
+                return true;
+            }
+
+            if (!validateLength(embed.title, "title", 256)) return false;
+            if (!validateLength(embed.description, "description", 2048)) return false;
+            if (embed.author) {
+                if (!validateLength(embed.author.name, "author name", 256)) return false;
+                if (!validateUrl(embed.author.icon_url, "author icon url")) return false;
+                if (!validateUrl(embed.author.url, "author url")) return false;
+            }
+
+            if (embed.image) {
+                if (!validateUrl(embed.image.url, "image url")) return false;
+            }
+
+            if (embed.thumbnail) {
+                if (!validateUrl(embed.thumbnail.url, "thumbnail url")) return false;
+            }
+
+            if (embed.fields) {
+                let fieldNumber = 1;
+                for (let field of embed.fields) {
+                    if (!validateLength(field.name, "field " + fieldNumber, 256)) return false;
+                    if (!validateLength(field.value, "field " + fieldNumber, 1024)) return false;
+                    fieldNumber++;
+                }
+            }
+
+            if (embed.footer) {
+                if (!validateLength(embed.footer.text, "footer text", 2048)) return false;
+                if (!validateUrl(embed.footer.icon_url, "footer icon url")) return false;
+            }
+
+            if (totalLength > 6000) {
+                alert("embbed " + embedNumber + " - " + "total length > 6000");
+                return false;
+            }
+
+            embedNumber++;
+        }
+    }
+
+    return true;
+}
+
 function sendMessage() {
+    if (!validateMessage()) return;
+
     const payload = new FormData();
     payload.append("payload_json", JSON.stringify(data));
     const attachmentDoms = $("#attachments").find("input");
