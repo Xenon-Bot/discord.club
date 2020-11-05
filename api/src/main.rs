@@ -44,7 +44,7 @@ async fn main() -> io::Result<()> {
             .wrap(auth::CheckAuth)
             .data(web::JsonConfig::default().limit(4096))
             .service(endpoints::oauth::exchange_tokens)
-
+            .service(endpoints::embeds::create_template)
     })
         .bind(host)?
         .run()

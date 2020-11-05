@@ -12,11 +12,13 @@ pub struct ExchangePayload {
 
 #[derive(Serialize, Deserialize)]
 pub struct TokenPayload {
+    // more fields
     pub access_token: String
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct UserData {
+    // more fields
     pub id: String,
     pub username: String,
 }
@@ -57,6 +59,7 @@ pub async fn exchange_tokens(state: web::Data<AppState>, payload: web::Json<Exch
 
     let res = client
         .get("https://discord.com/api/users/@me")
+        .header("Authorization", format!("Bearer {}", token_data.access_token))
         .send()
         .await;
 
