@@ -1,1 +1,0 @@
-setTimeout(function() {history.go(-1);}, 5000);
