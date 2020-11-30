@@ -14,18 +14,18 @@ bp = Blueprint(name="api.messages", url_prefix="/messages")
 @requires_token
 @requires_body(
     name=str,
-    data=dict
+    data=dict,
+    files=list
 )
 async def create_template(request, payload, user_id):
     result = await request.app.db.templates.insert_one({
         "user_id": user_id,
+        "last_updated": datetime.utcnow(),
         "name": payload["name"],
-        "data": payload["data"]
+        "data": payload["data"],
+        "files": payload["files"]
     })
-    return {
-        "id": str(result.inserted_id),
-        **payload
-    }
+    return {"id": str(result.inserted_id)}
 
 
 @bp.patch("/<template_id>")
@@ -39,10 +39,19 @@ async def update_template(request, payload, user_id, template_id):
 
     to_update = {}
     if "name" in payload:
-        to_update["name"] = payload["name"]
+        name = payload["name"]
+        if isinstance(name, str):
+            to_update["name"] = name
 
     if "data" in payload:
-        to_update["data"] = payload["data"]
+        data = payload["data"]
+        if isinstance(data, dict):
+            to_update["data"] = data
+
+    if "files" in payload:
+        files = payload["files"]
+        if isinstance(files, list):
+            to_update["files"] = files
 
     result = await request.app.db.templates.find_one_and_update(
         {"_id": template_id, "user_id": user_id},
