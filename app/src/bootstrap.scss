@@ -1,4 +1,4 @@
-$theme-colors: ( "primary": #0AEBA0, "secondary": #F57200, "light": #F1F0F9, "dark": #292C3D, "darker": #181A25, "discordbg": #37393f);
+$theme-colors: ("primary": #0AEBA0, "secondary": #F57200, "light": #F1F0F9, "dark": #292C3D, "darker": #181A25, "discordbg": #37393f);
 $body-bg: map-get($theme-colors, "dark");
 $body-color: map-get($theme-colors, "light");
 $input-bg: map-get($theme-colors, "dark");
@@ -7,9 +7,9 @@ $modal-header-border-color: map-get($theme-colors, 'darker');
 $modal-content-bg: map-get($theme-colors, 'dark');
 @import "~bootstrap/scss/bootstrap";
 .c-pointer {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .float-clear {
-    clear: both;
+  clear: both;
 }

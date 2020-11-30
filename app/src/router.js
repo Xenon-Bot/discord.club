@@ -5,20 +5,20 @@ import Home from './views/Home.vue'
 Vue.use(VueRouter)
 
 const routes = [{
-        path: '/',
-        name: 'Home',
-        component: Home
-    },
+    path: '/',
+    name: 'Home',
+    component: Home
+},
     {
         path: '/dashboard',
         component: () =>
             import ( /* webpackChunkName: "dashboard" */ './views/Dashboard.vue'),
         children: [{
-                name: 'Quick Message',
-                path: '',
-                component: () =>
-                    import ( /* webpackChunkName: "editor" */ './views/QuickMessage.vue')
-            },
+            name: 'Quick Message',
+            path: '',
+            component: () =>
+                import ( /* webpackChunkName: "editor" */ './views/QuickMessage.vue')
+        },
             {
                 name: 'Messages',
                 path: 'messages',

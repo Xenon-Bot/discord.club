@@ -13,7 +13,7 @@ class Api {
 
     isAuthenticated() {
         return true
-            // return this.token !== undefined && this.token !== null
+        // return this.token !== undefined && this.token !== null
     }
 
     setToken(token) {
@@ -22,13 +22,13 @@ class Api {
 
     request(method, path, data) {
         return fetch(apiHost + path, {
-                method: method,
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": this.token
-                },
-                body: data != null ? JSON.stringify(data) : null
-            })
+            method: method,
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": this.token
+            },
+            body: data != null ? JSON.stringify(data) : null
+        })
             .then(resp => {
                 if (!resp.ok) {
                     // NotificationManager.error(`API Error ${resp.status}: ${resp.statusText}`);
@@ -90,7 +90,9 @@ const store = new Vuex.Store({
         }
     },
     getters: {
-        isAuthenticated(state) { return state.api.isAuthenticated() }
+        isAuthenticated(state) {
+            return state.api.isAuthenticated()
+        }
     }
 })
 
