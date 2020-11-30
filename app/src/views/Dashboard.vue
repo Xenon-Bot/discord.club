@@ -3,7 +3,7 @@
         <nav class="topbar navbar navbar-expand-lg navbar-dark bg-darker">
         <span class="navbar-brand">
           <span class="sidebar-trigger h4 align-middle ml-2 mr-2 c-pointer" v-on:click="sidebarShow = !sidebarShow">
-            <i class="fas fa-bars"></i>
+            <i class="fas fa-bars"/>
           </span>
           {{ currentRouteName }}
         </span>
@@ -11,7 +11,7 @@
                 <router-link to="/">
                     <button class="btn btn-lg btn-outline-primary my-2 my-sm-0">
                         Home
-                        <i class="fas fa-angle-double-left ml-1"></i>
+                        <i class="fas fa-angle-double-left ml-1"/>
                     </button>
                 </router-link>
             </div>
@@ -19,22 +19,22 @@
         <div class="sidebar bg-darker" v-bind:class="{show: sidebarShow}">
             <div class="links" v-on:click="sidebarShow = false">
                 <router-link to="/dashboard" class="link">
-                    <span class="icon"><i class="fas fa-rocket"></i></span>
+                    <span class="icon"><i class="fas fa-rocket"/></span>
                     <span class="text">Quick Message</span>
                 </router-link>
                 <router-link to="/dashboard/messages" class="link">
-                    <span class="icon"><i class="fas fa-envelope-open-text"></i></span>
+                    <span class="icon"><i class="fas fa-envelope-open-text"/></span>
                     <span class="text">Messages</span>
                 </router-link>
                 <router-link to="/dashboard/triggers" class="link">
-                    <span class="icon"><i class="fas fa-magic"></i></span>
+                    <span class="icon"><i class="fas fa-magic"/></span>
                     <span class="text">Triggers</span>
                 </router-link>
             </div>
         </div>
         <div class="main" v-on:click="sidebarShow = false">
             <div class="container-fluid pt-4 px-2 p-lg-4">
-                <router-view></router-view>
+                <router-view/>
             </div>
         </div>
     </div>

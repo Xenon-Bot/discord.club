@@ -1,6 +1,6 @@
 <template>
     <div>
-        <login-prompt v-if="!api.isAuthenticated"></login-prompt>
+        <login-prompt v-if="!api.isAuthenticated"/>
         <div v-else>
             <div v-if="loadingError">{{loadingError}}</div>
             <div v-else-if="!messages">Loading messages ...</div>
@@ -20,7 +20,7 @@
                             <div class="float-clear"></div>
                         </div>
                         <div class="collapse bg-discordbg rounded-bottom" v-bind:id="'msg' + i">
-                            <preview v-bind:data="msg.data" class="mx-3 my-4"></preview>
+                            <preview v-bind:data="msg.data" class="mx-3 my-4"/>
                         </div>
                     </div>
                 </div>

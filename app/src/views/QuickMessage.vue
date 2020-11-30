@@ -1,6 +1,6 @@
 <template>
     <div>
-        <editor v-bind:onSave="onSave" ref="editor"></editor>
+        <editor v-bind:onSave="onSave" ref="editor"/>
         <div class="modal fade" id="saveModal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">

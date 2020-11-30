@@ -1,6 +1,6 @@
 <template>
     <div>
-        <editor v-bind:onSave="onSave"></editor>
+        <editor v-bind:onSave="onSave"/>
     </div>
 </template>
 <script>

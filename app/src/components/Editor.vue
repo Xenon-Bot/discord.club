@@ -14,7 +14,7 @@
                             <div class="col-12 mb-4">
                                 <label>Message ID or URL
                                     <span class="ml-1 hover-tooltip" title="yeet">
-                                    <i class="fas fa-question hover-tooltip-trigger"></i>
+                                    <i class="fas fa-question hover-tooltip-trigger"/>
                                     <span class="hover-tooltip-content bg-dark py-2 px-3 rounded">
                                         If you want to edit an existing message, you can paste the message link or id here.
                                         The author of the message must be a webhook. 
@@ -46,7 +46,7 @@
                             <div class="col-12 col-lg-6">
                                 <label>Avatar URL
                                     <span class="ml-1 hover-tooltip" title="yeet">
-                                        <i class="fas fa-question hover-tooltip-trigger"></i>
+                                        <i class="fas fa-question hover-tooltip-trigger"/>
                                         <span class="hover-tooltip-content bg-dark py-2 px-3 rounded">
                                             Image URLs must resolve to a valid image and respond with the correct Content-Type header.
                                             URLs ending with .png, .webp, .jpg or .jpeg are in most cases safe to use.
@@ -64,7 +64,7 @@
                                     <label class="form-check-label">TTS</label>
                                 </div>
                                 <textarea v-model="content" rows="5" class="form-control" placeholder="I like webhooks"
-                                          maxlength="2000"></textarea>
+                                          maxlength="2000"/>
                             </div>
                             <div class="col-12">
                                 <label>Files</label>
@@ -74,13 +74,13 @@
                                       class="px-2 py-1 m-1 bg-dark col-auto rounded">
                                     <label class="mr-2 d-inline">{{file.name}}</label>
                                     <span class="c-pointer d-line" v-on:click="deleteFile(i)"><i
-                                            class="fas fa-minus"></i></span>
+                                            class="fas fa-minus"/></span>
                                 </span>
                                 </div>
                                 <input type="file" class="btn btn-sm btn-outline-light mr-2"
                                        v-on:change="addFileFromInput">
                                 <div class="btn btn-sm btn-outline-light" v-on:click="clearFiles">
-                                    <i class="fas fa-trash"></i>
+                                    <i class="fas fa-trash"/>
                                 </div>
                             </div>
                         </div>
@@ -93,14 +93,14 @@
                          v-bind:style="{borderLeft: '5px solid' + embed.color}">
                         <div class="card-body">
                             <div class="float-right" style="font-size: 1.1rem">
-                                <span class="mr-3 c-pointer" v-if="e != 0" v-on:click="moveEmbedUp(e)"><i
-                                        class="fas fa-chevron-up"></i></span>
-                                <span class="mr-3 c-pointer" v-if="e != embeds.length - 1"
-                                      v-on:click="moveEmbedDown(e)"><i class="fas fa-chevron-down"></i></span>
+                                <span class="mr-3 c-pointer" v-if="e !== 0" v-on:click="moveEmbedUp(e)"><i
+                                        class="fas fa-chevron-up"/></span>
+                                <span class="mr-3 c-pointer" v-if="e !== embeds.length - 1"
+                                      v-on:click="moveEmbedDown(e)"><i class="fas fa-chevron-down"/></span>
                                 <span class="mr-3 c-pointer" v-if="embeds.length < 10" v-on:click="cloneEmbed(e)"><i
-                                        class="far fa-copy"></i></span>
+                                        class="far fa-copy"/></span>
                                 <span class="mr-3 c-pointer" v-on:click="deleteEmbed(e)"><i
-                                        class="fas fa-minus"></i></span>
+                                        class="fas fa-minus"/></span>
                             </div>
                             <h5 data-toggle="collapse" v-bind:data-target="'#embed' + e" role="button"
                                 class="overflow-auto text-nowrap">
@@ -145,7 +145,7 @@
                                         <label>Description</label>
                                         <span class="text-muted ml-2 char-counter">{{ embed.description ? embed.description.length : 0 }} / 2048</span>
                                         <textarea v-model="embed.description" class="form-control"
-                                                  placeholder="My first template" rows="5" maxlength="2048"></textarea>
+                                                  placeholder="My first template" rows="5" maxlength="2048"/>
                                     </div>
                                     <div class="col-12 col-lg-6 mb-4">
                                         <label>URL</label>
@@ -162,7 +162,7 @@
                                     <div class="col-12 col-lg-6 mb-4">
                                         <label>Image URL
                                             <span class="ml-1 hover-tooltip" title="yeet">
-                                            <i class="fas fa-question hover-tooltip-trigger"></i>
+                                            <i class="fas fa-question hover-tooltip-trigger"/>
                                             <span class="hover-tooltip-content bg-dark py-2 px-3 rounded">
                                                 Image URLs must resolve to a valid image and respond with the correct Content-Type header.
                                                 URLs ending with .png, .webp, .jpg or .jpeg are in most cases safe to use.
@@ -175,7 +175,7 @@
                                     <div class="col-12 col-lg-6 mb-4">
                                         <label>Thumbnail URL
                                             <span class="ml-1 hover-tooltip" title="yeet">
-                                            <i class="fas fa-question hover-tooltip-trigger"></i>
+                                            <i class="fas fa-question hover-tooltip-trigger"/>
                                             <span class="hover-tooltip-content bg-dark py-2 px-3 rounded">
                                                 Image URLs must resolve to a valid image and respond with the correct Content-Type header.
                                                 URLs ending with .png, .webp, .jpg or .jpeg are in most cases safe to use.
@@ -198,12 +198,12 @@
                                         <div class="form-row">
                                             <div class="col">
                                                 <datetime v-model.trim="embed.timestamp" type="datetime"
-                                                          input-class="form-control"></datetime>
+                                                          input-class="form-control"/>
                                             </div>
                                             <div class="col-auto">
                                                 <button class="btn btn-outline-light"
                                                         v-on:click="embed.timestamp = null">
-                                                    <i class="fas fa-eraser"></i>
+                                                    <i class="fas fa-eraser"/>
                                                 </button>
                                             </div>
                                         </div>
@@ -211,7 +211,7 @@
                                     <div class="col-12 col-lg-6 mb-4">
                                         <label>Footer Icon URL
                                             <span class="ml-1 hover-tooltip" title="yeet">
-                                            <i class="fas fa-question hover-tooltip-trigger"></i>
+                                            <i class="fas fa-question hover-tooltip-trigger"/>
                                             <span class="hover-tooltip-content bg-dark py-2 px-3 rounded">
                                                 Image URLs must resolve to a valid image and respond with the correct Content-Type header.
                                                 URLs ending with .png, .webp, .jpg or .jpeg are in most cases safe to use.
@@ -229,7 +229,7 @@
                                     <span class="text-muted ml-2 char-counter">{{ field.name ? field.name.length : 0 }} / 256</span>
                                     <span class="text-muted ml-2 char-counter">{{ field.value ? field.value.length : 0 }} / 1024</span>
                                     <span class="c-pointer float-right" v-on:click="deleteField(e, f)"><i
-                                            class="fas fa-minus"></i></span>
+                                            class="fas fa-minus"/></span>
                                     <div class="form-row mb-3">
                                         <div class="col-8 col-sm-10 mb-3">
                                             <input v-model.trim="field.name" type="text" class="form-control"
@@ -244,26 +244,26 @@
                                         </div>
                                         <div class="col-12">
                                             <textarea v-model.trim="field.value" rows="2" class="form-control"
-                                                      placeholder="Value" maxlength="1024"></textarea>
+                                                      placeholder="Value" maxlength="1024"/>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="btn btn-sm btn-outline-light mr-2" v-on:click="clearFields(e)">
-                                    <i class="fas fa-trash"></i>
+                                    <i class="fas fa-trash"/>
                                 </div>
                                 <div class="btn btn-sm btn-outline-light" v-on:click="addField(e)"
                                      v-bind:class="{disabled: embed.fields ? embed.fields.length >= 10 : false}">
-                                    <i class="fas fa-plus"></i>
+                                    <i class="fas fa-plus"/>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="btn btn-sm btn-outline-secondary mr-2" v-on:click="clearEmbeds">
-                        <i class="fas fa-trash"></i>
+                        <i class="fas fa-trash"/>
                     </div>
                     <div class="btn btn-sm btn-outline-primary" v-on:click="addEmbed"
                          v-bind:class="{disabled: embeds.length >= 10}">
-                        <i class="fas fa-plus"></i>
+                        <i class="fas fa-plus"/>
                     </div>
                 </div>
             </div>
@@ -271,13 +271,13 @@
                 <h4 class="ml-2 mb-3">Preview</h4>
                 <div class="card preview mb-5 bg-discordbg">
                     <div class="card-body px-1 py-3">
-                        <preview v-bind:data="getJSON()"></preview>
+                        <preview v-bind:data="getJSON()"/>
                     </div>
                 </div>
                 <h4 class="ml-2 mb-3">JSON Code</h4>
                 <div class="card bg-darker mb-5">
                     <div class="card-body px-3 py-3">
-                        <textarea v-model.lazy="jsonCode" class="form-control mb-2" rows="10"></textarea>
+                        <textarea v-model.lazy="jsonCode" class="form-control mb-2" rows="10"/>
                         <span class="text-danger">{{ jsonError }}</span>
                         <button class="btn btn-outline-secondary float-right" v-on:click="onSave">
                             Save Message
