@@ -17,8 +17,8 @@ bp = Blueprint(name="api.messages", url_prefix="/messages")
     data=dict,
     files=list
 )
-async def create_template(request, payload, user_id):
-    result = await request.app.db.templates.insert_one({
+async def create_message(request, payload, user_id):
+    result = await request.app.db.messages.insert_one({
         "user_id": user_id,
         "last_updated": datetime.utcnow(),
         "name": payload["name"],
@@ -28,12 +28,12 @@ async def create_template(request, payload, user_id):
     return {"id": str(result.inserted_id)}
 
 
-@bp.patch("/<template_id>")
+@bp.patch("/<msg_id>")
 @requires_token
 @requires_body()
-async def update_template(request, payload, user_id, template_id):
+async def update_message(request, payload, user_id, msg_id):
     try:
-        template_id = bson.ObjectId(template_id)
+        msg_id = bson.ObjectId(msg_id)
     except bson.errors.InvalidId:
         return response.empty(status=404)
 
@@ -53,8 +53,8 @@ async def update_template(request, payload, user_id, template_id):
         if isinstance(files, list):
             to_update["files"] = files
 
-    result = await request.app.db.templates.find_one_and_update(
-        {"_id": template_id, "user_id": user_id},
+    result = await request.app.db.messages.find_one_and_update(
+        {"_id": msg_id, "user_id": user_id},
         {"$set": to_update},
         return_document=pymongo.ReturnDocument.AFTER
     )
@@ -63,22 +63,22 @@ async def update_template(request, payload, user_id, template_id):
     return response.json(result)
 
 
-@bp.delete("/<template_id>")
+@bp.delete("/<msg_id>")
 @requires_token
-async def delete_template(request, user_id, template_id):
+async def delete_message(request, user_id, msg_id):
     try:
-        template_id = bson.ObjectId(template_id)
+        msg_id = bson.ObjectId(msg_id)
     except bson.errors.InvalidId:
         return response.empty(status=404)
 
-    await request.app.db.templates.delete_one({"_id": template_id, "user_id": user_id})
-    return response.json({"id": template_id})
+    await request.app.db.messages.delete_one({"_id": msg_id, "user_id": user_id})
+    return response.json({"id": msg_id})
 
 
-@bp.get("/<template_id>")
+@bp.get("/<msg_id>")
 @requires_token
-async def get_template(request, user_id, template_id):
-    result = await request.app.db.templates.find_one({"_id": template_id, "user_id": user_id})
+async def get_message(request, user_id, msg_id):
+    result = await request.app.db.messages.find_one({"_id": msg_id, "user_id": user_id})
     result["id"] = result.pop("_id")
     del result["user_id"]
     return response.json(result)
@@ -86,40 +86,13 @@ async def get_template(request, user_id, template_id):
 
 @bp.get("/")
 @requires_token
-async def get_templates(request, user_id):
-    return response.json([{"id": str(i), "name": f"Cool Message {i + 1}", "last_updated": datetime.utcnow().timestamp(), "data":
-        {
-            "content": "asdsadasdsadasdasdasdsadsadd",
-            "embeds": [
-                {
-                    "title": "What's this?",
-                    "color": 5814783,
-                    "author": {},
-                    "image": {},
-                    "thumbnail": {},
-                    "footer": {},
-                    "fields": [
-                        {
-                            "name": "asdasd",
-                            "value": "asd",
-                            "inline": True
-                        },
-                        {
-                            "name": "asd",
-                            "value": "asd",
-                            "inline": True
-                        }
-                    ]
-                },
-                {
-                    "title": "cool embed",
-                    "color": 16381952,
-                    "description": "yeeeeetyeeeeetyeeeeetyeeeeetyeeeeetyeeeeetyeeeeetyeeeeetyeeeeetyeeeeetyeeeeetyeeeeet\nyeeeeetyeeeeetyeeeeet",
-                    "author": {},
-                    "image": {},
-                    "thumbnail": {},
-                    "footer": {}
-                }
-            ]
-        }
-    } for i in range(25)])
+async def get_messages(request, user_id):
+    messages = []
+    async for msg in request.app.db.messages.find_one({"user_id": user_id}):
+        messages.append({
+            "id": str(msg.pop("_id")),
+            "last_updated": msg.pop("last_updated").timestamp(),
+            **msg
+        })
+
+    return response.json(messages)
