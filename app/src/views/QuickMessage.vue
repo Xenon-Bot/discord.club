@@ -1,9 +1,9 @@
 <template>
     <div>
-        <editor v-bind:onSave="onSave" ref="editor"/>
+        <editor v-bind:onSave="onSave" ref="editor" v-bind:localStorage="true"/>
         <div class="modal fade" id="saveModal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
-                <div class="modal-content">
+                <div class="modal-content" v-if="api.isAuthenticated()">
                     <div class="modal-header">
                         <h5 class="modal-title">Save Message</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -20,6 +20,9 @@
                                 v-bind:class="{disabled: !saveName}">Save
                         </button>
                     </div>
+                </div>
+                <div class="modal-content" v-else>
+                    <login-prompt/>
                 </div>
             </div>
         </div>
@@ -48,7 +51,13 @@
                     files: this.$refs.editor.files,
                     name: this.saveName
                 }
-                this.api.saveMessage(payload)
+                this.api.saveMessage(payload).then(resp => {
+                    if (!resp.ok) {
+                        console.log(resp)
+                    } else {
+                        resp.json().then(data => window.location.replace(`/dashboard/messages/${data.id}`))
+                    }
+                })
             }
         },
         computed: {

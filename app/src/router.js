@@ -4,11 +4,12 @@ import Home from './views/Home.vue'
 
 Vue.use(VueRouter)
 
-const routes = [{
-    path: '/',
-    name: 'Home',
-    component: Home
-},
+const routes = [
+    {
+        path: '/',
+        name: 'Home',
+        component: Home
+    },
     {
         path: '/dashboard',
         component: () =>
@@ -38,6 +39,11 @@ const routes = [{
                     import ( /* webpackChunkName: "editor" */ './views/Triggers.vue')
             }
         ]
+    },
+    {
+        path: '/callback',
+        name: 'Oauth Callback',
+        component: () => null
     }
 ]
 

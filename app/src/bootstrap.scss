@@ -13,3 +13,8 @@ $modal-content-bg: map-get($theme-colors, 'dark');
 .float-clear {
   clear: both;
 }
+
+.vue-notification {
+  padding: 10px 30px;
+  font-size: 1.3rem;
+}

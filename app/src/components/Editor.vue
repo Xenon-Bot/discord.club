@@ -297,7 +297,7 @@
     export default {
         name: 'Editor',
         components: {Preview, Datetime},
-        props: ['onSave'],
+        props: ['onSave', 'localStorage'],
         data() {
             return {
                 webhookId: "",
@@ -313,9 +313,11 @@
             }
         },
         created() {
-            const lastData = localStorage.getItem("lastData")
-            if (lastData) {
-                this.setJSON(JSON.parse(lastData));
+            if (this.localStorage) {
+                const lastData = localStorage.getItem("lastData")
+                if (lastData) {
+                    this.setJSON(JSON.parse(lastData));
+                }
             }
         },
         methods: {
@@ -354,7 +356,9 @@
                     tts: this.tts,
                     embeds: embeds
                 }
-                localStorage.setItem("lastData", JSON.stringify(data))
+                if (this.localStorage) {
+                    localStorage.setItem("lastData", JSON.stringify(data))
+                }
                 return data
             },
             setJSON(data) {

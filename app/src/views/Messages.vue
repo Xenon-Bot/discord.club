@@ -1,18 +1,19 @@
 <template>
     <div>
-        <login-prompt v-if="!api.isAuthenticated"/>
+        <login-prompt v-if="!api.isAuthenticated()"/>
         <div v-else>
             <div v-if="loadingError">{{loadingError}}</div>
-            <div v-else-if="!messages">Loading messages ...</div>
+            <loading v-else-if="!messages" />
             <div v-else class="row">
                 <div v-for="(msg, i) in messages" v-bind:key="i" class="col-12 mb-2">
                     <div class="card bg-darker">
                         <div class="card-body">
                             <div class="float-right">
+                                <button class="btn btn-outline-primary mr-2">Send</button>
                                 <router-link v-bind:to="'/dashboard/messages/' + msg.id">
                                     <button class="btn btn-outline-secondary mr-2">Edit</button>
                                 </router-link>
-                                <button class="btn btn-outline-primary">Send</button>
+                                <button class="btn btn-outline-danger" v-on:click="deleteMessage(msg.id)">Delete</button>
                             </div>
                             <h5 class="c-pointer align-middle mb-0" data-toggle="collapse"
                                 v-bind:data-target="'#msg' + i">{{msg.name}}</h5>
@@ -61,6 +62,15 @@
                 }
                 let date = new Date(timestamp * 1000)
                 return date.toLocaleDateString() + ' ' + date.toLocaleTimeString().replace(/(.*)\D\d+/, '$1');
+            },
+            deleteMessage(id) {
+                this.api.deleteMessage(id).then(resp => {
+                    if (!resp.ok) {
+                        console.log(resp)
+                    } else {
+                        this.loadMessages()
+                    }
+                })
             }
         },
         computed: {

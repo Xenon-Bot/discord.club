@@ -12,8 +12,7 @@ class Api {
     }
 
     isAuthenticated() {
-        return true
-        // return this.token !== undefined && this.token !== null
+        return this.token !== undefined && this.token !== null
     }
 
     setToken(token) {
@@ -32,13 +31,38 @@ class Api {
             .then(resp => {
                 if (!resp.ok) {
                     // NotificationManager.error(`API Error ${resp.status}: ${resp.statusText}`);
-                    if (resp.status === 401) {
-                        this.token = null;
-                        localStorage.removeItem("token");
-                        // window.location.replace("/");
+                    if (!resp.ok) {
+                        if (resp.status === 401) {
+                            this.token = null;
+                            localStorage.removeItem("token");
+                        } else {
+                            resp.json().then(data => {
+                                Vue.notify({
+                                    group: 'main',
+                                    title: 'Request Failed',
+                                    text: data.error,
+                                    type: 'error'
+                                })
+                            }).catch(() => {
+                                Vue.notify({
+                                    group: 'main',
+                                    title: 'Request Failed',
+                                    text: `${resp.status}: ${resp.statusText}`,
+                                    type: 'error'
+                                })
+                            })
+                        }
                     }
                 }
                 return resp
+            })
+            .catch(() => {
+                Vue.notify({
+                    group: 'main',
+                    title: 'Request Failed',
+                    text: 'The API seems to be unavailable',
+                    type: 'error'
+                })
             })
     }
 
