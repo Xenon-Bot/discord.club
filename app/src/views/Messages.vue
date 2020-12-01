@@ -42,7 +42,9 @@
             }
         },
         created() {
-            this.loadMessages()
+            if (this.api.isAuthenticated()) {
+                this.loadMessages()
+            }
         },
         methods: {
             loadMessages() {

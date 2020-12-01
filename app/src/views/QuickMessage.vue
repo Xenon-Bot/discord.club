@@ -12,7 +12,8 @@
                     </div>
                     <div class="modal-body">
                         <label>Message Name</label>
-                        <input type="text" class="form-control" placeholder="Cool Message" v-model.trim="saveName">
+                        <input type="text" class="form-control mb-3" placeholder="Cool Message" v-model.trim="saveName">
+                        <span class="text-muted">Saved messages don't include the webhook or message URl.</span>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

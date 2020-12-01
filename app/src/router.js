@@ -43,7 +43,8 @@ const routes = [
     {
         path: '/callback',
         name: 'Oauth Callback',
-        component: () => null
+        component: () =>
+            import ( /* webpackChunkName: "editor" */ './views/OauthCallback.vue')
     }
 ]
 

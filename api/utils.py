@@ -14,6 +14,9 @@ def requires_body(*fields, **typed_fields):
             if data is None:
                 return response.json({"error": "JSON body required"}, status=400)
 
+            if len(fields) == 0 and len(typed_fields) == 0:
+                return await handler(request, data, *args, **kwargs)
+
             for field in fields:
                 value = data.get(field)
                 if value is None:

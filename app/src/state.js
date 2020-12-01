@@ -17,6 +17,7 @@ class Api {
 
     setToken(token) {
         this.token = token
+        localStorage.setItem("token", token)
     }
 
     request(method, path, data) {
@@ -67,7 +68,13 @@ class Api {
     }
 
     exchangeToken(code) {
-        console.log(code)
+        return this.request('POST', '/oauth/exchange', {code})
+            .then(resp => {
+                if (resp.ok) {
+                    resp.json().then(data => this.setToken(data.token))
+                }
+                return resp
+            })
     }
 
     getUser() {
