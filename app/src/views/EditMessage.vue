@@ -1,21 +1,56 @@
 <template>
     <div>
-        <editor v-bind:onSave="onSave" v-bind:localStorage="false" ref="editor"/>
+        <editor v-on:save="onSave" v-on:dataUpdate="onDataUpdate" :initData="initData">
+            <template v-slot:top-left>
+                <h4 class="ml-2 mb-3">Webhook</h4>
+                <div class="card border-0 tex-light mb-4 bg-darker">
+                    <div class="card-body mb-0">
+                        <webhook-executor :data="lastData"/>
+                    </div>
+                </div>
+            </template>
+        </editor>
     </div>
 </template>
 <script>
     import Editor from '@/components/Editor.vue'
+    import WebhookExecutor from "@/components/WebhookExecutor";
 
     export default {
         name: 'EditMessage',
-        components: {Editor},
+        components: {Editor, WebhookExecutor},
+        data() {
+            return {
+                lastData: null,
+                initData: null,
+                unsavedChanges: false,
+            }
+        },
+        beforeRouteLeave(to, from, next) {
+            if (this.unsavedChanges && !window.confirm('You have unsaved changes! Do you want to leave?')) {
+                return;
+            }
+            next()
+        },
         methods: {
+            onDataUpdate(data) {
+                this.lastData = data
+                this.unsavedChanges = true
+            },
             onSave() {
-                let payload = {
-                    data: this.$refs.editor.getJSON(),
-                    files: this.$refs.editor.files
-                }
-                this.api.editMessage(this.msgId, payload).then(resp => console.log(resp))
+                this.api.editMessage(this.msgId, this.lastData).then(resp => {
+                    if (!resp.ok) {
+                        console.log(resp)
+                    } else {
+                        this.unsavedChanges = false
+                        this.$notify({
+                            group: 'main',
+                            title: 'Messages Saved',
+                            text: 'You can continue editing your message now',
+                            type: 'success'
+                        })
+                    }
+                })
             }
         },
         created() {
@@ -23,9 +58,9 @@
                 if (!resp.ok) {
                     console.log(resp)
                 } else {
-                    resp.json().then(body => {
-                        this.$refs.editor.setJSON(body.data)
-                        this.$refs.editor.files = body.files
+                    resp.json().then(data => {
+                        this.initData = data
+                        this.unsavedChanges = false
                     })
                 }
             })

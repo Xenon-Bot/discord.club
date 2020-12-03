@@ -1,6 +1,15 @@
 <template>
     <div>
-        <editor v-bind:onSave="onSave" ref="editor" v-bind:localStorage="true"/>
+        <editor v-on:save="onSave" v-on:dataUpdate="onDataUpdate" :initData="initData">
+            <template v-slot:top-left>
+                <h4 class="ml-2 mb-3">Webhook</h4>
+                <div class="card border-0 tex-light mb-4 bg-darker">
+                    <div class="card-body mb-0">
+                        <webhook-executor :data="lastData" v-on:messageRetrieved="onMessageRetrieved"/>
+                    </div>
+                </div>
+            </template>
+        </editor>
         <div class="modal fade" id="saveModal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content" v-if="api.isAuthenticated()">
@@ -13,11 +22,11 @@
                     <div class="modal-body">
                         <label>Message Name</label>
                         <input type="text" class="form-control mb-3" placeholder="Cool Message" v-model.trim="saveName">
-                        <span class="text-muted">Saved messages don't include the webhook or message URl.</span>
+                        <span class="text-muted">Saved messages don't include the webhook or message URL.</span>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" v-on:click="saveMessage"
+                        <button type="button" class="btn btn-primary" v-on:click="saveMessage" data-dismiss="modal"
                                 v-bind:class="{disabled: !saveName}">Save
                         </button>
                     </div>
@@ -32,31 +41,53 @@
 <script>
     import Editor from '@/components/Editor.vue'
     import $ from 'jquery'
+    import WebhookExecutor from "@/components/WebhookExecutor";
 
     export default {
         name: 'QuickMessage',
-        components: {Editor},
+        components: {Editor, WebhookExecutor},
+        created() {
+            const lastData = localStorage.getItem("lastData")
+            if (lastData) {
+                this.initData = JSON.parse(lastData);
+            }
+        },
         data() {
             return {
-                saveName: ""
+                saveName: "",
+                initData: null,
+                lastData: null
             }
         },
         methods: {
+            onDataUpdate(data) {
+                this.lastData = data
+                localStorage.setItem("lastData", JSON.stringify(this.lastData))
+            },
             onSave() {
                 $('#saveModal').modal()
+            },
+            onMessageRetrieved(data) {
+                this.initData = {files: [], json: data}
             },
             saveMessage() {
                 if (!this.saveName) return;
                 let payload = {
-                    data: this.$refs.editor.getJSON(),
-                    files: this.$refs.editor.files,
+                    json: this.lastData.json,
+                    files: this.lastData.files,
                     name: this.saveName
                 }
                 this.api.saveMessage(payload).then(resp => {
                     if (!resp.ok) {
                         console.log(resp)
                     } else {
-                        resp.json().then(data => window.location.replace(`/dashboard/messages/${data.id}`))
+                        this.$notify({
+                            group: 'main',
+                            title: 'Messages Saved',
+                            text: 'You can continue editing your message now',
+                            type: 'success'
+                        })
+                        resp.json().then(data => this.$router.push(`/dashboard/messages/${data.id}`))
                     }
                 })
             }

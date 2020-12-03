@@ -2,7 +2,7 @@ from sanic import Blueprint
 
 from . import oauth, platforms, messages, triggers
 
-bp = Blueprint.group(oauth.bp, platforms.bp, triggers.bp, messages.bp, url_prefix="/api")
+bp = Blueprint.group(oauth.bp, platforms.bp, triggers.bp, messages.bp)
 
 
 async def setup(app):

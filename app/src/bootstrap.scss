@@ -18,3 +18,27 @@ $modal-content-bg: map-get($theme-colors, 'dark');
   padding: 10px 50px;
   font-size: 1.3rem;
 }
+
+.hover-tooltip {
+  position: relative;
+
+  &:hover {
+    .hover-tooltip-content {
+      display: block;
+    }
+  }
+
+  .hover-tooltip-content {
+    display: none;
+    position: absolute;
+    width: 250px;
+    left: 0;
+    bottom: 25px;
+    z-index: 10;
+    box-shadow: 0 0 2px black;
+  }
+
+  .hover-tooltip-trigger {
+    cursor: pointer;
+  }
+}

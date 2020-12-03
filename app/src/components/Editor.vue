@@ -2,37 +2,7 @@
     <div class="quick" v-on:paste="addFileFromClipboard">
         <div class="row">
             <div class="col-12 col-xl-6 mb-5">
-                <h4 class="ml-2 mb-3">Webhook</h4>
-                <div class="card border-0 tex-light mb-4 bg-darker">
-                    <div class="card-body mb-0">
-                        <div class="form-row mb-2">
-                            <div class="col-12 mb-4">
-                                <label>Webhook URL</label>
-                                <input v-model.trim.lazy="webhookUrl" type="url" class="form-control"
-                                       placeholder="https://discord.com/api/webhooks/423157583646294017/nsFEJfuNKVBRcKcgj0JX3TygdvhX-ItEJhrWVWadw7shUXXuIRwsJHUS_XbDDSA_ILKN">
-                            </div>
-                            <div class="col-12 mb-4">
-                                <label>Message ID or URL
-                                    <span class="ml-1 hover-tooltip" title="yeet">
-                                    <i class="fas fa-question hover-tooltip-trigger"/>
-                                    <span class="hover-tooltip-content bg-dark py-2 px-3 rounded">
-                                        If you want to edit an existing message, you can paste the message link or id here.
-                                        The author of the message must be a webhook. 
-                                    </span>
-                                </span>
-                                </label>
-                                <input v-model.trim.lazy="messageUrl" type="text" class="form-control"
-                                       placeholder="https://discord.com/channels/410488579140354049/633228954064650250/781981855808487477">
-                            </div>
-                        </div>
-                        <button class="btn btn-outline-primary float-right" v-on:click="sendMessage"
-                                v-bind:class="{disabled: !this.webhookUrl}">
-                            <span v-if="messageId">Edit</span>
-                            <span v-else>Send</span>
-                            Message
-                        </button>
-                    </div>
-                </div>
+                <slot name="top-left"/>
                 <h4 class="ml-2 mb-3">Message</h4>
                 <div class="card border-0 tex-light mb-4 bg-darker">
                     <div class="card-body">
@@ -78,7 +48,7 @@
                                 </span>
                                 </div>
                                 <input type="file" class="btn btn-sm btn-outline-light mr-2"
-                                       v-on:change="addFileFromInput">
+                                       v-on:change="addFileFromInput" style="max-width: 100%">
                                 <div class="btn btn-sm btn-outline-light" v-on:click="clearFiles">
                                     <i class="fas fa-trash"/>
                                 </div>
@@ -233,7 +203,7 @@
                                     <div class="form-row mb-3">
                                         <div class="col-8 col-sm-10 mb-3">
                                             <input v-model.trim="field.name" type="text" class="form-control"
-                                                   placeholder="Name" maxlength="256">
+                                                   placeholder="Name" maxlength="256" required>
                                         </div>
                                         <div class="col-4 col-sm-2 mb-3">
                                             <div class="form-check pt-2">
@@ -244,7 +214,7 @@
                                         </div>
                                         <div class="col-12">
                                             <textarea v-model.trim="field.value" rows="2" class="form-control"
-                                                      placeholder="Value" maxlength="1024"/>
+                                                      placeholder="Value" maxlength="1024" required/>
                                         </div>
                                     </div>
                                 </div>
@@ -271,7 +241,7 @@
                 <h4 class="ml-2 mb-3">Preview</h4>
                 <div class="card preview mb-5 bg-discordbg">
                     <div class="card-body px-1 py-3">
-                        <preview v-bind:data="getJSON()"/>
+                        <preview v-bind:data="fullData"/>
                     </div>
                 </div>
                 <h4 class="ml-2 mb-3">JSON Code</h4>
@@ -279,9 +249,14 @@
                     <div class="card-body px-3 py-3">
                         <textarea v-model.lazy="jsonCode" class="form-control mb-2" rows="10"/>
                         <span class="text-danger">{{ jsonError }}</span>
-                        <button class="btn btn-outline-secondary float-right" v-on:click="onSave">
-                            Save Message
-                        </button>
+                        <div class="float-right">
+                            <button class="btn btn-outline-light mr-2" v-on:click="exportJSON">
+                                Download
+                            </button>
+                            <button class="btn btn-outline-secondary" v-on:click="$emit('save', fullData)">
+                                Save Message
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -297,12 +272,9 @@
     export default {
         name: 'Editor',
         components: {Preview, Datetime},
-        props: ['onSave', 'localStorage'],
+        props: ['initData'],
         data() {
             return {
-                webhookId: "",
-                webhookToken: "",
-                messageId: "",
                 webhookUsername: "",
                 webhookAvatarUrl: "",
                 content: "",
@@ -313,11 +285,8 @@
             }
         },
         created() {
-            if (this.localStorage) {
-                const lastData = localStorage.getItem("lastData")
-                if (lastData) {
-                    this.setJSON(JSON.parse(lastData));
-                }
+            if (this.initData) {
+                this.fullData = this.initData
             }
         },
         methods: {
@@ -355,9 +324,6 @@
                     content: this.content,
                     tts: this.tts,
                     embeds: embeds
-                }
-                if (this.localStorage) {
-                    localStorage.setItem("lastData", JSON.stringify(data))
                 }
                 return data
             },
@@ -447,35 +413,6 @@
                     embed.fields.splice(i, 1)
                 }
             },
-            sendMessage() {
-                if (!this.webhookUrl) return
-                if (this.messageId) {
-                    // TODO: default content to " " to remove existing content
-                    fetch(`${this.webhookUrl}/messages/${this.messageId}`, {
-                        method: 'PATCH',
-                        body: JSON.stringify(this.getJSON()),
-                        headers: {'Content-Type': 'application/json'}
-                    })
-                        .then(resp => alert(resp.status))
-                } else {
-                    let data = new FormData()
-                    data.append('payload_json', JSON.stringify(this.getJSON()))
-                    for (let i in this.files) {
-                        let file = this.files[i]
-                        data.append(`file${i}`, new Blob([file.content]), file.name)
-                    }
-
-                    fetch(`${this.webhookUrl}?wait=true`, {
-                        method: 'POST',
-                        body: data
-                    })
-                        .then(resp => {
-                            alert(resp.status)
-                            return resp.json()
-                        })
-                        .then(data => this.messageId = data.id)
-                }
-            },
             addFile(file) {
                 let reader = new FileReader()
                 reader.readAsArrayBuffer(file)
@@ -488,9 +425,20 @@
                         name += "_"
                     }
 
+                    let fileContent = ''
+                    let bytes = new Uint8Array(re.target.result)
+                    if (bytes.length > 5000000) {
+                        alert('That file is too big and can not be added')
+                        return
+                    }
+                    for (let i = 0; i < bytes.length; i ++) {
+                        fileContent += String.fromCharCode(bytes[i])
+                    }
+
                     this.files.push({
                         name: `${name}.${extension}`,
-                        content: re.target.result
+                        content: window.btoa(fileContent),
+                        size: bytes.length
                     })
                 }
             },
@@ -512,6 +460,15 @@
             },
             clearFiles() {
                 this.files = []
+            },
+            exportJSON() {
+                let element = document.createElement('a');
+                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.jsonCode));
+                element.setAttribute('download', 'message.json');
+                element.style.display = 'none';
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
             }
         },
         computed: {
@@ -531,61 +488,29 @@
                     this.setJSON(data);
                 }
             },
-            messageUrl: {
+            fullData: {
                 get() {
-                    return this.messageId
+                    return {
+                        json: this.getJSON(),
+                        files: this.files
+                    }
                 },
-                set(newValue) {
-                    const urlRegex = /https:\/\/(canary\.)?discord(app)?.com\/channels\/[0-9]+\/[0-9]+\/([0-9]+)\/?/i
-                    let match = newValue.toString().match(urlRegex);
-                    if (match) {
-                        this.messageId = match[3]
-                    } else if (newValue.match(/^[0-9]+$/)) {
-                        this.messageId = newValue
-                    } else {
-                        this.messageId = null;
-                    }
-
-                    if (this.webhookUrl && this.messageId) {
-                        console.log("fetch")
-                        fetch(`${this.webhookUrl}/messages/${this.messageId}`, {
-                            method: 'PATCH',
-                            body: '{}',
-                            headers: {'Content-Type': 'application/json'}
-                        })
-                            .then(resp => {
-                                if (resp.status != 200) {
-                                    alert("Invalid message")
-                                }
-                                return resp.json()
-                            })
-                            .then(data => {
-                                // TODO: add warning and confirmation before overwriting
-                                this.setJSON(data)
-                            })
-                    }
+                set(data) {
+                    this.setJSON(data.json ? data.json : {})
+                    this.files = data.files ? data.files : []
                 }
-            },
-            webhookUrl: {
-                get() {
-                    if (this.webhookId && this.webhookToken) {
-                        return `https://discord.com/api/v8/webhooks/${this.webhookId}/${this.webhookToken}`
-                    }
-                    return null
+            }
+        },
+        watch: {
+            $data: {
+                handler() {
+                    this.$emit('dataUpdate', this.fullData)
                 },
-                set(newValue) {
-                    const urlRegex = /https:\/\/(canary\.)?discord(app)?.com\/(api\/(v[6-8]\/)?)?webhooks\/([0-9]+)\/(.+)\/?/i
-                    let match = newValue.match(urlRegex);
-                    if (match) {
-                        this.webhookId = match[5]
-                        this.webhookToken = match[6]
-                        fetch(this.webhookUrl)
-                            .then(resp => resp.json())
-                            .then(data => this.webhookUsername = data.name)
-                    } else {
-                        this.webhookId = null
-                        this.webhookToken = null
-                    }
+                deep: true
+            },
+            initData(newValue) {
+                if (this.initData) {
+                    this.fullData = newValue
                 }
             }
         }
@@ -595,30 +520,6 @@
 <style scoped lang="scss">
     .preview {
         box-shadow: 0 0 2px #212121;
-    }
-
-    .hover-tooltip {
-        position: relative;
-
-        &:hover {
-            .hover-tooltip-content {
-                display: block;
-            }
-        }
-
-        .hover-tooltip-content {
-            display: none;
-            position: absolute;
-            width: 250px;
-            left: 0;
-            bottom: 25px;
-            z-index: 10;
-            box-shadow: 0 0 2px black;
-        }
-
-        .hover-tooltip-trigger {
-            cursor: pointer;
-        }
     }
 
     .char-counter {

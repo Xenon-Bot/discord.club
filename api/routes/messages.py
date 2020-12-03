@@ -14,7 +14,7 @@ bp = Blueprint(name="api.messages", url_prefix="/messages")
 @requires_token
 @requires_body(
     name=str,
-    data=dict,
+    json=dict,
     files=list
 )
 async def save_message(request, payload, user_id):
@@ -22,7 +22,7 @@ async def save_message(request, payload, user_id):
         "user_id": user_id,
         "last_updated": datetime.utcnow(),
         "name": payload["name"],
-        "data": payload["data"],
+        "json": payload["json"],
         "files": payload["files"]
     })
     return response.json({"id": str(result.inserted_id)})
@@ -45,10 +45,10 @@ async def update_message(request, payload, user_id, msg_id):
         if isinstance(name, str):
             to_update["name"] = name
 
-    if "data" in payload:
-        data = payload["data"]
-        if isinstance(data, dict):
-            to_update["data"] = data
+    if "json" in payload:
+        json_data = payload["json"]
+        if isinstance(json_data, dict):
+            to_update["json"] = json_data
 
     if "files" in payload:
         files = payload["files"]
@@ -98,6 +98,9 @@ async def get_message(request, user_id, msg_id):
 async def get_messages(request, user_id):
     messages = []
     async for msg in request.app.db.messages.find({"user_id": user_id}, sort=[("last_updated", pymongo.DESCENDING)]):
+        for file in msg.get("files", []):
+            file.pop("content")
+
         messages.append({
             "id": str(msg.pop("_id")),
             "last_updated": msg.pop("last_updated").timestamp(),

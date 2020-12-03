@@ -6,7 +6,7 @@
         </div>
         <div class="card-body text-center">
             <a href="https://discord.com/api/oauth2/authorize?client_id=410138706490425344&redirect_uri=https%3A%2F%2Fnew.discord.club%2Fcallback&response_type=code&scope=identify"
-               target="_blank" class="py-5">
+               class="py-5">
                 <img src="@/assets/discord.png" alt="" class="discord-logo">
             </a>
         </div>

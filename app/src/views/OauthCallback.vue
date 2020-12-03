@@ -2,11 +2,11 @@
     <div class="container text-center mt-5">
         <div v-if="success">
             <h1>You are now logged in!</h1>
-            <h5 class="text-muted">You can close this tab now ...</h5>
+            <h5 class="text-muted">Redirecting you back ...</h5>
         </div>
         <div v-else-if="error">
             <h2>An error occurred while trying to log you in</h2>
-            <h5 class="text-muted">You can close this tab now ...</h5>
+            <h5 class="text-muted">Redirecting you back ...</h5>
         </div>
         <div v-else>
             <h1>Logging you in ...</h1>
@@ -41,6 +41,18 @@
         computed: {
             api() {
                 return this.$store.state.api
+            }
+        },
+        watch: {
+            success(newValue) {
+                if (newValue) {
+                    setTimeout(() => this.$router.push('/dashboard'), 3000)
+                }
+            },
+            error(newValue) {
+                if (newValue) {
+                    setTimeout(() => this.$router.push('/dashboard'), 5000)
+                }
             }
         }
     }

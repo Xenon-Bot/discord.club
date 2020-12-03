@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 
 Vue.use(Vuex)
-const apiHost = "http://localhost:8080/api";
+const apiHost = process.env.VUE_APP_API_HOST;
 
 
 class Api {
@@ -18,6 +18,10 @@ class Api {
     setToken(token) {
         this.token = token
         localStorage.setItem("token", token)
+    }
+
+    deleteToken() {
+        localStorage.removeItem('token')
     }
 
     request(method, path, data) {
@@ -36,23 +40,22 @@ class Api {
                         if (resp.status === 401) {
                             this.token = null;
                             localStorage.removeItem("token");
-                        } else {
-                            resp.json().then(data => {
-                                Vue.notify({
-                                    group: 'main',
-                                    title: 'Request Failed',
-                                    text: data.error,
-                                    type: 'error'
-                                })
-                            }).catch(() => {
-                                Vue.notify({
-                                    group: 'main',
-                                    title: 'Request Failed',
-                                    text: `${resp.status}: ${resp.statusText}`,
-                                    type: 'error'
-                                })
-                            })
                         }
+                        resp.json().then(data => {
+                            Vue.notify({
+                                group: 'main',
+                                title: 'Request Failed',
+                                text: data.error,
+                                type: 'error'
+                            })
+                        }).catch(() => {
+                            Vue.notify({
+                                group: 'main',
+                                title: 'Request Failed',
+                                text: `${resp.status}: ${resp.statusText}`,
+                                type: 'error'
+                            })
+                        })
                     }
                 }
                 return resp

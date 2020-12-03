@@ -30,6 +30,10 @@
                     <span class="icon"><i class="fas fa-magic"/></span>
                     <span class="text">Triggers</span>
                 </router-link>
+                <div class="link link-bottom c-pointer" v-on:click="logout" v-if="api.isAuthenticated()">
+                    <span class="icon"><i class="fas fa-sign-out-alt"/></span>
+                    <span class="text">Logout</span>
+                </div>
             </div>
         </div>
         <div class="main" v-on:click="sidebarShow = false">
@@ -51,6 +55,15 @@
         computed: {
             currentRouteName() {
                 return this.$route.name;
+            },
+            api() {
+                return this.$store.state.api
+            }
+        },
+        methods: {
+            logout() {
+                this.api.deleteToken()
+                this.$router.push('/')
             }
         }
     }
@@ -83,6 +96,8 @@
 
         .links {
             margin-top: 25px;
+            height: 100%;
+            position: relative;
 
             .link {
                 font-size: 1.2rem;
@@ -98,6 +113,11 @@
                 .text {
                     padding-left: 15px;
                 }
+            }
+
+            .link-bottom {
+                position: absolute;
+                bottom: 100px;
             }
         }
     }
