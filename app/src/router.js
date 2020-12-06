@@ -1,42 +1,61 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from './views/Home.vue'
+import Index from "./views/Index";
 
 Vue.use(VueRouter)
 
 const routes = [
     {
         path: '/',
-        name: 'Home',
-        component: Home
+        component: Home,
+        children: [
+            {
+                name: 'Index',
+                path: '',
+                component: Index
+            },
+            {
+                name: 'Privacy Policy',
+                path: '/privacy',
+                component: () =>
+                    import ( /* webpackChunkName: "privacy" */ './views/Privacy.vue')
+            },
+            {
+                name: 'About',
+                path: '/about',
+                component: () =>
+                    import ( /* webpackChunkName: "about" */ './views/About.vue')
+            }
+        ]
     },
     {
         path: '/dashboard',
         component: () =>
-            import ( /* webpackChunkName: "dashboard" */ './views/Dashboard.vue'),
+            import ( /* webpackChunkName: "dashboard" */ './views/dashboard/Dashboard.vue'),
         children: [{
             name: 'Quick Message',
             path: '',
             component: () =>
-                import ( /* webpackChunkName: "editor" */ './views/QuickMessage.vue')
+                import ( /* webpackChunkName: "editor" */ './views/dashboard/QuickMessage.vue')
         },
             {
                 name: 'Messages',
                 path: 'messages',
                 component: () =>
-                    import ( /* webpackChunkName: "editor" */ './views/Messages.vue')
+                    import ( /* webpackChunkName: "messages" */ './views/dashboard/Messages.vue')
             },
             {
                 name: 'Edit Message',
                 path: 'messages/:id',
                 component: () =>
-                    import ( /* webpackChunkName: "editor" */ './views/EditMessage.vue')
+                    import ( /* webpackChunkName: "edit_message" */ './views/dashboard/EditMessage.vue')
             },
             {
                 name: 'Triggers',
                 path: 'triggers',
                 component: () =>
-                    import ( /* webpackChunkName: "editor" */ './views/Triggers.vue')
+                    import ( /* webpackChunkName: "triggers" */ './views/dashboard/Triggers.vue')
             }
         ]
     },
@@ -44,7 +63,14 @@ const routes = [
         path: '/callback',
         name: 'Oauth Callback',
         component: () =>
-            import ( /* webpackChunkName: "editor" */ './views/OauthCallback.vue')
+            import ( /* webpackChunkName: "oauth_callback" */ './views/OauthCallback.vue')
+    },
+    {
+        path: '/share/:id',
+        name: 'Share Shortcut',
+        redirect: to => {
+            return {path: '/dashboard', query: {share: to.params.id}}
+        }
     }
 ]
 

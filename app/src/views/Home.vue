@@ -1,7 +1,7 @@
 <template>
     <div class="home">
-        <div class="main">
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="main bg-darker">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-darker">
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -12,7 +12,7 @@
                     <div class="container">
                         <ul class="navbar-nav mr-auto">
                             <li class="nav-item">
-                                <a class="nav-link mr-3 text-light" href="/support">Support</a>
+                                <a class="nav-link mr-3 text-light" href="/discord">Support</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-light" href="/invite">Invite Bot</a>
@@ -29,9 +29,10 @@
                     </div>
                 </div>
             </nav>
+            <router-view/>
             <div class="footer-push"></div>
         </div>
-        <div class="footer bg-darker">
+        <div class="footer bg-dark">
             <div class="container pt-5">
                 <div class="row">
                     <div class="col-12 col-md-6 mb-2">
@@ -51,10 +52,10 @@
                     <div class="col-6 col-md-3 col-sm-6 mb-3">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a href="/legal/privacy" class="nav-link text-light p-1">Privacy Policy</a>
+                                <router-link to="/about" class="nav-link text-light p-1">About</router-link>
                             </li>
                             <li class="nav-item">
-                                <a href="/legal/cookies" class="nav-link text-light p-1">Cookie Policy</a>
+                                <router-link to="/privacy" class="nav-link text-light p-1">Privacy Policy</router-link>
                             </li>
                         </ul>
                     </div>

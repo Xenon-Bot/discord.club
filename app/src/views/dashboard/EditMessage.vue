@@ -61,6 +61,11 @@
                     resp.json().then(data => {
                         this.initData = data
                         this.unsavedChanges = false
+                        for (let file of data.files) {
+                            this.api.getFile(file.id)
+                                .then(resp => resp.blob())
+                                .then(body => file.content = body)
+                        }
                     })
                 }
             })

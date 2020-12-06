@@ -63,7 +63,7 @@
         methods: {
             logout() {
                 this.api.deleteToken()
-                this.$router.push('/')
+                window.location.replace("/")
             }
         }
     }

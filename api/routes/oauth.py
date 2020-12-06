@@ -2,6 +2,7 @@ from sanic import Blueprint, response
 import aiohttp
 
 from utils import *
+from stay_fast import *
 from auth import requires_token
 
 
@@ -10,6 +11,7 @@ bp = Blueprint(name="api.oauth", url_prefix="/oauth")
 
 @bp.post("/exchange")
 @requires_body("code")
+@ratelimit(limit=1, seconds=3)
 async def exchange_token(request, payload):
     code = payload["code"]
     try:
@@ -22,6 +24,7 @@ async def exchange_token(request, payload):
 
 @bp.get("/user")
 @requires_token
+@ratelimit(limit=1, seconds=3)
 async def get_user(request, user_id):
     session = await request.app.db.sessions.find_one({"_id": user_id})
     return response.json(session["user"])
@@ -29,6 +32,7 @@ async def get_user(request, user_id):
 
 @bp.get("/tokens")
 @requires_token
-async def get_user(request, user_id):
+@ratelimit(limit=1, seconds=3)
+async def get_tokens(request, user_id):
     session = await request.app.db.sessions.find_one({"_id": user_id})
     return response.json(session["tokens"])

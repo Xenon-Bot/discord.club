@@ -25,13 +25,18 @@ class Api {
     }
 
     request(method, path, data) {
+        const headers = {
+            "Authorization": this.token
+        }
+        if (!(data instanceof FormData)) {
+            headers['Content-Type'] = 'application/json'
+        }
+        const body = data instanceof FormData ? data : JSON.stringify(data)
+
         return fetch(apiHost + path, {
             method: method,
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": this.token
-            },
-            body: data != null ? JSON.stringify(data) : null
+            headers: headers,
+            body: body
         })
             .then(resp => {
                 if (!resp.ok) {
@@ -92,16 +97,41 @@ class Api {
         return this.request('GET', `/messages/${id}`)
     }
 
-    saveMessage(payload) {
-        return this.request('POST', `/messages`, payload)
+    getFile(id) {
+        return this.request('GET', `/messages/files/${id}`)
     }
 
-    editMessage(id, payload) {
-        return this.request('PATCH', `/messages/${id}`, payload)
+    saveMessage(name, data) {
+        const formData = new FormData()
+        formData.append('json', JSON.stringify(data.json))
+        formData.append('name', name)
+        for (let i in data.files) {
+            let file = data.files[i]
+            formData.append(`file${i}`, file.content, file.name)
+        }
+        return this.request('POST', `/messages`, formData)
+    }
+
+    editMessage(id, data) {
+        const formData = new FormData()
+        formData.append('json', JSON.stringify(data.json))
+        for (let i in data.files) {
+            let file = data.files[i]
+            formData.append(`file${i}`, file.content, file.name)
+        }
+        return this.request('PATCH', `/messages/${id}`, formData)
     }
 
     deleteMessage(id) {
         return this.request('DELETE', `/messages/${id}`)
+    }
+
+    createShare(json) {
+        return this.request('POST', '/messages/share', {json: json})
+    }
+
+    getShare(id) {
+        return this.request('GET', `/messages/share/${id}`)
     }
 }
 
@@ -109,7 +139,10 @@ class Api {
 const store = new Vuex.Store({
     state: {
         api: new Api(),
-        user: null
+        user: null,
+        settings: {
+            enableProxy: localStorage.getItem('enableProxy') !== 'false'
+        }
     },
     mutations: {
         init(state) {
@@ -121,11 +154,6 @@ const store = new Vuex.Store({
             state.api.setToken(token);
             localStorage.setItem("token", token)
             this.init(state);
-        }
-    },
-    getters: {
-        isAuthenticated(state) {
-            return state.api.isAuthenticated()
         }
     }
 })

@@ -27,7 +27,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary" v-on:click="saveMessage" data-dismiss="modal"
-                                v-bind:class="{disabled: !saveName}">Save
+                                :class="{disabled: !saveName}" :disabled="!saveName">Save
                         </button>
                     </div>
                 </div>
@@ -47,9 +47,9 @@
         name: 'QuickMessage',
         components: {Editor, WebhookExecutor},
         created() {
-            const lastData = localStorage.getItem("lastData")
+            const lastData = localStorage.getItem("lastJson")
             if (lastData) {
-                this.initData = JSON.parse(lastData);
+                this.initData = {json: JSON.parse(lastData)}
             }
         },
         data() {
@@ -62,7 +62,7 @@
         methods: {
             onDataUpdate(data) {
                 this.lastData = data
-                localStorage.setItem("lastData", JSON.stringify(this.lastData))
+                localStorage.setItem("lastJson", JSON.stringify(this.lastData.json))
             },
             onSave() {
                 $('#saveModal').modal()
@@ -72,12 +72,7 @@
             },
             saveMessage() {
                 if (!this.saveName) return;
-                let payload = {
-                    json: this.lastData.json,
-                    files: this.lastData.files,
-                    name: this.saveName
-                }
-                this.api.saveMessage(payload).then(resp => {
+                this.api.saveMessage(this.saveName, this.lastData).then(resp => {
                     if (!resp.ok) {
                         console.log(resp)
                     } else {

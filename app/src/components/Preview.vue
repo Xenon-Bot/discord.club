@@ -2,7 +2,7 @@
     <div>
         <div class="message">
             <div class="header">
-                <img v-bind:src="avatarUrl" alt="Avatar" class="avatar">
+                <img v-bind:src="applyProxy(avatarUrl)" alt="Avatar" class="avatar">
                 <h1 class="username">{{ json.username ? json.username : 'Captain Hook'}}</h1>
                 <span class="bot-badge">BOT</span>
                 <span class="timestamp">Today at {{messageTime}}</span>
@@ -12,7 +12,7 @@
                 <markdown-highlight :text="json.content"/>
             </div>
             <div class="embeds">
-                <div v-for="(file, i) in files" v-bind:key="i" class="file">
+                <div v-for="(file, i) in files" v-bind:key="`file${i}`" class="file">
                     <div class="file-icon">
                         <svg width="28" height="40" viewBox="0 0 28 40" version="1.1"
                              xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -57,11 +57,11 @@
                         </svg>
                     </div>
                 </div>
-                <div v-for="(embed, i) in json.embeds" v-bind:key="i">
+                <div v-for="(embed, i) in json.embeds" v-bind:key="`enbed${i}`">
                     <div class="embed" v-bind:style="{borderColor: '#' + embed.color.toString(16)}">
                         <div class="embed-body">
                             <div class="author" v-if="embed.author && embed.author.name">
-                                <img v-if="embed.author.icon_url" v-bind:src="embed.author.icon_url" alt="Icon"
+                                <img v-if="applyProxy(embed.author.icon_url)" v-bind:src="embed.author.icon_url" alt="Icon"
                                      class="author-icon">
                                 <a v-if="embed.author.url" v-bind:href="embed.author.url" class="author-name"
                                    target="_blank">{{ embed.author.name }}</a>
@@ -90,11 +90,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <img v-if="embed.image && embed.image.url" v-bind:src="embed.image.url" alt="image"
+                            <img v-if="embed.image && embed.image.url" v-bind:src="applyProxy(embed.image.url)" alt="image"
                                  class="image">
                             <div class="footer"
                                  v-if="embed.timestamp || (embed.footer && (embed.footer.text || embed.footer.icon_url))">
-                                <img v-if="embed.footer.icon_url" v-bind:src="embed.footer.icon_url" alt="Icon"
+                                <img v-if="embed.footer.icon_url" v-bind:src="applyProxy(embed.footer.icon_url)" alt="Icon"
                                      class="footer-icon">
                                 <span class="footer-text">
                             {{embed.footer.text}}
@@ -105,7 +105,7 @@
                         </span>
                             </div>
                             <div class="thumbnail" v-if="embed.thumbnail && embed.thumbnail.url">
-                                <img v-bind:src="embed.thumbnail.url" alt="thumbnail">
+                                <img v-bind:src="applyProxy(embed.thumbnail.url)" alt="thumbnail">
                             </div>
                         </div>
                     </div>
@@ -119,7 +119,7 @@
     import MarkdownHighlight from "./MarkdownHighlight";
 
     export default {
-        props: ['data'],
+        props: ['data', 'enableProxy'],
         components: {MarkdownHighlight},
         computed: {
             avatarUrl() {
@@ -161,6 +161,14 @@
 
 
                 return bytes.toFixed(dp) + ' ' + units[u];
+            },
+            applyProxy(url) {
+                if (!url) return url
+                if (!this.$store.state.settings.enableProxy) return url
+                if (url.match(/^https:\/\/cdn.discord(app)?\.com/i)) return url
+                if (url.match(/^https:\/\/i.imgur.com/i)) return url
+                const encodedUrl = window.btoa(url)
+                return `https://proxy.discord.club/${encodedUrl}`
             }
         }
     }

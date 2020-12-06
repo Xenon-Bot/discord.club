@@ -1,7 +1,8 @@
 from sanic import Sanic
-from motor.motor_asyncio import AsyncIOMotorClient
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorGridFSBucket
 import aiohttp
 import aioredis
+import pymongo
 from sanic_cors import CORS
 
 import routes
@@ -22,6 +23,8 @@ class App(Sanic, auth.AuthMixin):
 
         self.mongo = None
         self.db = None
+        self.file_bucket = None
+
         self.redis = None
 
         self.session = None
@@ -35,6 +38,11 @@ class App(Sanic, auth.AuthMixin):
     async def setup(self, _, loop):
         self.mongo = AsyncIOMotorClient()
         self.db = self.mongo.dclub
+
+        self.file_bucket = AsyncIOMotorGridFSBucket(self.db, bucket_name="files", chunk_size_bytes=10**6)
+        await self.db.files.files.create_index([("md5", pymongo.ASCENDING)], unique=True)
+        await self.db.messages.create_index([("user_id", pymongo.ASCENDING)])
+        await self.db.messages.create_index([("last_updated", pymongo.ASCENDING)])
 
         self.session = aiohttp.ClientSession(loop=loop)
         self.redis = await aioredis.create_redis_pool("redis://localhost", loop=loop)

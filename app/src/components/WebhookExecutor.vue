@@ -22,11 +22,11 @@
         </div>
         <div class="float-right">
             <button class="btn btn-outline-secondary mr-2" v-on:click="editMessage"
-                    v-bind:class="{disabled: !webhookUrl}" v-if="messageId">
+                    :class="{disabled: !webhookUrl}" :disabled="!webhookUrl" v-if="messageId">
                 Edit Message
             </button>
             <button class="btn btn-outline-primary" v-on:click="sendMessage"
-                    v-bind:class="{disabled: !webhookUrl}">
+                    :class="{disabled: !webhookUrl}" :disabled="!webhookUrl">
                 Send Message
             </button>
         </div>
@@ -75,12 +75,7 @@
                 data.append('payload_json', JSON.stringify(this.data.json))
                 for (let i in this.data.files) {
                     let file = this.data.files[i]
-                    let binaryContent = window.atob(file.content)
-                    let bytes = new Uint8Array(binaryContent.length)
-                    for (let i = 0; i < binaryContent.length; i++) {
-                        bytes[i] = binaryContent.charCodeAt(i)
-                    }
-                    data.append(`file${i}`, new Blob([bytes]), file.name)
+                    data.append(`file${i}`, file.content, file.name)
                 }
 
                 fetch(`${this.webhookUrl}?wait=true`, {
@@ -171,7 +166,7 @@
                         this.webhookToken = match[6]
                         fetch(this.webhookUrl)
                             .then(resp => resp.json())
-                            // .then(data => this.$refs.editor.webhookUsername = data.name)
+                        // .then(data => this.$refs.editor.webhookUsername = data.name)
                     } else {
                         this.webhookId = null
                         this.webhookToken = null

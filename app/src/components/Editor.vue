@@ -23,7 +23,7 @@
                                         </span>
                                     </span>
                                 </label>
-                                <input v-model.trim="webhookAvatarUrl" type="url" class="form-control"
+                                <input v-model.trim.lazy="webhookAvatarUrl" type="url" class="form-control"
                                        placeholder="https://i.imgur.com/yed5Zfk.png">
                             </div>
                             <div class="col-12 mb-4">
@@ -100,7 +100,7 @@
                                         </span>
                                     </span>
                                         </label>
-                                        <input v-model.trim="embed.authorIconUrl" type="url" class="form-control"
+                                        <input v-model.trim.lazy="embed.authorIconUrl" type="url" class="form-control"
                                                placeholder="https://i.imgur.com/yed5Zfk.png">
                                     </div>
                                 </div>
@@ -139,7 +139,7 @@
                                             </span>
                                         </span>
                                         </label>
-                                        <input v-model.trim="embed.imageUrl" type="url" class="form-control"
+                                        <input v-model.trim.lazy="embed.imageUrl" type="url" class="form-control"
                                                placeholder="https://i.imgur.com/yed5Zfk.png">
                                     </div>
                                     <div class="col-12 col-lg-6 mb-4">
@@ -152,7 +152,7 @@
                                             </span>
                                         </span>
                                         </label>
-                                        <input v-model.trim="embed.thumbnailUrl" type="url" class="form-control"
+                                        <input v-model.trim.lazy="embed.thumbnailUrl" type="url" class="form-control"
                                                placeholder="https://i.imgur.com/yed5Zfk.png">
                                     </div>
                                 </div>
@@ -188,7 +188,7 @@
                                             </span>
                                         </span>
                                         </label>
-                                        <input v-model.trim="embed.footerIconUrl" type="url" class="form-control"
+                                        <input v-model.trim.lazy="embed.footerIconUrl" type="url" class="form-control"
                                                placeholder="https://i.imgur.com/yed5Zfk.png">
                                     </div>
                                 </div>
@@ -250,6 +250,9 @@
                         <textarea v-model.lazy="jsonCode" class="form-control mb-2" rows="10"/>
                         <span class="text-danger">{{ jsonError }}</span>
                         <div class="float-right">
+                            <button class="btn btn-outline-light mr-2" v-on:click="shareJSON">
+                                Share
+                            </button>
                             <button class="btn btn-outline-light mr-2" v-on:click="exportJSON">
                                 Download
                             </button>
@@ -261,6 +264,31 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="shareModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Shared Message</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Successfully created a share link for you. This link will be valid for 24 hours and only
+                            gives
+                            other user access to clone your message. There is no way for them to edit your existing
+                            message.
+                        </p>
+                        <a :href="`https://discord.club/share/${lastShareId}`" target="_blank">https://discord.club/share/{{lastShareId}}</a>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" v-on:click="copySaveLink">Copy Link</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -268,6 +296,7 @@
     import Preview from './Preview.vue'
     import {Datetime} from 'vue-datetime'
     import 'vue-datetime/dist/vue-datetime.css'
+    import $ from 'jquery'
 
     export default {
         name: 'Editor',
@@ -281,12 +310,20 @@
                 tts: undefined,
                 files: [],
                 embeds: [],
-                jsonError: ""
+                jsonError: "",
+
+                lastShareId: ""
             }
         },
         created() {
             if (this.initData) {
                 this.fullData = this.initData
+            }
+            const shareid = this.$route.query.share
+            if (shareid) {
+                this.api.getShare(shareid)
+                    .then(resp => resp.json())
+                    .then(data => this.setJSON(data.json))
             }
         },
         methods: {
@@ -425,20 +462,10 @@
                         name += "_"
                     }
 
-                    let fileContent = ''
-                    let bytes = new Uint8Array(re.target.result)
-                    if (bytes.length > 5000000) {
-                        alert('That file is too big and can not be added')
-                        return
-                    }
-                    for (let i = 0; i < bytes.length; i ++) {
-                        fileContent += String.fromCharCode(bytes[i])
-                    }
-
                     this.files.push({
                         name: `${name}.${extension}`,
-                        content: window.btoa(fileContent),
-                        size: bytes.length
+                        content: new Blob([re.target.result]),
+                        size: re.target.result.byteLength
                     })
                 }
             },
@@ -469,6 +496,17 @@
                 document.body.appendChild(element);
                 element.click();
                 document.body.removeChild(element);
+            },
+            shareJSON() {
+                this.api.createShare(this.getJSON())
+                    .then(resp => resp.json())
+                    .then(data => {
+                        this.lastShareId = data.id
+                        $('#shareModal').modal()
+                    })
+            },
+            copySaveLink() {
+                navigator.clipboard.writeText(`https://discord.club/share/${this.lastShareId}`)
             }
         },
         computed: {
@@ -499,6 +537,9 @@
                     this.setJSON(data.json ? data.json : {})
                     this.files = data.files ? data.files : []
                 }
+            },
+            api() {
+                return this.$store.state.api
             }
         },
         watch: {
