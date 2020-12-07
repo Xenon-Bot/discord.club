@@ -51,14 +51,17 @@
                 </div>
             </div>
         </div>
+        <confirmation text="Do you want to load the JSON-Code from the existing message? This will overwrite your existing message!" ref="existingOverwriteConfirmation"/>
     </div>
 </template>
 <script>
     import $ from "jquery";
+    import Confirmation from "./Confirmation";
 
     export default {
         name: 'SendMessage',
         props: ['data'],
+        components: {Confirmation},
         data() {
             return {
                 webhookId: "",
@@ -145,8 +148,11 @@
                                 return resp.json()
                             })
                             .then(data => {
-                                // TODO: add warning and confirmation before overwriting
-                                this.$emit('messageRetrieved', data)
+                                this.$refs.existingOverwriteConfirmation.open().then(confirmed => {
+                                    if (confirmed) {
+                                        this.$emit('messageRetrieved', data)
+                                    }
+                                })
                             })
                     }
                 }

@@ -250,13 +250,15 @@
                         <textarea v-model.lazy="jsonCode" class="form-control mb-2" rows="10"/>
                         <span class="text-danger">{{ jsonError }}</span>
                         <div class="float-right">
-                            <button class="btn btn-outline-light mr-2" v-on:click="shareJSON">
+                            <button class="btn btn-outline-light mr-2" v-on:click="shareJSON"
+                                    :class="{disabled: jsonIsEmpty}" :disabled="jsonIsEmpty">
                                 Share
                             </button>
                             <button class="btn btn-outline-light mr-2" v-on:click="exportJSON">
                                 Download
                             </button>
-                            <button class="btn btn-outline-secondary" v-on:click="$emit('save', fullData)">
+                            <button class="btn btn-outline-secondary" v-on:click="$emit('save', fullData)"
+                                    :class="{disabled: jsonIsEmpty}" :disabled="jsonIsEmpty">
                                 Save Message
                             </button>
                         </div>
@@ -275,12 +277,10 @@
                     </div>
                     <div class="modal-body">
                         <p>
-                            Successfully created a share link for you. This link will be valid for 24 hours and only
-                            gives
-                            other user access to clone your message. There is no way for them to edit your existing
-                            message.
+                            This link will be valid for 24 hours and only gives other user access to clone your message.
+                            There is no way for them to edit your copy of the message.
                         </p>
-                        <a :href="`https://discord.club/share/${lastShareId}`" target="_blank">https://discord.club/share/{{lastShareId}}</a>
+                        <a :href="lastShareLink" target="_blank">{{lastShareLink}}</a>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" v-on:click="copySaveLink">Copy Link</button>
@@ -289,6 +289,9 @@
                 </div>
             </div>
         </div>
+        <confirmation
+                text="Do you want to load the JSON-Code from the shared message? This will overwrite your existing message!"
+                ref="shareOverwriteConfirmation"/>
     </div>
 </template>
 
@@ -297,10 +300,11 @@
     import {Datetime} from 'vue-datetime'
     import 'vue-datetime/dist/vue-datetime.css'
     import $ from 'jquery'
+    import Confirmation from "@/components/Confirmation";
 
     export default {
         name: 'Editor',
-        components: {Preview, Datetime},
+        components: {Preview, Datetime, Confirmation},
         props: ['initData'],
         data() {
             return {
@@ -319,11 +323,17 @@
             if (this.initData) {
                 this.fullData = this.initData
             }
+        },
+        mounted() {
             const shareid = this.$route.query.share
             if (shareid) {
-                this.api.getShare(shareid)
-                    .then(resp => resp.json())
-                    .then(data => this.setJSON(data.json))
+                this.$refs.shareOverwriteConfirmation.open().then(confirmed => {
+                    if (confirmed) {
+                        this.api.getShare(shareid)
+                            .then(resp => resp.json())
+                            .then(data => this.setJSON(data.json))
+                    }
+                })
             }
         },
         methods: {
@@ -506,7 +516,7 @@
                     })
             },
             copySaveLink() {
-                navigator.clipboard.writeText(`https://discord.club/share/${this.lastShareId}`)
+                navigator.clipboard.writeText(this.lastShareLink)
             }
         },
         computed: {
@@ -540,6 +550,12 @@
             },
             api() {
                 return this.$store.state.api
+            },
+            lastShareLink() {
+                return `${process.env.VUE_APP_SITE_HOST}/share/${this.lastShareId}`
+            },
+            jsonIsEmpty() {
+                return !this.webhookUsername && !this.webhookAvatarUrl && !this.content && this.embeds.length === 0
             }
         },
         watch: {

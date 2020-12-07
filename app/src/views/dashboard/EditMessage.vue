@@ -5,20 +5,23 @@
                 <h4 class="ml-2 mb-3">Webhook</h4>
                 <div class="card border-0 tex-light mb-4 bg-darker">
                     <div class="card-body mb-0">
-                        <webhook-executor :data="lastData"/>
+                        <webhook-executor :data="lastData" v-on:messageRetrieved="onMessageRetrieved"/>
                     </div>
                 </div>
             </template>
         </editor>
+        <confirmation text="Are you sure that you want to leave this page? You have unsaved changes!"
+                      ref="exitConfirmation"/>
     </div>
 </template>
 <script>
     import Editor from '@/components/Editor.vue'
     import WebhookExecutor from "@/components/WebhookExecutor";
+    import Confirmation from "@/components/Confirmation";
 
     export default {
         name: 'EditMessage',
-        components: {Editor, WebhookExecutor},
+        components: {Editor, WebhookExecutor, Confirmation},
         data() {
             return {
                 lastData: null,
@@ -26,11 +29,45 @@
                 unsavedChanges: false,
             }
         },
-        beforeRouteLeave(to, from, next) {
-            if (this.unsavedChanges && !window.confirm('You have unsaved changes! Do you want to leave?')) {
-                return;
+        created() {
+            this.api.getMessage(this.msgId).then(resp => {
+                if (!resp.ok) {
+                    console.log(resp)
+                } else {
+                    resp.json().then(data => {
+                        this.initData = data
+                        for (let file of data.files) {
+                            this.api.getFile(file.id)
+                                .then(resp => resp.blob())
+                                .then(body => file.content = body)
+                        }
+
+                        setTimeout(() => this.unsavedChanges = false, 500)
+                    })
+                }
+            })
+        },
+        mounted() {
+            window.onbeforeunload = event => {
+                if (this.unsavedChanges) {
+                    event.preventDefault()
+                    event.returnValue = "Are you sure that you want to leave this page? You have unsaved changes!"
+                    return event.returnValue
+                }
             }
-            next()
+        },
+        beforeRouteLeave(to, from, next) {
+            if (!this.unsavedChanges) {
+                window.onbeforeunload = undefined
+                return next()
+            }
+
+            this.$refs.exitConfirmation.open().then(confirmed => {
+                if (confirmed) {
+                    window.onbeforeunload = undefined
+                    return next()
+                }
+            })
         },
         methods: {
             onDataUpdate(data) {
@@ -51,24 +88,10 @@
                         })
                     }
                 })
-            }
-        },
-        created() {
-            this.api.getMessage(this.msgId).then(resp => {
-                if (!resp.ok) {
-                    console.log(resp)
-                } else {
-                    resp.json().then(data => {
-                        this.initData = data
-                        this.unsavedChanges = false
-                        for (let file of data.files) {
-                            this.api.getFile(file.id)
-                                .then(resp => resp.blob())
-                                .then(body => file.content = body)
-                        }
-                    })
-                }
-            })
+            },
+            onMessageRetrieved(data) {
+                this.initData = {files: [], json: data}
+            },
         },
         computed: {
             api() {

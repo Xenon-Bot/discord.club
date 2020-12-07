@@ -155,7 +155,7 @@ async def get_messages(request, user_id):
 
 @bp.post("/share")
 @requires_body(json=dict)
-@ratelimit(limit=2, seconds=5)
+@ratelimit(limit=2, seconds=10, level=RequestBucket.IP)
 async def create_share(request, payload):
     share_id = uuid.uuid4().hex[:8]
     await request.app.redis.setex(f"share:{share_id}", 60 * 60 * 24, json.dumps(payload["json"]))
@@ -163,7 +163,7 @@ async def create_share(request, payload):
 
 
 @bp.get("/share/<share_id>")
-@ratelimit(limit=5, seconds=5)
+@ratelimit(limit=5, seconds=5, level=RequestBucket.IP)
 async def get_share(request, share_id):
     raw_share = await request.app.redis.get(f"share:{share_id}")
     if raw_share is None:

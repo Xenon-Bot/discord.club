@@ -7,9 +7,9 @@
           </span>
           {{ currentRouteName }}
         </span>
-            <div class="navbar-nav ml-auto">
+            <div class="navbar-nav ml-auto mr-0 mr-md-2">
                 <router-link to="/">
-                    <button class="btn btn-lg btn-outline-primary my-2 my-sm-0">
+                    <button class="btn btn-lg btn-outline-primary">
                         Home
                         <i class="fas fa-angle-double-left ml-1"/>
                     </button>
@@ -38,7 +38,9 @@
         </div>
         <div class="main" v-on:click="sidebarShow = false">
             <div class="container-fluid pt-4 px-2 p-lg-4">
-                <router-view/>
+                <transition name="fade">
+                    <router-view/>
+                </transition>
             </div>
         </div>
     </div>
