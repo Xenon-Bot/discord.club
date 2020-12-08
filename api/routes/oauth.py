@@ -11,7 +11,7 @@ bp = Blueprint(name="api.oauth", url_prefix="/oauth")
 
 @bp.post("/exchange")
 @requires_body("code")
-@ratelimit(limit=1, seconds=3)
+@ratelimit(limit=1, seconds=3, level=RequestBucket.IP)
 async def exchange_token(request, payload):
     code = payload["code"]
     try:
