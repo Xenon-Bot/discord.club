@@ -43,15 +43,109 @@
                 </transition>
             </div>
         </div>
+        <div class="modal fade" id="introModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document" style="max-height: 90vh">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Welcome!</h3>
+                    </div>
+                    <div class="modal-body" style="max-height: 70vh; overflow: auto">
+                        <p class="intro-text">
+                            As you might have noticed, a lot has changed here. The whole site was undergoing a complete
+                            rewrite in the past weeks and this is the result. Beside a new design, the rewrite also
+                            has a lot of new features.
+                        </p>
+                        <h4 class="mt-4">New Features</h4>
+                        <ul class="intro-text">
+                            <li>Complete Redesign</li>
+                            <li>Up to 10 embeds per message</li>
+                            <li>Support for files / attachments</li>
+                            <li>Editing existing messages</li>
+                            <li>Proper message preview</li>
+                            <li>Saving and editing messages with custom names</li>
+                            <li>Actually meaningful error responses</li>
+                        </ul>
+                        <h4 class="mt-4">Quick Start</h4>
+                        <p class="intro-text">
+                            A lot has changed so here are some tips to get you started if you are coming from the old
+                            website:
+                        </p>
+                        <ul class="intro-text">
+                            <li>
+                                You can now add up to 10 embeds using the
+                                <span class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-plus"/>
+                                </span>
+                                button.
+                            </li>
+                            <li>You can collapse and un-collapse each embed by clicking on their name</li>
+                            <li>
+                                You can save your message using the
+                                <button class="btn btn-sm btn-outline-secondary">
+                                    Save Message
+                                </button>
+                                button
+                            </li>
+                            <li>Editing a saved message is possible by clicking on "Messages" on the left side</li>
+                            <li>
+                                Sending a message can be done by pasting a Webhook URL into the input and clicking the
+                                <button class="btn btn-sm btn-outline-primary">
+                                    Send Message
+                                </button>
+                                button
+                            </li>
+                            <li>
+                                Editing a previously sent message can be done by pasting the Message URL or ID into the
+                                input below the Webhook URL and clicking on the
+                                <button class="btn btn-sm btn-outline-secondary">
+                                    Edit Message
+                                </button>
+                                button
+                            </li>
+                            <li>Creating a webhook is no longer possible directly over the website. You need to go to
+                                the channel settings in discord and click on "Integrations" or "Webhooks" (depending on
+                                your device)
+                            </li>
+                        </ul>
+                        <h4 class="mt-4">Migrating</h4>
+                        <p class="intro-text">
+                            You can easily migrate your previously saved embeds from the old website to the new one until the 31th of January:
+                        </p>
+                        <ul class="intro-text">
+                            <li>Go to <a href="https://old.discord.club" target="_blank">https://old.discord.club</a>
+                            </li>
+                            <li>Login with your discord account and select one of your previously saved embeds</li>
+                            <li>Copy the JSON-Code on the old site and paste it on the new one.</li>
+                            <li>Click "Save Message" on the new site and give the message a name. (You might need to
+                                login)
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="introClose">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
+    import $ from 'jquery'
+
     export default {
         name: 'Dashboard',
         data() {
             return {
                 sidebarShow: false
+            }
+        },
+        mounted() {
+            const hasDoneIntro = localStorage.getItem("intro")
+            if (!hasDoneIntro) {
+                $('#introModal').modal({backdrop: 'static'})
             }
         },
         computed: {
@@ -66,6 +160,9 @@
             logout() {
                 this.api.deleteToken()
                 window.location.replace("/")
+            },
+            introClose() {
+                localStorage.setItem("intro", "true")
             }
         }
     }
@@ -150,6 +247,14 @@
 
         @media screen and (max-width: $sidebar-collapse-at) {
             margin-left: 0;
+        }
+    }
+
+    .intro-text {
+        font-size: 1.2em;
+
+        li {
+            margin-bottom: 0.3em;
         }
     }
 </style>

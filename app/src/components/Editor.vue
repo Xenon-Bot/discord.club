@@ -13,7 +13,7 @@
                                 <input v-model.trim="webhookUsername" type="text" class="form-control"
                                        placeholder="Captain Hook" maxlength="80">
                             </div>
-                            <div class="col-12 col-lg-6">
+                            <div class="col-12 col-lg-6 mb-4">
                                 <label>Avatar URL
                                     <span class="ml-1 hover-tooltip" title="yeet">
                                         <i class="fas fa-question hover-tooltip-trigger"/>
@@ -74,6 +74,9 @@
                             </div>
                             <h5 data-toggle="collapse" v-bind:data-target="'#embed' + e" role="button"
                                 class="overflow-auto text-nowrap">
+                                <span class="mr-1">
+                                    <i class="fas fa-chevron-down"/>
+                                </span>
                                 Embed {{ e + 1 }}
                                 <span v-if="embed.title" class="text-muted">- {{ embed.title.substring(0, 15) }}</span>
                             </h5>
@@ -338,12 +341,30 @@
         },
         methods: {
             getJSON() {
+                function formatFix(text) {
+                    if (!text) {
+                        return text
+                    }
+                    return text.replace(/\u200b>/gm, '>')
+                }
+
                 let embeds = []
                 for (let embed of this.embeds) {
+                    let fields = []
+                    if (embed.fields) {
+                        for (let field of embed.fields) {
+                            fields.push({
+                                name: field.name,
+                                value: formatFix(field.value),
+                                inline: field.inline
+                            })
+                        }
+                    }
+
                     embeds.push({
                         title: embed.title,
                         color: embed.color ? parseInt(embed.color.substring(1), 16) : undefined,
-                        description: embed.description,
+                        description: formatFix(embed.description),
                         timestamp: embed.timestamp,
                         url: embed.url,
                         author: {
@@ -361,14 +382,14 @@
                             text: embed.footerText,
                             icon_url: embed.footerIconUrl
                         },
-                        fields: embed.fields
+                        fields: fields
                     });
                 }
 
                 const data = {
                     username: this.webhookUsername,
                     avatar_url: this.webhookAvatarUrl,
-                    content: this.content,
+                    content: formatFix(this.content),
                     tts: this.tts,
                     embeds: embeds
                 }
@@ -376,6 +397,16 @@
             },
             setJSON(data) {
                 let embeds = []
+
+                // Legacy support
+                if (data.embed) {
+                    if (data.embeds) {
+                        data.embeds.push(data.embed)
+                    } else {
+                        data.embeds = [data.embed]
+                    }
+                }
+
                 if (data.embeds) {
                     for (let embed of data.embeds) {
                         let parsed = {
@@ -421,6 +452,9 @@
                     return
                 }
                 this.embeds.push({color: "#000"})
+                setTimeout(() => {
+                    $(`#embed${this.embeds.length - 1}`).addClass('show')
+                }, 100)
             },
             clearEmbeds() {
                 this.embeds = []

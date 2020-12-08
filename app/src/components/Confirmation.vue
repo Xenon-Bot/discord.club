@@ -1,5 +1,5 @@
 <template>
-    <div class="modal fade" id="saveModal" tabindex="-1" role="dialog" ref="modal">
+    <div class="modal fade" tabindex="-1" role="dialog" ref="modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -32,13 +32,12 @@
         },
         methods: {
             open() {
-                $(this.$refs.modal).modal()
+                $(this.$refs.modal).modal({backdrop: 'static'})
                 this.result = null
-                const refBack = this
                 return new Promise(function(resolve, reject) {
-                    refBack.resolve = resolve
-                    refBack.reject = reject
-                })
+                    this.resolve = resolve
+                    this.reject = reject
+                }.bind(this))
             },
             onConfirm() {
                 this.result = true

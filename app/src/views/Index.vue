@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="text-center header">
-            <h1 class="d-none">Discord.Club</h1>
+            <h1 class="d-none">Discord.Club - Embed Generator</h1>
             <h2 class="mb-5">Bring your discord to the next level!</h2>
             <router-link class="btn btn-primary btn-lg mr-3" to="/dashboard">Start Now</router-link>
             <a href="/discord" class="btn btn-dark btn-lg">Support</a>

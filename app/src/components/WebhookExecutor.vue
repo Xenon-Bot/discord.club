@@ -125,10 +125,10 @@
                     return this.messageId
                 },
                 set(newValue) {
-                    const urlRegex = /https:\/\/(canary\.)?discord(app)?.com\/channels\/[0-9]+\/[0-9]+\/([0-9]+)\/?/i
+                    const urlRegex = /https:\/\/((canary\.)|(ptb\.))?\.?discord(app)?.com\/channels\/[0-9]+\/[0-9]+\/([0-9]+)\/?/i
                     let match = newValue.toString().match(urlRegex);
                     if (match) {
-                        this.messageId = match[3]
+                        this.messageId = match[5]
                     } else if (newValue.match(/^[0-9]+$/)) {
                         this.messageId = newValue
                     } else {
@@ -165,11 +165,12 @@
                     return null
                 },
                 set(newValue) {
-                    const urlRegex = /https:\/\/(canary\.)?discord(app)?.com\/(api\/(v[6-8]\/)?)?webhooks\/([0-9]+)\/(.+)\/?/i
+                    const urlRegex = /https:\/\/((canary\.)|(ptb\.))?discord(app)?.com\/(api\/(v[6-8]\/)?)?webhooks\/([0-9]+)\/(.+)\/?/i
                     let match = newValue.match(urlRegex);
+                    console.log(match)
                     if (match) {
-                        this.webhookId = match[5]
-                        this.webhookToken = match[6]
+                        this.webhookId = match[7]
+                        this.webhookToken = match[8]
                         fetch(this.webhookUrl)
                             .then(resp => resp.json())
                         // .then(data => this.$refs.editor.webhookUsername = data.name)

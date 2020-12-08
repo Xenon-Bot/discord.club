@@ -31,6 +31,7 @@ const routes = [
     },
     {
         path: '/dashboard',
+        alias: ['/embedg', '/embed-generator'],
         component: () =>
             import ( /* webpackChunkName: "dashboard" */ './views/dashboard/Dashboard.vue'),
         children: [{
