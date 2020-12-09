@@ -158,7 +158,9 @@ async def get_messages(request, user_id):
 @ratelimit(limit=2, seconds=10, level=RequestBucket.IP)
 async def create_share(request, payload):
     share_id = uuid.uuid4().hex[:8]
-    await request.app.redis.setex(f"share:{share_id}", 60 * 60 * 24, json.dumps(payload["json"]))
+    await request.app.redis.setex(f"share:{share_id}", 60 * 60 * 24, json.dumps({
+        "json": payload["json"]
+    }))
     return response.json({"id": share_id})
 
 
@@ -169,4 +171,9 @@ async def get_share(request, share_id):
     if raw_share is None:
         return response.json({"error": "Share does not exist or has expired"}, status=404)
 
-    return response.json({"json": json.loads(raw_share)})
+    data = json.loads(raw_share)
+    if "json" in data:
+        return response.json(data)
+
+    # legacy
+    return response.json({"json": data})
