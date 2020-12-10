@@ -30,6 +30,10 @@
                     <span class="icon"><i class="fas fa-magic"/></span>
                     <span class="text">Triggers</span>
                 </router-link>
+                <router-link to="/dashboard/help" class="link">
+                    <span class="icon"><i class="fas fa-book"/></span>
+                    <span class="text">Help & FAQ</span>
+                </router-link>
                 <div class="link link-bottom c-pointer" v-on:click="logout" v-if="api.isAuthenticated()">
                     <span class="icon"><i class="fas fa-sign-out-alt"/></span>
                     <span class="text">Logout</span>
@@ -102,14 +106,18 @@
                                 </button>
                                 button
                             </li>
-                            <li>Creating a webhook is no longer possible directly over the website. You need to go to
+                            <li>
+                                Creating a webhook is no longer possible directly over the website. You need to go to
                                 the channel settings in discord and click on "Integrations" or "Webhooks" (depending on
-                                your device)
+                                your device) <br>
+                                If you are using the mobile app, you can also use the <a href="/invite">discord bot</a>
+                                to create a webhook: <code>&gt;webhook</code>
                             </li>
                         </ul>
                         <h4 class="mt-4">Migrating</h4>
                         <p class="intro-text">
-                            You can easily migrate your previously saved embeds from the old website to the new one until the 31th of January:
+                            You can easily migrate your previously saved embeds from the old website to the new one
+                            until the 31th of January:
                         </p>
                         <ul class="intro-text">
                             <li>Go to <a href="https://old.discord.club" target="_blank">https://old.discord.club</a>
