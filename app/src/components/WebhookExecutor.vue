@@ -23,10 +23,12 @@
         <div class="float-right">
             <button class="btn btn-outline-secondary mr-2" v-on:click="editMessage"
                     :class="{disabled: !webhookUrl}" :disabled="!webhookUrl" v-if="messageId">
+                <span v-if="editDone" class="mr-1"><i class="fas fa-check-circle"/></span>
                 Edit Message
             </button>
             <button class="btn btn-outline-primary" v-on:click="sendMessage"
                     :class="{disabled: !webhookUrl}" :disabled="!webhookUrl">
+                <span v-if="sendDone" class="mr-1"><i class="fas fa-check-circle"/></span>
                 Send Message
             </button>
         </div>
@@ -36,14 +38,13 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">{{responseStatus}}</h5>
+                        <h5 class="modal-title">Webhook Error</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <textarea class="form-control disabled bg-darker" rows="10" v-bind:value="responseBody"
-                                  disabled/>
+                        <error-formatter :response="response"/>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -51,27 +52,43 @@
                 </div>
             </div>
         </div>
-        <confirmation text="Do you want to load the JSON-Code from the existing message? This will overwrite your existing message!" ref="existingOverwriteConfirmation"/>
+        <confirmation
+                text="Do you want to load the JSON-Code from the existing message? This will overwrite your existing message!"
+                ref="existingOverwriteConfirmation"/>
     </div>
 </template>
 <script>
     import $ from "jquery";
     import Confirmation from "./Confirmation";
+    import ErrorFormatter from './ErrorFormatter'
 
     export default {
         name: 'SendMessage',
         props: ['data'],
-        components: {Confirmation},
+        components: {Confirmation, ErrorFormatter},
         data() {
             return {
                 webhookId: "",
                 webhookToken: "",
                 messageId: "",
-                responseStatus: "",
-                responseBody: ""
+                response: null,
+
+                sendDone: false,
+                editDone: false
             }
         },
         methods: {
+            formatError(data) {
+                if (!data.errors) {
+                    return 'Unknown error'
+                }
+
+                let result = ''
+                for (let error of data.errors) {
+                    console.log(error)
+                }
+                return result
+            },
             sendMessage() {
                 if (!this.webhookUrl) return
                 let data = new FormData()
@@ -81,21 +98,27 @@
                     data.append(`file${i}`, file.content, file.name)
                 }
 
-                fetch(`${this.webhookUrl}?wait=true`, {
-                    method: 'POST',
-                    body: data
-                })
-                    .then(resp => {
-                        resp.json().then(data => {
-                            this.responseStatus = `${resp.statusText} (${resp.status})`
-                            this.responseBody = JSON.stringify(data, null, 2)
-                            $('#responseModal').modal()
-
+                this.sendDone = false
+                try {
+                    fetch(`${this.webhookUrl}?wait=true`, {
+                        method: 'POST',
+                        body: data
+                    })
+                        .then(resp => {
+                            this.response = resp
                             if (resp.ok) {
-                                this.messageId = data.id
+                                this.sendDone = true
+                                setTimeout(() => this.sendDone = false, 2000)
+                                resp.json().then(data => {
+                                    this.messageId = data.id
+                                })
+                            } else {
+                                $('#responseModal').modal()
                             }
                         })
-                    })
+                } catch (e) {
+                    alert(e)
+                }
             },
             editMessage() {
                 if (!this.messageId || !this.webhookUrl) return
@@ -104,19 +127,25 @@
                     payload.content = ' '
                 }
 
-                // TODO: default content to " " to remove existing content
-                fetch(`${this.webhookUrl}/messages/${this.messageId}`, {
-                    method: 'PATCH',
-                    body: JSON.stringify(payload),
-                    headers: {'Content-Type': 'application/json'}
-                })
-                    .then(resp => {
-                        resp.json().then(data => {
-                            this.responseStatus = `${resp.statusText} (${resp.status})`
-                            this.responseBody = JSON.stringify(data, null, 2)
-                            $('#responseModal').modal()
-                        })
+                this.editDone = false
+                try {
+                    fetch(`${this.webhookUrl}/messages/${this.messageId}`, {
+                        method: 'PATCH',
+                        body: JSON.stringify(payload),
+                        headers: {'Content-Type': 'application/json'}
                     })
+                        .then(resp => {
+                            this.response = resp
+                            if (!resp.ok) {
+                                $('#responseModal').modal()
+                            } else {
+                                this.editDone = true
+                                setTimeout(() => this.editDone = false, 1000)
+                            }
+                        })
+                } catch (e) {
+                    alert(e)
+                }
             }
         },
         computed: {
@@ -143,16 +172,21 @@
                         })
                             .then(resp => {
                                 if (!resp.ok) {
-                                    alert("Invalid message")
+                                    this.$notify({
+                                        group: 'main',
+                                        title: 'Unknown message',
+                                        text: `The message is either invalid or wasn't sent by the webhook you specified.`,
+                                        type: 'error'
+                                    })
+                                } else {
+                                    resp.json().then(data => {
+                                        this.$refs.existingOverwriteConfirmation.open().then(confirmed => {
+                                            if (confirmed) {
+                                                this.$emit('messageRetrieved', data)
+                                            }
+                                        })
+                                    })
                                 }
-                                return resp.json()
-                            })
-                            .then(data => {
-                                this.$refs.existingOverwriteConfirmation.open().then(confirmed => {
-                                    if (confirmed) {
-                                        this.$emit('messageRetrieved', data)
-                                    }
-                                })
                             })
                     }
                 }
@@ -167,7 +201,6 @@
                 set(newValue) {
                     const urlRegex = /https:\/\/((canary\.)|(ptb\.))?discord(app)?.com\/(api\/(v[6-8]\/)?)?webhooks\/([0-9]+)\/(.+)\/?/i
                     let match = newValue.match(urlRegex);
-                    console.log(match)
                     if (match) {
                         this.webhookId = match[7]
                         this.webhookToken = match[8]
@@ -184,5 +217,19 @@
     }
 </script>
 <style scoped lang="scss">
+    .spin {
+        animation-name: spin;
+        animation-duration: 500ms;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+    }
 
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
 </style>
