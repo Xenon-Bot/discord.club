@@ -16,11 +16,14 @@
                 </div>
             </div>
         </div>
-        <h5 class="text-right">Translated by {{faq.author}}</h5>
         <span class="float-right">
             <img src="@/assets/locales/en.svg" alt="English" class="locale" @click="setLocale('en')">
             <img src="@/assets/locales/de.svg" alt="German" class="locale" @click="setLocale('de')">
             <img src="@/assets/locales/ru.svg" alt="Russian" class="locale" @click="setLocale('ru')">
+            <img src="@/assets/locales/es.svg" alt="Spanish" class="locale" @click="setLocale('es')">
+            <img src="@/assets/locales/fr.svg" alt="French" class="locale" @click="setLocale('fr')">
+            <img src="@/assets/locales/ar.svg" alt="Arabic" class="locale" @click="setLocale('ar')">
+            <h5 class="text-right mt-2">Translated by {{faq.author}}</h5>
         </span>
     </div>
 </template>
@@ -171,6 +174,18 @@
             ]
         },
         ru: {
+            author: '',
+            questions: []
+        },
+        ar: {
+            author: '',
+            questions: []
+        },
+        es: {
+            author: '',
+            questions: []
+        },
+        fr: {
             author: '',
             questions: []
         }
