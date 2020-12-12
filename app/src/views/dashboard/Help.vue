@@ -16,11 +16,11 @@
                 </div>
             </div>
         </div>
+        <h5 class="text-right">Translated by {{faq.author}}</h5>
         <span class="float-right">
-            <h5>Translated by {{faq.author}}</h5>
             <img src="@/assets/locales/en.svg" alt="English" class="locale" @click="setLocale('en')">
             <img src="@/assets/locales/de.svg" alt="German" class="locale" @click="setLocale('de')">
-            <img src="@/assets/locales/ru.svg" alt="Russian" class="locale" @click="setLocale('ru')">
+            <!-- <img src="@/assets/locales/ru.svg" alt="Russian" class="locale" @click="setLocale('ru')"> -->
         </span>
     </div>
 </template>
@@ -140,8 +140,40 @@
                 }
             ]
         },
-        de: [],
-        ru: []
+        de: {
+            author: 'Merlin',
+            questions: [
+                {
+                    title: 'Wie erstelle ich einen Webhook?',
+                    text: `Du benötigst einen Webhook um eine Nachricht zu senden. Wenn du die Dasktop-App von discord bentuzt,
+                                kannst du einen Webhook in den Kanaleinstellungen erstellen.
+                                <img src="/img/faq/create_webhook_desktop.png" alt="Create a webhook desktop" class="faq-image">
+                                Wenn du die Mobile-App benutzt, kannst du den
+                                <a href="/invite" target="_blank">bot einladen</a> und den <code>&gt;webhook</code>
+                                Befehl benutzen um eine Webhook-Url für den Kanal zu bekommen.
+                                <img src="/img/faq/create_webhook_mobile.png" alt="Create a webhook mobile" class="faq-image">`
+                },
+                {
+                    title: 'Wie editiere ich eine existierende Nachricht?',
+                    text: `Um eine existierende Nachricht zu editieren, benötigst du die Nachrichten-URL und die
+                                Webhook-URL die verwendet wurde, um die Nachricht zu erstellen. Wenn die Nachricht nicht
+                                von einem Webhook gesendet, oder der Webhook gelöscht wurde gibt es keine Möglichkeit
+                                die Nachricht zu editieren. <br/>
+                                Die Webhook-URL kannst du in den Kanaleinstellungen finden. Um die Nachrichten-URL
+                                abzurufen, musst due nach dem Rechtsklick auf eine Nachricht auf
+                                 <code>Nachrichtenlink kopieren</code> klicken.
+                                <img src="/img/faq/get_message_url.png" alt="Get message URL" class="faq-image">
+                                Du kannst auch <a href="/invite" target="_blank">den bot einladen</a> und den
+                                <code>&gt;edit &lt;message-url-or-id&gt;</code> Befehl benutzen um schnell
+                                einen Share-Link mit der Webhook-URL und Message-URL zu bekommen.
+                                <img src="/img/faq/edit_message_cmd.png" alt="Edit message cmd" class="faq-image">`
+                },
+            ]
+        },
+        ru: {
+            author: '',
+            questions: []
+        }
     }
 
     export default {
@@ -184,7 +216,7 @@
 
     .locale {
         height: 3em;
-        margin-right: 1em;
+        margin-left: 1em;
         cursor: pointer;
     }
 </style>
