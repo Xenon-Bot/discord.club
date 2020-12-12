@@ -20,7 +20,7 @@
         <span class="float-right">
             <img src="@/assets/locales/en.svg" alt="English" class="locale" @click="setLocale('en')">
             <img src="@/assets/locales/de.svg" alt="German" class="locale" @click="setLocale('de')">
-            <!-- <img src="@/assets/locales/ru.svg" alt="Russian" class="locale" @click="setLocale('ru')"> -->
+            <img src="@/assets/locales/ru.svg" alt="Russian" class="locale" @click="setLocale('ru')">
         </span>
     </div>
 </template>
