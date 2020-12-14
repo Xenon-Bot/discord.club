@@ -21,12 +21,12 @@
             </div>
         </div>
         <div class="float-right">
-            <button class="btn btn-outline-secondary mr-2" v-on:click="editMessage"
+            <button class="btn btn-outline-secondary mr-2" v-on:click="editMessage" type="button"
                     :class="{disabled: !webhookUrl}" :disabled="!webhookUrl" v-if="messageId">
                 <span v-if="editDone" class="mr-1"><i class="fas fa-check-circle"/></span>
                 Edit Message
             </button>
-            <button class="btn btn-outline-primary" v-on:click="sendMessage"
+            <button class="btn btn-outline-primary" v-on:click="sendMessage" type="button"
                     :class="{disabled: !webhookUrl}" :disabled="!webhookUrl">
                 <span v-if="sendDone" class="mr-1"><i class="fas fa-check-circle"/></span>
                 Send Message

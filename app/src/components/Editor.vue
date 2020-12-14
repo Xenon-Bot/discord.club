@@ -174,7 +174,7 @@
                                                           input-class="form-control"/>
                                             </div>
                                             <div class="col-auto">
-                                                <button class="btn btn-outline-light"
+                                                <button class="btn btn-outline-light" type="button"
                                                         v-on:click="embed.timestamp = null">
                                                     <i class="fas fa-eraser"/>
                                                 </button>
@@ -254,14 +254,14 @@
                         <span class="text-danger">{{ jsonError }}</span>
                         <div class="float-right">
                             <button class="btn btn-outline-light mr-2" v-on:click="shareJSON"
-                                    :class="{disabled: jsonIsEmpty}" :disabled="jsonIsEmpty">
+                                    :class="{disabled: jsonIsEmpty}" :disabled="jsonIsEmpty" type="button">
                                 Share
                             </button>
-                            <button class="btn btn-outline-light mr-2" v-on:click="exportJSON">
+                            <button class="btn btn-outline-light mr-2" v-on:click="exportJSON" type="button">
                                 Download
                             </button>
                             <button class="btn btn-outline-secondary" v-on:click="$emit('save', fullData)"
-                                    :class="{disabled: jsonIsEmpty}" :disabled="jsonIsEmpty">
+                                    :class="{disabled: jsonIsEmpty}" :disabled="jsonIsEmpty" type="button">
                                 Save Message
                             </button>
                         </div>
