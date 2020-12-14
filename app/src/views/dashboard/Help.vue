@@ -178,7 +178,7 @@
             questions: []
         },
         ar: {
-            author: '',
+            author: 'Mei',
             questions: [
             {
                     title: 'كيفية إنشاء ويب هوك؟',
