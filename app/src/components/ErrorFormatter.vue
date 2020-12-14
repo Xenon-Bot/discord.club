@@ -27,19 +27,30 @@
                     }
 
                     if (errors.embeds) {
-                        for (let pos in errors.embeds) {
-                            let embed = errors.embeds[pos]
-
-                            let level = embed
-                            let name = ''
-                            while (!level._errors) {
-                                const NextKey = Object.keys(level)[0]
-                                name += ' ' + NextKey
-                                level = level[NextKey]
+                        if (errors.embeds._errors) {
+                            for (let error of errors.embeds._errors) {
+                                this.errors.push(`Embeds: ${error.message}`)
                             }
+                        } else {
+                            for (let pos in errors.embeds) {
+                                let embed = errors.embeds[pos]
 
-                            for (let error of level._errors) {
-                                this.errors.push(`Embed ${parseInt(pos) + 1}: <code>${formatName(name)}</code> is invalid (${error.message})`)
+                                let level = embed
+                                let name = ''
+                                while (!level._errors) {
+                                    const nextKey = Object.keys(level)[0]
+                                    if (!nextKey) {
+                                        break
+                                    }
+                                    name += ' ' + nextKey
+                                    level = level[nextKey]
+                                }
+
+                                if (level._errors) {
+                                    for (let error of level._errors) {
+                                        this.errors.push(`Embed ${parseInt(pos) + 1}: <code>${formatName(name)}</code> is invalid (${error.message})`)
+                                    }
+                                }
                             }
                         }
                         delete errors.embeds
@@ -49,13 +60,18 @@
                         let name = key
                         let level = errors[key]
                         while (!level._errors) {
-                            const NextKey = Object.keys(level)[0]
-                            name += ' ' + NextKey
-                            level = level[NextKey]
+                            const nextKey = Object.keys(level)[0]
+                            if (!nextKey) {
+                                break
+                            }
+                            name += ' ' + nextKey
+                            level = level[nextKey]
                         }
 
-                        for (let error of level._errors) {
-                            this.errors.push(`<code>${formatName(name)}</code> is invalid (${error.message})`)
+                        if (level._errors) {
+                            for (let error of level._errors) {
+                                this.errors.push(`<code>${formatName(name)}</code> is invalid (${error.message})`)
+                            }
                         }
                     }
                 })
