@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "name": "proxy",
+  "version": "1.0.0",
+  "description": "Simple http proxy that only supports GET",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write '**/*.{js,css,json,md}'"
+  },
+  "author": "Merlintor <merlinfuchs2001@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^1.18.2"
+  }
+}
