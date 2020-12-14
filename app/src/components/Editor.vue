@@ -4,7 +4,7 @@
             <div class="col-12 col-xl-6 mb-5">
                 <slot name="top-left"/>
                 <h4 class="ml-2 mb-3">Message</h4>
-                <div class="card border-0 tex-light mb-4 bg-darker">
+                <div class="card border-0 text-light mb-4 bg-darker">
                     <div class="card-body">
                         <div class="form-row mb-2">
                             <div class="col-12 col-lg-6 mb-4">
@@ -59,7 +59,7 @@
                 <h4 class="ml-2 mb-3">Embeds <span
                         class="text-muted ml-2 char-counter h6">{{ embeds.length }} / 10</span></h4>
                 <div class="mb-5">
-                    <div v-for="(embed, e) in embeds" v-bind:key="e" class="card tex-light mb-3 bg-darker"
+                    <div v-for="(embed, e) in embeds" v-bind:key="`embed${e}`" class="card tex-light mb-3 bg-darker"
                          v-bind:style="{borderLeft: '5px solid' + embed.color}">
                         <div class="card-body">
                             <div class="float-right" style="font-size: 1.1rem">
@@ -197,7 +197,7 @@
                                 </div>
                                 <h5>Fields <span class="text-muted ml-2 char-counter">{{ embed.fields ? embed.fields.length : 0 }} / 10</span>
                                 </h5>
-                                <div v-for="(field, f) in embed.fields" v-bind:key="f">
+                                <div v-for="(field, f) in embed.fields" v-bind:key="`field${f}`">
                                     <label>Field {{ f + 1 }}</label>
                                     <span class="text-muted ml-2 char-counter">{{ field.name ? field.name.length : 0 }} / 256</span>
                                     <span class="text-muted ml-2 char-counter">{{ field.value ? field.value.length : 0 }} / 1024</span>
@@ -484,15 +484,19 @@
                     return
                 }
                 embed.fields.push({})
+                embed.content = embed.content ? embed.content : undefined
+                this.$forceUpdate() // idk why it doesn't work without this (maybe too much nesting)
             },
             clearFields(e) {
                 this.embeds[e].fields = []
+                this.$forceUpdate() // idk why it doesn't work without this (maybe too much nesting)
             },
             deleteField(e, i) {
                 let embed = this.embeds[e];
                 if (embed.fields) {
                     embed.fields.splice(i, 1)
                 }
+                this.$forceUpdate() // idk why it doesn't work without this (maybe too much nesting)
             },
             addFile(file) {
                 let reader = new FileReader()

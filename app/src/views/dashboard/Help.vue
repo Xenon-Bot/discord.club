@@ -23,7 +23,7 @@
             <img src="@/assets/locales/es.svg" alt="Spanish" class="locale" @click="setLocale('es')">
             <img src="@/assets/locales/fr.svg" alt="French" class="locale" @click="setLocale('fr')">
             <img src="@/assets/locales/ar.svg" alt="Arabic" class="locale" @click="setLocale('ar')">
-            <h5 class="text-right mt-2">Translated by {{faq.author}}</h5>
+            <h6 class="text-right mt-2">Translated by {{faq.author}}</h6>
         </span>
     </div>
 </template>
@@ -230,7 +230,7 @@
     }
 
     .locale {
-        height: 3em;
+        height: 2.5em;
         margin-left: 1em;
         cursor: pointer;
     }
