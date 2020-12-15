@@ -288,8 +288,109 @@
             ]
         },
         ar: {
-            author: '',
-            questions: []
+            author: 'Mei',
+            questions: [
+            {
+                    title: 'كيفية إنشاء ويب هوك؟',
+                      text: `.للويب هوك لإرسال رسالة URL أنت بحاجة الى عنوان   
+                           .إذا كنت تستخدم إصدار سطح المكتب أو الويب، يمكنك ببساطة الانتقال إلى إعدادات القناة وإنشاء ويب هوك من هناك
+                            <img src="/img/faq/create_webhook_desktop.png" alt="Create a webhook desktop" class="faq-image">
+                           <a href="/invite" target="_blank">دعوة البوت</a> إذا كنت تستخدم تطبيق الموبايل يمكنك 
+                          .صالح لقناتك URL للحصول على عنوان ويب هوك <code>&gt;webhook</code> واستخدام الكومند 
+                          <img src="/img/faq/create_webhook_mobile.png" alt="Create a webhook mobile" class="faq-image">`
+                },
+                {
+                    title: 'كيفية تعديل رسالة موجودة؟',
+                    text: `.للويب هوك الذي تم استخدامه لإنشاء الرسالة URL او معرف الرسالة و عنوان URL يتطلب تعديل رسالة موجودة عنوان 
+                           <br/> .إذا لم يتم إرسال الرسالة بواسطة الويب هوك أو تم حذف الويب هوك الصحيح ، فلا توجد طريقة لتحرير الرسالة
+                         .<code>نسخ رابط الرسالة<code> للرسالة عن طريق النقر بزر الماوس الأيمن فوق الرسالة (فتح قائمة السياق) والنقر فوق URL الخاص بالويب هوك في إعدادات القناة وعنوان URL يمكنك الحصول على عنوان  
+                         <img src="/img/faq/get_message_url.png" alt="Get message URL" class="faq-image">
+                      <code>&gt;edit &lt;message-url-or-id&gt;</code> واستخدام الكومند <a href="/invite" target="_blank">دعوةالبوت</a> يمكنك أيضا 
+                     .للرسالة المملوءين مسبقا URL للحصول بسرعة على رابط مشاركة باستخدام الويب هوك وعنوان
+                        <img src="/img/faq/edit_message_cmd.png" alt="Edit message cmd" class="faq-image">`
+                },
+                {
+                    title: 'كيف أشير الى مستخدم أو قناة أو دور؟',
+                    text: `للإشارة إلى مستخدم أو قناة أو دور، تحتاج الى استخدام 
+                         <a href="https://discord.com/developers/docs/reference#message-formatting">API نظام</a>.
+                        <a href="https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID">هنا</a> انقر   
+                                                                      <br> .لمعرفة كيفية الحصول على معرف الوحدة 
+                       .لنص معين API للحصول على تصميم ال <code>&gt;format &lt;text&gt;</code> واستخدام الكومند <a href="/invite" target="_blank">دعوةالبوت</a> يمكنك أيضا
+                                <img src="/img/faq/api_format_cmd.png" alt="API format cmd" class="faq-image">`
+                },
+                {     
+                    title: 'كيف يمكنني استخدام ايموجي مخصص؟',
+                    text: `لاستخدام رمز تعبيري مخصص تحتاج إلى استخدام 
+                    <a href="https://discord.com/developers/docs/reference#message-formatting">API نظام</a>.
+                <br> .أمام الايموجي داخل ديسكورد (<code>\\</code>) يمكنك الحصول على التصميم الصحيح عن طريق وضع شرطة 
+                <code>&gt;format &lt;text&gt;</code> واستخدام الكومند <a href="/invite" target="_blank">دعوةالبوت</a> يمكنك أيضا 
+                                                                                    .لنص معين API للحصول على تصميم   
+                      <img src="/img/faq/api_format_cmd.png" alt="API format cmd" class="faq-image">
+                    "Use External Emojis" بحاجة للحصول على إذن <code>@everyone</code> ضع في الاعتبار أن دور
+                           .إذا كنت تريد استخدام ايموجي من سيرفر مختلف في رسالة الويب هوك`              
+                },
+                {
+                    title: 'هل توجد طرق أخرى لصياغة رسالتي؟',
+                     text: `.يدعم ديسكورد مجموعة فرعية محدودة من الاشارات في رسائل التضمينات و الويب هوك. الاشارات معتمدة فقط في محتوى الرسالة ووصف التضمين وقيم المجالات المضمنة
+                              <div class="faq-table mt-3 rounded">
+                                <table class="table table-dark">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>الشكل</th>
+                                            <th>النتيجة</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <td>عريض</td>
+                                        <td><code>**نص**</code></td>
+                                        <td><b>نص</b></td>
+                                    </tbody>
+                                    <tbody>
+                                        <td>مائل</td>
+                                        <td><code>*نص*</code></td>
+                                        <td><i>نص</i></td>
+                                    </tbody>
+                                    <tbody>
+                                        <td>مسطر</td>
+                                        <td><code>__نص__</code></td>
+                                        <td><u>نص</u></td>
+                                    </tbody>
+                                    <tbody>
+                                        <td>مشطوب</td>
+                                        <td><code>~~نص~~</code></td>
+                                        <td><strike>نص</strike></td>
+                                    </tbody>
+                                    <tbody>
+                                        <td>رابط تشعبي</td>
+                                        <td><code>[Xenon Bot](https://xenon.bot)</code></td>
+                                        <td><a href="https://xenon.bot" target="_blank">Xenon Bot</a></td>
+                                    </tbody>
+                                    <tbody>
+                                        <td>تجنب التضمين</td>
+                                        <td><code>&lt;https://xenon.bot&gt;</code></td>
+                                        <td>لن يتم تضمين الرابط بواسطة ديسكورد</td>
+                                    </tbody>
+                                </table>
+                                </div>
+                                <code>**__text__**</code> سينتج عنه <b><u>text</u></b>. :يمكنك أيضًا الجمع بين أساليب متعددة `
+                },
+                {
+                    title: 'كيف أحفظ رسالة؟',
+                    text: `<br> .تحتاج إلى تسجيل الدخول في ديسكورد لتتمكن من حفظ الرسائل في السيرفر 
+                                  <br> .كود وانقر على أيقونة ديسكورد إذا لم تكن قد قمت بتسجيل الدخول بالفعل JSON في قسم "الرسالة السريعة" ، انقر على "حفظ الرسالة" أسفل  
+                                بعد تسجيل الدخول، يمكنك النقر فوق "حفظ الرسالة" مرة أخرى، سم الرسالة وانقر فوق "حفظ". ستتم إعادة توجيهك إلى صفحة تحرير الرسالة المحفوظة حديثًا
+                                <img src="/img/faq/save_message.png" alt="Save message" class="faq-image">`
+                },
+                {
+                    title: 'كيف يمكنني تعديل واستخدام رسالة محفوظة؟',
+                    text: `.يمكنك العثور على رسائلك المحفوظة بالنقر فوق "الرسائل" في القائمة الموجودة على الجانب الأيسر
+                          .حدد الرسالة التي تريد تعديلها أو استخدامها واضغط فوق "عرض". يجب أن تظهر رسالتك المحفوظة ويمكنك تعديلها
+                         ."يمكنك حفظ الرسالة المعدلة بالضغط على "حفظ الرسالة 
+                                 <img src="/img/faq/edit_saved.png" alt="Edit saved message" class="faq-image"/>`
+                }
+            ]
+        },             
         },
         es: {
             author: '',
