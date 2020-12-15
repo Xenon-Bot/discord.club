@@ -23,6 +23,7 @@
             <!-- <img src="@/assets/locales/es.svg" alt="Spanish" class="locale" @click="setLocale('es')"> -->
             <!-- <img src="@/assets/locales/fr.svg" alt="French" class="locale" @click="setLocale('fr')"> -->
             <img src="@/assets/locales/ar.svg" alt="Arabic" class="locale" @click="setLocale('ar')">
+            <img src="@/assets/locales/pt.svg" alt="Portuguese" class="locale" @click="setLocale('pt')">
             <h6 class="text-right mt-2">Translated by {{faq.author}}</h6>
         </span>
     </div>
@@ -396,6 +397,10 @@
             questions: []
         },
         fr: {
+            author: '',
+            questions: []
+        },
+        pt: {
             author: '',
             questions: []
         }
