@@ -33,6 +33,9 @@ class DiscordClubBot(cmd.AutoShardedBot):
             self.load_extension(f"modules.{module}")
 
     async def on_command_error(self, ctx, e):
+        if isinstance(e, cmd.CommandNotFound):
+            return
+
         if isinstance(e, cmd.CheckFailure):
             await ctx.send(str(e))
         else:
