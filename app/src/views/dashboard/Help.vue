@@ -180,48 +180,51 @@
         ar: {
             author: 'Mei',
             questions: [
-            {
+           {
                     title: 'كيفية إنشاء ويب هوك؟',
-                      text: `.للويب هوك لإرسال رسالة URL أنت بحاجة الى عنوان   
-                           .إذا كنت تستخدم إصدار سطح المكتب أو الويب، يمكنك ببساطة الانتقال إلى إعدادات القناة وإنشاء ويب هوك من هناك
-                            <img src="/img/faq/create_webhook_desktop.png" alt="Create a webhook desktop" class="faq-image">
-                           <a href="/invite" target="_blank">دعوة البوت</a> إذا كنت تستخدم تطبيق الموبايل يمكنك 
-                          .صالح لقناتك URL للحصول على عنوان ويب هوك <code>&gt;webhook</code> واستخدام الكومند 
-                          <img src="/img/faq/create_webhook_mobile.png" alt="Create a webhook mobile" class="faq-image">`
+                    text: `
+للويب هوك لإرسال رسالة URL أنت بحاجة الى عنوان <br/>
+                                .إذا كنت تستخدم إصدار سطح المكتب أو الويب، يمكنك ببساطة الانتقال إلى إعدادات القناة وإنشاء ويب هوك من هناك <br/>
+                                <img src="/img/faq/create_webhook_desktop.png" alt="Create a webhook desktop" class="faq-image">
+إذا كنت تستخدم تطبيق الموبايل ، يمكنك <a href="/invite"  target="_blank">دعوة البوت</a> واستخدام الكومند <code>&gt;ويب هوك</code> <br/>
+ للويب هوك صالح للاستعمال لقناتك url  للحصول على عنوان 
+                                <img src="/img/faq/create_webhook_mobile.png" alt="Create a webhook mobile" class="faq-image">`
                 },
                 {
                     title: 'كيفية تعديل رسالة موجودة؟',
                     text: `.للويب هوك الذي تم استخدامه لإنشاء الرسالة URL او معرف الرسالة و عنوان URL يتطلب تعديل رسالة موجودة عنوان 
-                           <br/> .إذا لم يتم إرسال الرسالة بواسطة الويب هوك أو تم حذف الويب هوك الصحيح ، فلا توجد طريقة لتحرير الرسالة
-                         .<code>نسخ رابط الرسالة<code> للرسالة عن طريق النقر بزر الماوس الأيمن فوق الرسالة (فتح قائمة السياق) والنقر فوق URL الخاص بالويب هوك في إعدادات القناة وعنوان URL يمكنك الحصول على عنوان  
-                         <img src="/img/faq/get_message_url.png" alt="Get message URL" class="faq-image">
-                      <code>&gt;edit &lt;message-url-or-id&gt;</code> واستخدام الكومند <a href="/invite" target="_blank">دعوةالبوت</a> يمكنك أيضا 
-                     .للرسالة المملوءين مسبقا URL للحصول بسرعة على رابط مشاركة باستخدام الويب هوك وعنوان
-                        <img src="/img/faq/edit_message_cmd.png" alt="Edit message cmd" class="faq-image">`
+                                <br/> .إذا لم يتم إرسال الرسالة بواسطة الويب هوك أو تم حذف الويب هوك الصحيح ، فلا توجد طريقة لتحرير الرسالة
+ .للويب هوك في إعدادت القناة URL يمكنك الحصول على عنوان<br/>
+للرسالة  عن طريق الضغط بزر الماوس الأيمن فوق الرسالة (فتح قائمة السياق)  URL ويمكنك الحصول على عنوان
+<br/>والنقر فوق <code>نسخ رابط الرسالة</code> 
+                                <img src="/img/faq/get_message_url.png" alt="Get message URL" class="faq-image">
+يمكنك أيضا <a href="/invite" target="_blank">دعوة البوت</a> <br/>
+  <code>&gt;edit &lt;message-url-or-id&gt;</code> واستخدام الكومند<br/> 
+                                .للرسالة المملوءين مسبقا URL للحصول بسرعة على رابط مشاركة باستخدام الويب هوك وعنوان
+                                  <img src="/img/faq/edit_message_cmd.png" alt="Edit message cmd" class="faq-image">`
                 },
                 {
                     title: 'كيف أشير الى مستخدم أو قناة أو دور؟',
-                    text: `للإشارة إلى مستخدم أو قناة أو دور، تحتاج الى استخدام 
-                         <a href="https://discord.com/developers/docs/reference#message-formatting">API نظام</a>.
-                        <a href="https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID">هنا</a> انقر   
-                                                                      <br> .لمعرفة كيفية الحصول على معرف الوحدة 
-                       .لنص معين API للحصول على تصميم ال <code>&gt;format &lt;text&gt;</code> واستخدام الكومند <a href="/invite" target="_blank">دعوةالبوت</a> يمكنك أيضا
+                    text: `
+ <a href="https://discord.com/developers/docs/reference#message-formatting">نظام API</a>. للإشارة إلى مستخدم أو قناة أو دور، تحتاج الى استخدام <br/> 
+ انقر <a href="https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID">هنا</a> لمعرفة كيفية الحصول على معرّف الوحدة <br/>  
+يمكنك أيضا <a href="/invite" target="_blank">دعوة البوت</a> <br/> 
+                               .لنص معين API للحصول على تصميم ال <code>&gt;format &lt;text&gt;</code> واستخدام الكومند
                                 <img src="/img/faq/api_format_cmd.png" alt="API format cmd" class="faq-image">`
                 },
                 {     
                     title: 'كيف يمكنني استخدام ايموجي مخصص؟',
-                    text: `لاستخدام رمز تعبيري مخصص تحتاج إلى استخدام 
-                    <a href="https://discord.com/developers/docs/reference#message-formatting">API نظام</a>.
-                <br> .أمام الايموجي داخل ديسكورد (<code>\\</code>) يمكنك الحصول على التصميم الصحيح عن طريق وضع شرطة 
-                <code>&gt;format &lt;text&gt;</code> واستخدام الكومند <a href="/invite" target="_blank">دعوةالبوت</a> يمكنك أيضا 
-                                                                                    .لنص معين API للحصول على تصميم   
-                      <img src="/img/faq/api_format_cmd.png" alt="API format cmd" class="faq-image">
-                    "Use External Emojis" بحاجة للحصول على إذن <code>@everyone</code> ضع في الاعتبار أن دور
-                           .إذا كنت تريد استخدام ايموجي من سيرفر مختلف في رسالة الويب هوك`              
+                    text: `<a href="https://discord.com/developers/docs/reference#message-formatting">نظام API</a>  
+                               لاستخدام رمز تعبيري مخصص تحتاج إلى استخدام <br/>
+   يمكنك الحصول على التصميم الصحيح عن طريق وضع شرطة مائلة (<code>\</code>) أمام الايموجي داخل ديسكورد <br/>                             
+   يمكنك أيضا <a href="/invite" target="_blank">دعوة البوت</a> <br/>     لنص معيّن API للحصول على تصميم  <code>&gt;format &lt;text&gt;</code>                                      واستخدام الكومند    
+                                <img src="/img/faq/api_format_cmd.png" alt="API format cmd" class="faq-image">
+                                "Use External Emojis" بحاجة للحصول على اذن  <code>@everyone</code> ضع في الاعتبار أن دور <br/>
+  .إذا كنت تريد استخدام ايموجي من سيرفر مختلف في رسالة الويب هوك`              
                 },
                 {
                     title: 'هل توجد طرق أخرى لصياغة رسالتي؟',
-                     text: `.يدعم ديسكورد مجموعة فرعية محدودة من الاشارات في رسائل التضمينات و الويب هوك. الاشارات معتمدة فقط في محتوى الرسالة ووصف التضمين وقيم المجالات المضمنة
+                    text: `يدعم ديسكورد مجموعة فرعية محدودة من الاشارات في رسائل التضمينات و الويب هوك. الاشارات معتمدة فقط في محتوى الرسالة ووصف التضمين وقيم المجالات المضمنة
                               <div class="faq-table mt-3 rounded">
                                 <table class="table table-dark">
                                     <thead>
@@ -263,28 +266,139 @@
                                     </tbody>
                                 </table>
                                 </div>
-                                <code>**__text__**</code> سينتج عنه <b><u>text</u></b>. :يمكنك أيضًا الجمع بين أساليب متعددة `
+                                <code>**__نص__**</code> سينتج عنه <b><u>نص</u></b>. :يمكنك أيضًا الجمع بين أساليب متعددة `
                 },
                 {
                     title: 'كيف أحفظ رسالة؟',
-                    text: `<br> .تحتاج إلى تسجيل الدخول في ديسكورد لتتمكن من حفظ الرسائل في السيرفر 
-                                  <br> .كود وانقر على أيقونة ديسكورد إذا لم تكن قد قمت بتسجيل الدخول بالفعل JSON في قسم "الرسالة السريعة" ، انقر على "حفظ الرسالة" أسفل  
-                                بعد تسجيل الدخول، يمكنك النقر فوق "حفظ الرسالة" مرة أخرى، سم الرسالة وانقر فوق "حفظ". ستتم إعادة توجيهك إلى صفحة تحرير الرسالة المحفوظة حديثًا
+                    text: `.تحتاج إلى تسجيل الدخول في ديسكورد لتتمكن من حفظ الرسائل في السيرفر<br> 
+كود JSON في قسم "الرسالة السريعة" انقر على "حفظ الرسالة" أسفل <br/>
+وانقر على أبقونة ديسكورد اذا لم تكن قد قمت بتسجيل الدخول بالفعل  <br> 
+بعد تسجيل الدخول، يمكنك النقر فوق "حفظ الرسالة" مرة أخرى، سم الرسالة وانقر فوق "حفظ". ستتم إعادة توجيهك إلى صفحة تحرير الرسالة المحفوظة حديثًا
                                 <img src="/img/faq/save_message.png" alt="Save message" class="faq-image">`
+                            
                 },
                 {
                     title: 'كيف يمكنني تعديل واستخدام رسالة محفوظة؟',
-                    text: `.يمكنك العثور على رسائلك المحفوظة بالنقر فوق "الرسائل" في القائمة الموجودة على الجانب الأيسر
-                          .حدد الرسالة التي تريد تعديلها أو استخدامها واضغط فوق "عرض". يجب أن تظهر رسالتك المحفوظة ويمكنك تعديلها
-                         ."يمكنك حفظ الرسالة المعدلة بالضغط على "حفظ الرسالة 
-                                 <img src="/img/faq/edit_saved.png" alt="Edit saved message" class="faq-image"/>`
+                    text: `يمكنك العثور على رسائلك المحفوظة بالنقر فوق "الرسائل" في القائمة الموجودة على الجانب الأيسر
+                                .حدد الرسالة التي تريد تعديلها أو استخدامها واضغط فوق "عرض". يجب أن تظهر رسالتك المحفوظة ويمكنك تعديلها
+                                <br/>"يمكنك حفظ الرسالة المعدلة بالضغط على "حفظ الرسالة 
+                                <img src="/img/faq/edit_saved.png" alt="Edit saved message" class="faq-image"/>`
+                               
                 }
             ]
-        },             
         },
         es: {
-            author: '',
-            questions: []
+            author: 'Mei',
+            questions: [
+                {
+                    title: '¿Cómo crear un webhook?'
+                    text: `Necesitas una URL de webhook para enviar un mensaje. Si estás utilizando la versión desktop o web de Discord, 
+                                puedes ir a la configuración del canal y crear un webhook allí.
+                               <img src="/img/faq/create_webhook_desktop.png" alt="Create a webhook desktop" class="faq-image">
+                               Si estás utilizando la aplicación del móvil, puedes
+                               <a href="/invite" target="_blank">invitar al bot</a> y usar el <code>&gt;webhook</code> 
+                               comando para obtener una URL de webhook válida para tu canal.
+                               <img src="/img/faq/create_webhook_mobile.png" alt="Create a webhook mobile" class="faq-image">`
+                },
+                {
+                    title: '¿Cómo editar un mensaje existente?',
+                    text: `La redacción de un mensaje existente requiere la URL / ID del mensaje y la URL del webhook que 
+                               que fue usada para crear el mensaje. Si el mensaje no fue enviado por un webhook o webhook correcto fue eliminado
+                               no hay forma para editar el mensaje. <br/>
+                               Puedes obtener la URL del webhook en la configuración del canal y la URL del mensaje haciendo un clic con el botón derecho en el mensaje (abriendo el menú contextual) 
+                               y haciendo un clic <code>Copiar el enlace del mensaje</code>. 
+                               <img src="/img/faq/get_message_url.png" alt="Get message URL" class="faq-image">
+                               También puedes <a href="/invite" target="_blank">invitar al bot</a> y usar el
+                               <code>&gt;edit &lt;message-url-or-id&gt;</code> comando para obtener rápidamente un enlace compartido 
+                               con el webhook y la URL del mensaje precargado.
+                               <img src="/img/faq/edit_message_cmd.png" alt="Edit message cmd" class="faq-image">`
+                },
+                {
+                    title: '¿Cómo puedo mencionar un usuario, canal o rol?',
+                    text: `Para mencionar un usuario, canal o rol, debes utilizar el
+                               <a href="https://discord.com/developers/docs/reference#message-formatting">formato de API</a>.
+                               Haz un clic <a href="https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID">Aquí</a>
+                               para ver cómo obtener un identificador de entidad ID. <br>
+                               También puedes <a href="/invite" target="_blank">invitar al bot</a> y usar el
+                               <code>&gt;format &lt;text&gt;</code> comando para obtener el formato de API para un texto dado.
+                               <img src="/img/faq/api_format_cmd.png" alt="API format cmd" class="faq-image">`
+                },
+                {
+                    title: '¿Cómo puedo utilizar un emoji personalizado?',
+                    text: `Para usar un emoji personalizado, debes usar el
+                               <a href="https://discord.com/developers/docs/reference#message-formatting">formato de API</a>.
+                               Puedes obtener el formato correcto colocando una barra invertida (<code>\\</code>) 
+                               delante del emoji dentro de discord.  <br>
+                               También puedes <a href="/invite" target="_blank">invitar al bot</a> y usar
+                               <code>&gt;format &lt;text&gt;</code> comando para obtener el formato de API para un texto dado.
+                               <img src="/img/faq/api_format_cmd.png" alt="API format cmd" class="faq-image">
+                               Ten en cuenta que <code>@everyone</code> rol debe tener el permiso "Usar emojis externos" 
+                               si deseas usar un emoji de otros servidores en un mensaje de webhook.`
+                },
+                {
+                    title: '¿Hay otras formas de formatear mi mensaje?',
+                    text: `Discord admite un subconjunto limitado de reducciones en mensajes embeds y mensajes de webhook. 
+                               Las reducciones solo se admiten en el contenido del mensaje, las descripciones de los embeds y los valores de campo de embeds.`
+                               <div class="faq-table mt-3 rounded">
+                                <table class="table table-dark">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Formato</th>
+                                            <th>Resultado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <td>Negrito</td>
+                                        <td><code>**texto**</code></td>
+                                        <td><b>text</b></td>
+                                    </tbody>
+                                    <tbody>
+                                        <td>Itálico</td>
+                                        <td><code>*texto*</code></td>
+                                        <td><i>text</i></td>
+                                    </tbody>
+                                    <tbody>
+                                        <td>Subrayado</td>
+                                        <td><code>__texto__</code></td>
+                                        <td><u>text</u></td>
+                                    </tbody>
+                                    <tbody>
+                                        <td>Tachado</td>
+                                        <td><code>~~texto~~</code></td>
+                                        <td><strike>text</strike></td>
+                                    </tbody>
+                                    <tbody>
+                                        <td>Hiperenlace</td>
+                                        <td><code>[Xenon Bot](https://xenon.bot)</code></td>
+                                        <td><a href="https://xenon.bot" target="_blank">Xenon Bot</a></td>
+                                    </tbody>
+                                    <tbody>
+                                        <td>Evitar Embed</td>
+                                        <td><code>&lt;https://xenon.bot&gt;</code></td>
+                                        <td>El enlace no será en embed por discord</td>
+                                    </tbody>
+                                </table>
+                                </div>
+                                También puedes combinar varios estilos: <code>**__texto__**</code> resultará <b><u>texto</u></b>.`
+                },
+                {
+                    title: '¿Cómo puedo guardar un mensaje?',
+                    text: `Debes iniciar sesión con discord para poder guardar mensajes en el servidor. <br>
+                                En la sección "Mensaje rápido", haz un clic en "Guardar mensaje" debajo del código JSON y haz un clic en el icono
+                                de discord si aún no has iniciado sesión. <br>
+                                Después de iniciar sesión, puedes hacer un clic en "Guardar mensaje" nuevamente, da un nombre al mensaje y 
+                                haz un clic en "Guardar". Serás redirigido a la página de edición del mensaje recién guardado.
+                                <img src="/img/faq/save_message.png" alt="Save message" class="faq-image">`
+                },
+                {
+                    title: '¿Cómo puedo editar y utilizar un mensaje guardado?',
+                    text: `Puedes encontrar tus mensajes guardados haciendo un clic en "Mensajes" en el menú del lado izquierdo.
+                               Selecciona el mensaje que quieres editar o usar y haz un clic en "Ver". Tu mensaje guardado debería 
+                               aparecer y puedes editarlo. Puedes guardar el mensaje editado haciendo clic en "Guardar mensaje".
+                               <img src="/img/faq/edit_saved.png" alt="Edit saved message" class="faq-image"/>`
+                }
+                ]
         },
         fr: {
             author: '',
