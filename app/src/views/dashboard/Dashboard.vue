@@ -30,6 +30,10 @@
                     <span class="icon"><i class="fas fa-magic"/></span>
                     <span class="text">Triggers</span>
                 </router-link>
+                <router-link to="/dashboard/integrations" class="link">
+                    <span class="icon"><i class="fas fa-link"/></span>
+                    <span class="text">Integrations</span>
+                </router-link>
                 <router-link to="/dashboard/help" class="link">
                     <span class="icon"><i class="fas fa-book"/></span>
                     <span class="text">Help & FAQ</span>

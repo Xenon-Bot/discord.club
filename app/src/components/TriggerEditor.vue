@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-12 col-lg-6">
             <h4 class="mb-3 ml-2">Settings</h4>
-            <div class="card mb-3">
+            <div class="card mb-4 bg-darker">
                 <div class="card-header">
                     <div class="form-row mb-2">
                         <div class="col-6">
@@ -13,8 +13,7 @@
                             <label>Type</label>
                             <select class="custom-select" v-model="type">
                                 <option :value="0">Scheduled</option>
-                                <option :value="1" disabled>Custom Command</option>
-                                <option :value="2">Twitch Event</option>
+                                <option :value="1">Custom Command</option>
                             </select>
                         </div>
                     </div>
@@ -31,24 +30,71 @@
                         </div>
                     </div>
                     <div class="form-row mt-2" v-if="type === 1">
-                        <div class="col mb-2">
+                        <div class="col-12 mb-3">
+                            <label>Bot Token</label>
+                            <input type="text" class="form-control" v-model.trim="settings.token"
+                                   placeholder="91ed336ce046430857c1353a9886d8662a88a196f4aaf05194006648c645245c">
+                        </div>
+                        <div class="col-12 mb-4">
                             <label>Public Key</label>
                             <input type="text" class="form-control" v-model.trim="settings.public_key"
                                    placeholder="91ed336ce046430857c1353a9886d8662a88a196f4aaf05194006648c645245c">
                         </div>
                     </div>
+
+                    <div class="float-right mt-3">
+                        <button class="btn btn-outline-primary">Save Trigger</button>
+                    </div>
                 </div>
             </div>
-            <div v-if="type === 1">
+            <div v-if="type === 1 && settings.token">
                 <h4 class="mb-3 ml-2">Command</h4>
-                <div class="card">
-                    <div class="card-body"></div>
+                <div class="card bg-darker">
+                    <div class="card-body">
+                        <label>Name</label>
+                        <input type="text" class="form-control mb-4" placeholder="ping" v-model="command.name">
+                        <label>Description</label>
+                        <textarea rows="1" class="form-control mb-4" placeholder="My first ping command (pong!)"
+                                  v-model="command.description"/>
+                        <h5 class="mb-3">Options</h5>
+                        <div class="form-row mb-2" v-for="(option, o) in command.options" :key="`var${o}`">
+                            <div class="col mb-2">
+                                <input type="text" class="form-control" placeholder="Name" v-model.trim="option.name">
+                            </div>
+                            <div class="col mb-2">
+                                <select class="custom-select" v-model="option.type">
+                                    <option :value="3" selected>Text</option>
+                                    <option :value="4">Number</option>
+                                    <option :value="5">Boolean</option>
+                                    <option :value="6">User</option>
+                                    <option :value="7">Channel</option>
+                                    <option :value="8">Role</option>
+                                </select>
+                            </div>
+                            <div class="col-auto mb-2">
+                                <div class="btn btn-outline-light" @click="deleteCommandOption(o)">
+                                    <i class="fas fa-minus"/>
+                                </div>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <textarea rows="1" class="form-control" placeholder="Description"/>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="btn btn-sm btn-outline-light mr-2" @click="clearCommandOptions()">
+                                <i class="fas fa-trash"/>
+                            </div>
+                            <div class="btn btn-sm btn-outline-light" @click="addCommandOption()">
+                                <i class="fas fa-plus"/>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-12 col-lg-6">
             <h4 class="mb-3 ml-2">Actions</h4>
-            <div v-for="(action, a) in actions" :key="`actions${a}`" class="card mb-3">
+            <div v-for="(action, a) in actions" :key="`actions${a}`" class="card mb-3 bg-darker">
                 <div class="card-body">
                     <div class="float-right">
                         <span class="mr-3 c-pointer" v-if="a !== 0" v-on:click="moveActionUp(a)"><i
@@ -82,15 +128,20 @@
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="col-12 col-md-6 mb-4" v-if="action.type !== 2">
+                            <div class="col-12 mb-4" v-if="action.type !== 2">
                                 <label>Webhook URL</label>
-                                <input type="url" class="form-control" v-model.trim="action.webhook_url"
+                                <input type="url" class="form-control" v-model.trim="action.webhook_url" required
                                        placeholder="https://discord.com/api/webhooks/423157583646294017/nsFEJfuNKVBRcKcgj0JX3TygdvhX-ItEJhrWVWadw7shUXXuIRwsJHUS_XbDDSA_ILKN">
                             </div>
-                            <div class="col-12 col-md-6 mb-4">
+                            <div class="col-12 mb-4" v-if="action.type === 1">
+                                <label>Message URL / ID</label>
+                                <input type="url" class="form-control" v-model.trim="action.message_url" required
+                                       placeholder="https://discord.com/channels/410488579140354049/633228954064650250/781981855808487477">
+                            </div>
+                            <div class="col-12 mb-4">
                                 <label>Message</label>
-                                <select class="custom-select" v-model.trim="action.message_id">
-                                    <option v-for="(msg, m) in messages" :key="`msg${m}`" :value="msg.id">msg.name
+                                <select class="custom-select" v-model.trim="action.message_id" required>
+                                    <option v-for="(msg, m) in messages" :key="`msg${m}`" :value="msg.id">{{msg.name}}
                                     </option>
                                 </select>
                             </div>
@@ -101,7 +152,8 @@
                                 <input type="text" class="form-control" placeholder="Name" v-model.trim="variable.name">
                             </div>
                             <div class="col">
-                                <input type="text" class="form-control" placeholder="Value" v-model.trim="variable.value">
+                                <input type="text" class="form-control" placeholder="Value"
+                                       v-model.trim="variable.value">
                             </div>
                             <div class="col-auto">
                                 <div class="btn btn-outline-light" @click="deleteVar(a, v)">
@@ -146,7 +198,25 @@
                 type: 0,
                 settings: {},
                 actions: [],
-                messages: []
+                messages: [],  // use in actions
+
+                existingCommands: [],
+                command: {
+                    id: null,
+                    name: '',
+                    description: '',
+                    options: []
+                }  // only used in type 1
+            }
+        },
+        mounted() {
+            this.api.getMessages()
+                .then(resp => resp.json())
+                .then(data => this.messages = data)
+            if (this.id) {
+                this.api.getTrigger(this.id)
+                    .then(resp => resp.json())
+                    .then(data => this.setTriggerData(data))
             }
         },
         methods: {
@@ -197,6 +267,46 @@
                     action.variables.splice(v, 1)
                 }
                 this.$forceUpdate()
+            },
+            addCommandOption() {
+                if (this.command.options) {
+                    this.command.options.push({type: 3})
+                } else {
+                    this.command.options = [{type: 3}]
+                }
+            },
+            deleteCommandOption(o) {
+                if (this.command.options) {
+                    this.command.options.splice(o, 1)
+                }
+            },
+            clearCommandOptions() {
+                this.command.options = []
+            },
+            saveTrigger() {
+                if (this.id) {
+                    console.log("save existing")
+                } else {
+                    console.log("save new")
+                }
+                // post or patch to discord api
+            },
+            setTriggerData(data) {
+                console.log(data)
+                // fetch command from discord
+            },
+            getTriggerData() {
+
+            }
+        },
+        computed: {
+            api() {
+                return this.$store.state.api
+            },
+            botToken: {
+                get() {
+                    return this.settings.botToken
+                }
             }
         },
         watch: {

@@ -1,14 +1,15 @@
 <template>
     <div>
         <login-prompt v-if="!api.isAuthenticated()"/>
-        <div v-else>
-            <h1>Coming Soon</h1>
-        </div>
+        <trigger-editor/>
     </div>
 </template>
 
 <script>
+    import TriggerEditor from "@/components/TriggerEditor";
+
     export default {
+        components: {TriggerEditor},
         computed: {
             api() {
                 return this.$store.state.api

@@ -59,6 +59,12 @@ const routes = [
                     import ( /* webpackChunkName: "triggers" */ './views/dashboard/Triggers.vue')
             },
             {
+                name: 'Integrations',
+                path: 'integrations',
+                component: () =>
+                    import ( /* webpackChunkName: "integrations" */ './views/dashboard/Integrations.vue')
+            },
+            {
                 name: 'Help & FAQ',
                 path: 'docs',
                 alias: ['/docs', '/help', 'help', 'faq', '/faq'],

@@ -195,7 +195,7 @@
                                                placeholder="https://i.imgur.com/yed5Zfk.png">
                                     </div>
                                 </div>
-                                <h5>Fields <span class="text-muted ml-2 char-counter">{{ embed.fields ? embed.fields.length : 0 }} / 10</span>
+                                <h5>Fields <span class="text-muted ml-2 char-counter">{{ embed.fields ? embed.fields.length : 0 }} / 25</span>
                                 </h5>
                                 <div v-for="(field, f) in embed.fields" v-bind:key="f">
                                     <label>Field {{ f + 1 }}</label>
@@ -225,7 +225,7 @@
                                     <i class="fas fa-trash"/>
                                 </div>
                                 <div class="btn btn-sm btn-outline-light" v-on:click="addField(e)"
-                                     v-bind:class="{disabled: embed.fields ? embed.fields.length >= 10 : false}">
+                                     v-bind:class="{disabled: embed.fields.length >= 25}">
                                     <i class="fas fa-plus"/>
                                 </div>
                             </div>
@@ -480,7 +480,7 @@
                 if (!embed.fields) {
                     embed.fields = []
                 }
-                if (embed.fields.length >= 10) {
+                if (embed.fields.length >= 25) {
                     return
                 }
                 embed.fields.push({})
