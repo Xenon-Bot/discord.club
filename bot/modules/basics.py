@@ -103,7 +103,7 @@ class Utilities(cmd.Cog):
         try:
             await ctx.send(f"**JSON Code**```js\n{json.dumps(data)}\n```")
         except discord.HTTPException:
-            share_url = await self._create_share(data)
+            share_url = await self._create_share({"json": data})
             embed = discord.Embed(
                 title="Edit Message",
                 description=f"You can view and edit the message [here](<{share_url}>)\n\n"
