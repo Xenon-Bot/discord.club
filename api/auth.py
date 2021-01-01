@@ -2,6 +2,7 @@ import jwt
 import typing
 from sanic import response
 from datetime import datetime, timedelta
+import traceback
 
 
 def requires_token(handler):
@@ -13,6 +14,7 @@ def requires_token(handler):
         try:
             data = request.app.decode_token(token)
         except jwt.DecodeError:
+            traceback.print_exc()
             return response.json({"error": "Invalid token"}, status=401)
 
         return await handler(request, data["uid"], *args, **kwargs)

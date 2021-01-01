@@ -19,7 +19,10 @@ async def exchange_token(request, payload):
     except aiohttp.ClientResponseError as e:
         return response.json({"error": f"Discord Exchange Error: {e.message}"}, status=e.status)
 
-    return response.json({"token": token.decode("utf-8")})
+    if type(token) == bytes:
+        token = token.decode()
+
+    return response.json({"token": token})
 
 
 @bp.get("/user")

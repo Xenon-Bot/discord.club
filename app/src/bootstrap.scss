@@ -5,6 +5,9 @@ $input-bg: map-get($theme-colors, "dark");
 $input-color: map-get($theme-colors, "light");
 $modal-header-border-color: map-get($theme-colors, 'darker');
 $modal-content-bg: map-get($theme-colors, 'dark');
+$card-border-color: map-get($theme-colors, 'dark');
+$card-cap-bg: map-get($theme-colors, 'darker');
+$card-bg: map-get($theme-colors, 'darker');
 @import "~bootstrap/scss/bootstrap";
 .c-pointer {
   cursor: pointer;

@@ -74,7 +74,7 @@ class Utilities(cmd.Cog):
         except discord.NotFound:
             return None
 
-        return {
+        return msg, {
             "username": msg.author.name,
             "avatar_url": str(msg.author.avatar_url) if msg.author.avatar_url else None,
             "content": msg.content,
@@ -95,7 +95,7 @@ class Utilities(cmd.Cog):
         """
         Get the json code for a given message in the current channel
         """
-        data = await self._get_message_json(ctx, message_id_or_url)
+        _, data = await self._get_message_json(ctx, message_id_or_url)
         if data is None:
             await ctx.send(f"Unknown message. The message must be in the channel that belongs to this server.")
             return
@@ -103,7 +103,7 @@ class Utilities(cmd.Cog):
         try:
             await ctx.send(f"**JSON Code**```js\n{json.dumps(data)}\n```")
         except discord.HTTPException:
-            share_url = await self._create_share(data)
+            share_url = await self._create_share({"json": data})
             embed = discord.Embed(
                 title="Edit Message",
                 description=f"You can view and edit the message [here](<{share_url}>)\n\n"
@@ -119,12 +119,15 @@ class Utilities(cmd.Cog):
         """
         Get a share link for a given message in the current channel
         """
-        data = await self._get_message_json(ctx, message_id_or_url)
-        if data is None:
+        msg, json_data = await self._get_message_json(ctx, message_id_or_url)
+        if json_data is None:
             await ctx.send(f"Unknown message. The message must be in the channel that belongs to this server.")
             return
 
-        share_url = await self._create_share(data)
+        share_url = await self._create_share({
+            "json": json_data,
+            "message_url": ""
+        })
         embed = discord.Embed(
             title="Edit Message",
             description=f"You can view and edit the message [here](<{share_url}>)\n\n"
