@@ -217,7 +217,12 @@ async def format(ctx, text):
     """
     Format the given text as the API format (emojis & mentions)
     """
-    await ctx.respond_with_source("Test!")
+    text = text.replace(">", "\u200b>")
+    await ctx.respond_with_source(**create_message(
+        f"```{text}```",
+        title="API Format",
+        f=Format.INFO
+    ))
 
 
 async def setup(app):
@@ -231,5 +236,5 @@ async def setup(app):
     bot.session = app.session
     bot.http = http
     await bot.prepare()
-    await bot.flush_commands()
+    # await bot.flush_commands()
     await bot.push_commands()
