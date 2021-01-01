@@ -69,7 +69,9 @@
                             </div>
                             <span class="title" v-if="embed.title">
                         <a class="title-content" v-if="embed.url" v-bind:href="embed.url" target="_blank">{{embed.title}}</a>
-                        <span class="title-content" v-else>{{embed.title}}</span>
+                        <span class="title-content" v-else>
+                            <markdown-highlight :text="embed.title" :partial="true"/>
+                        </span>
                     </span>
                             <div class="description">
                                 <div class="description-content" v-if="embed.description">
@@ -81,7 +83,9 @@
                                 <div v-for="(field, i) in embed.fields" v-bind:key="i" class="field"
                                      style="grid-column: 1 / 13;">
                                     <div class="field-name">
-                                        <div class="field-name-content">{{field.name}}</div>
+                                        <div class="field-name-content">
+                                            <markdown-highlight :text="field.name" :partial="true"/>
+                                        </div>
                                     </div>
                                     <div class="field-value">
                                         <div class="field-value-content">

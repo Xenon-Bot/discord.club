@@ -4,30 +4,37 @@
 <script>
     export default {
         name: 'MarkdownHighlight',
-        props: ['text'],
+        props: ['text', 'partial'],
         computed: {
             highlightedText() {
                 if (!this.text) return null
 
-                return this.text
+                let text = this.text
                     .replace(/&/g, "&amp;")
                     .replace(/</g, "&lt;")
                     .replace(/>/g, "&gt;")
                     .replace(/"/g, "&quot;")
                     .replace(/'/g, "&#039;")
 
+                if (!this.partial) {
+                    text = text
+                        .replace(/```(\S+\n|\n)?([\s\S]+?)\n?```/g, `<span class="highlight-code">$2</span>`)
+                        .replace(/\[([\w\s\d]+)\]\((https?:\/\/[\w\d_\-./?=#]+)\)/g, `<a class="highlight-link" href="$2" target="_blank">$1</a>`)
+                        .replace(/(\s)(&lt;)?(https?:\/\/[\w\d_\-./?=#]+)(&gt;)?(\s)/g, `<a class="highlight-link" href="$3" target="_blank">$1$3$5</a>`)
+                        .replace(/(&lt;(?:@|@!|@&amp;|#)[0-9]+&gt;)/g, `<span class="highlight-mention">$1</span>`)
+                        .replace(/(@everyone|@here)/g, `<span class="highlight-mention">$1</span>`)
+                }
+
+                text = text
                     .replace(/\*\*([\s\S]+?)\*\*/g, `<b class="highlight-bold">$1</b>`)
                     .replace(/\*([\s\S]+?)\*/g, `<i class="highlight-italic">$1</i>`)
                     .replace(/__([\s\S]+?)__/g, `<u class="highlight-underline">$1</u>`)
                     .replace(/~~([\s\S]+?)~~/g, `<span class="highlight-strike">$1</span>`)
-                    .replace(/```(\S+\n|\n)?([\s\S]+?)\n?```/g, `<span class="highlight-code">$2</span>`)
                     .replace(/`([\s\S]+?)`/g, `<span class="highlight-monospace">$1</span>`)
-                    .replace(/\[([\w\s\d]+)\]\((https?:\/\/[\w\d_\-./?=#]+)\)/g, `<a class="highlight-link" href="$2" target="_blank">$1</a>`)
-                    .replace(/(\s)(&lt;)?(https?:\/\/[\w\d_\-./?=#]+)(&gt;)?(\s)/g, `<a class="highlight-link" href="$3" target="_blank">$1$3$5</a>`)
                     .replace(/&lt;(:\w+:)([0-9]+)&gt;/g, `<img  src="https://cdn.discordapp.com/emojis/$2.png" alt="$1" class="highlight-emoji"/>`)
                     .replace(/&lt;(a:\w+:)([0-9]+)&gt;/g, `<img  src="https://cdn.discordapp.com/emojis/$2.gif" alt="$1" class="highlight-emoji"/>`)
-                    .replace(/(&lt;(?:@|@!|@&amp;|#)[0-9]+&gt;)/g, `<span class="highlight-mention">$1</span>`)
-                    .replace(/(@everyone|@here)/g, `<span class="highlight-mention">$1</span>`)
+
+                return text
             },
         }
     }

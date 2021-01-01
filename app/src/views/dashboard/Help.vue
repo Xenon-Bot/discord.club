@@ -291,7 +291,7 @@
         ar: {
             author: 'Mei',
             questions: [
-           {
+                {
                     title: 'كيفية إنشاء ويب هوك؟',
                     text: `
 للويب هوك لإرسال رسالة URL أنت بحاجة الى عنوان <br/>
@@ -323,15 +323,15 @@
                                .لنص معين API للحصول على تصميم ال <code>&gt;format &lt;text&gt;</code> واستخدام الكومند
                                 <img src="/img/faq/api_format_cmd.png" alt="API format cmd" class="faq-image">`
                 },
-                {     
+                {
                     title: 'كيف يمكنني استخدام ايموجي مخصص؟',
                     text: `<a href="https://discord.com/developers/docs/reference#message-formatting">نظام API</a>  
                                لاستخدام رمز تعبيري مخصص تحتاج إلى استخدام <br/>
-   يمكنك الحصول على التصميم الصحيح عن طريق وضع شرطة مائلة (<code>\</code>) أمام الايموجي داخل ديسكورد <br/>                             
+   يمكنك الحصول على التصميم الصحيح عن طريق وضع شرطة مائلة (<code>\\</code>) أمام الايموجي داخل ديسكورد <br/>
    يمكنك أيضا <a href="/invite" target="_blank">دعوة البوت</a> <br/>     لنص معيّن API للحصول على تصميم  <code>&gt;format &lt;text&gt;</code>                                      واستخدام الكومند    
                                 <img src="/img/faq/api_format_cmd.png" alt="API format cmd" class="faq-image">
                                 "Use External Emojis" بحاجة للحصول على اذن  <code>@everyone</code> ضع في الاعتبار أن دور <br/>
-  .إذا كنت تريد استخدام ايموجي من سيرفر مختلف في رسالة الويب هوك`              
+  .إذا كنت تريد استخدام ايموجي من سيرفر مختلف في رسالة الويب هوك`
                 },
                 {
                     title: 'هل توجد طرق أخرى لصياغة رسالتي؟',
@@ -386,7 +386,7 @@
 وانقر على أبقونة ديسكورد اذا لم تكن قد قمت بتسجيل الدخول بالفعل  <br> 
 بعد تسجيل الدخول، يمكنك النقر فوق "حفظ الرسالة" مرة أخرى، سم الرسالة وانقر فوق "حفظ". ستتم إعادة توجيهك إلى صفحة تحرير الرسالة المحفوظة حديثًا
                                 <img src="/img/faq/save_message.png" alt="Save message" class="faq-image">`
-                            
+
                 },
                 {
                     title: 'كيف يمكنني تعديل واستخدام رسالة محفوظة؟',
@@ -394,7 +394,7 @@
                                 .حدد الرسالة التي تريد تعديلها أو استخدامها واضغط فوق "عرض". يجب أن تظهر رسالتك المحفوظة ويمكنك تعديلها
                                 <br/>"يمكنك حفظ الرسالة المعدلة بالضغط على "حفظ الرسالة 
                                 <img src="/img/faq/edit_saved.png" alt="Edit saved message" class="faq-image"/>`
-                               
+
                 }
             ]
         },
@@ -402,7 +402,7 @@
             author: 'Mei',
             questions: [
                 {
-                    title: '¿Cómo crear un webhook?'
+                    title: '¿Cómo crear un webhook?',
                     text: `Necesitas una URL de webhook para enviar un mensaje. Si estás utilizando la versión desktop o web de Discord, 
                                 puedes ir a la configuración del canal y crear un webhook allí.
                                <img src="/img/faq/create_webhook_desktop.png" alt="Create a webhook desktop" class="faq-image">
@@ -420,7 +420,7 @@
                                y haciendo un clic <code>Copiar el enlace del mensaje</code>. 
                                <img src="/img/faq/get_message_url.png" alt="Get message URL" class="faq-image">
                                También puedes <a href="/invite" target="_blank">invitar al bot</a> y usar el
-                               <code>&gt;edit &lt;message-url-or-id&gt;</code> comando para obtener rápidamente un enlace compartido 
+                               <code>&gt;edit &lt;message-url-or-id&gt;</code> comando para obtener rápidamente un enlace compartido
                                con el webhook y la URL del mensaje precargado.
                                <img src="/img/faq/edit_message_cmd.png" alt="Edit message cmd" class="faq-image">`
                 },
@@ -449,7 +449,7 @@
                 {
                     title: '¿Hay otras formas de formatear mi mensaje?',
                     text: `Discord admite un subconjunto limitado de reducciones en mensajes embeds y mensajes de webhook. 
-                               Las reducciones solo se admiten en el contenido del mensaje, las descripciones de los embeds y los valores de campo de embeds.`
+                               Las reducciones solo se admiten en el contenido del mensaje, las descripciones de los embeds y los valores de campo de embeds.
                                <div class="faq-table mt-3 rounded">
                                 <table class="table table-dark">
                                     <thead>
@@ -509,7 +509,7 @@
                                aparecer y puedes editarlo. Puedes guardar el mensaje editado haciendo clic en "Guardar mensaje".
                                <img src="/img/faq/edit_saved.png" alt="Edit saved message" class="faq-image"/>`
                 }
-                ]
+            ]
         },
         fr: {
             author: '',
