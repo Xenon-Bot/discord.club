@@ -34,12 +34,13 @@ const routes = [
         alias: ['/embedg', '/embed-generator'],
         component: () =>
             import ( /* webpackChunkName: "dashboard" */ './views/dashboard/Dashboard.vue'),
-        children: [{
-            name: 'Quick Message',
-            path: '',
-            component: () =>
-                import ( /* webpackChunkName: "editor" */ './views/dashboard/QuickMessage.vue')
-        },
+        children: [
+            {
+                name: 'Quick Message',
+                path: '',
+                component: () =>
+                    import ( /* webpackChunkName: "editor" */ './views/dashboard/QuickMessage.vue')
+            },
             {
                 name: 'Messages',
                 path: 'messages',
@@ -53,16 +54,35 @@ const routes = [
                     import ( /* webpackChunkName: "edit_message" */ './views/dashboard/EditMessage.vue')
             },
             {
-                name: 'Triggers',
                 path: 'triggers',
                 component: () =>
-                    import ( /* webpackChunkName: "triggers" */ './views/dashboard/Triggers.vue')
+                    import ( /* webpackChunkName: "triggers" */ './views/dashboard/triggers/Triggers.vue'),
+                children: [
+                    {
+                        name: 'Triggers',
+                        path: '',
+                        component: () =>
+                            import ( /* webpackChunkName: "triggers" */ './views/dashboard/triggers/TriggerEdit.vue'),
+                    },
+                    {
+                        name: 'Create Trigger',
+                        path: 'create',
+                        component: () =>
+                            import ( /* webpackChunkName: "triggers" */ './views/dashboard/triggers/TriggerCreate.vue'),
+                    },
+                    {
+                        name: 'Edit Trigger',
+                        path: ':id',
+                        component: () =>
+                            import ( /* webpackChunkName: "triggers" */ './views/dashboard/triggers/TriggerEdit.vue'),
+                    }
+                ]
             },
             {
                 name: 'Integrations',
                 path: 'integrations',
                 component: () =>
-                    import ( /* webpackChunkName: "integrations" */ './views/dashboard/Integrations.vue')
+                    import ( /* webpackChunkName: "edit_message" */ './views/dashboard/Integrations.vue')
             },
             {
                 name: 'Help & FAQ',

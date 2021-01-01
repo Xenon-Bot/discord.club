@@ -7,7 +7,11 @@
                         <button class="btn btn-outline-primary mr-2">Edit</button>
                         <button class="btn btn-outline-secondary">Delete</button>
                     </div>
-                    <h5 class="align-middle mb-0">{{integration.name}}</h5>
+                    <h5 class="align-middle mb-0">{{integration.name}}
+                        <span class="text-muted">-
+                            <span v-if="integration.type === 0">Discord Bot</span>
+                        </span>
+                    </h5>
                     <div class="float-clear"></div>
                 </div>
             </div>
@@ -41,7 +45,7 @@
                         </div>
                         <div v-if="editing.type === 0">
                             <label>Client ID</label>
-                            <input type="text" class="form-control mb-3" v-model="editing.values.client_id">
+                            <input type="number" class="form-control mb-3" v-model="editing.values.client_id">
                             <label>Bot Token</label>
                             <input type="password" class="form-control mb-3" v-model="editing.values.bot_token">
                             <label>Public Key</label>
@@ -92,6 +96,8 @@
                                     text: 'The integration was saved and can now be used in triggers',
                                     type: 'success'
                                 })
+                                // TODO: validate values
+                                $(this.$refs.editModal).modal('hide')
                             }
                         })
                 }

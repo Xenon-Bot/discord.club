@@ -31,19 +31,24 @@
                     </div>
                     <div class="form-row mt-2" v-if="type === 1">
                         <div class="col-12 mb-3">
-                            <label>Bot Token</label>
-                            <input type="text" class="form-control" v-model.trim="settings.token"
-                                   placeholder="91ed336ce046430857c1353a9886d8662a88a196f4aaf05194006648c645245c">
+                            <label>Bot Integration</label>
+                            <router-link to="/dashboard/integrations" class="float-right text-primary" @click="addCommandOption()">
+                                <i class="fas fa-plus"/>
+                            </router-link>
+                            <select class="custom-select" v-model="settings.integration_id">
+                                <option :value="0">Scheduled</option>
+                                <option :value="1">Custom Command</option>
+                            </select>
                         </div>
                         <div class="col-12 mb-4">
-                            <label>Public Key</label>
-                            <input type="text" class="form-control" v-model.trim="settings.public_key"
+                            <label>Guild ID</label>
+                            <input type="text" class="form-control" v-model.trim="settings.guild_id"
                                    placeholder="91ed336ce046430857c1353a9886d8662a88a196f4aaf05194006648c645245c">
                         </div>
                     </div>
 
                     <div class="float-right mt-3">
-                        <button class="btn btn-outline-primary">Save Trigger</button>
+                        <button class="btn btn-outline-primary" @click="saveTrigger">Save Trigger</button>
                     </div>
                 </div>
             </div>
@@ -138,14 +143,28 @@
                                 <input type="url" class="form-control" v-model.trim="action.message_url" required
                                        placeholder="https://discord.com/channels/410488579140354049/633228954064650250/781981855808487477">
                             </div>
-                            <div class="col-12 mb-4">
+                            <div class="col-12 mb-4" v-if="action.type === 2">
+                                <label>Response Type</label>
+                                <select class="custom-select" v-model="action.response_type">
+                                    <option :value="3">Respond</option>
+                                    <option :value="4">Respond With Source</option>
+                                    <option :value="2">Acknowledge</option>
+                                    <option :value="5">Acknowledge With Source</option>
+                                </select>
+                            </div>
+                            <div class="col-12 mb-4" v-if="action.type !== 2 || action.response_type === 3 || action.response_type === 4">
                                 <label>Message</label>
+                                <div class="form-check float-right" v-if="action.type === 2">
+                                    <input v-model.trim="action.response_ephemeral" type="checkbox" class="form-check-input">
+                                    <label class="form-check-label">Ephemeral</label>
+                                </div>
                                 <select class="custom-select" v-model.trim="action.message_id" required>
                                     <option v-for="(msg, m) in messages" :key="`msg${m}`" :value="msg.id">{{msg.name}}
                                     </option>
                                 </select>
                             </div>
                         </div>
+                        <!--
                         <h5 class="mb-3">Variables</h5>
                         <div class="form-row mb-2" v-for="(variable, v) in action.variables" :key="`var${v}`">
                             <div class="col">
@@ -169,6 +188,7 @@
                                 <i class="fas fa-plus"/>
                             </div>
                         </div>
+                        -->
                     </div>
                 </div>
             </div>
@@ -200,9 +220,7 @@
                 actions: [],
                 messages: [],  // use in actions
 
-                existingCommands: [],
                 command: {
-                    id: null,
                     name: '',
                     description: '',
                     options: []
@@ -224,7 +242,7 @@
                 if (this.actions.length >= 5) {
                     return
                 }
-                this.actions.push({type: 0})
+                this.actions.push({type: 0, message_id: null, response_type: 4, response_ephemeral: false})
                 setTimeout(() => {
                     $(`#action${this.actions.length - 1}`).addClass('show')
                 }, 100)
@@ -292,21 +310,27 @@
                 // post or patch to discord api
             },
             setTriggerData(data) {
-                console.log(data)
-                // fetch command from discord
+                this.name = data.name
+                this.type = data.type
+                this.settings = data.settings
+                this.actions = data.actions
+
+                if (this.type === 1) {
+                    // fetch command if commandId is set
+                }
             },
             getTriggerData() {
-
+                return {
+                    name: this.name,
+                    type: this.type,
+                    settings: this.settings,
+                    actions: this.actions,
+                }
             }
         },
         computed: {
             api() {
                 return this.$store.state.api
-            },
-            botToken: {
-                get() {
-                    return this.settings.botToken
-                }
             }
         },
         watch: {

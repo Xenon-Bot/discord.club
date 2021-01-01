@@ -1,15 +1,14 @@
 <template>
     <div>
         <login-prompt v-if="!api.isAuthenticated()"/>
-        <trigger-editor/>
+        <transition name="fade">
+            <router-view/>
+        </transition>
     </div>
 </template>
 
 <script>
-    import TriggerEditor from "@/components/TriggerEditor";
-
     export default {
-        components: {TriggerEditor},
         computed: {
             api() {
                 return this.$store.state.api
