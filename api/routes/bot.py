@@ -16,6 +16,7 @@ bot = dc.InteractionBot(
 )
 http = None
 redis = None
+db = None
 
 bp = Blueprint(name="api.bot", url_prefix="/entry")
 
@@ -65,6 +66,7 @@ async def website(ctx):
         )
     )
 )
+@checks.cooldown(1, 3)
 async def webhook(ctx, channel: dc.CommandOptionType.CHANNEL = None):
     """
     Get a valid webhook URL for this or another channel
@@ -138,10 +140,14 @@ async def _create_share_link(data):
         )
     )
 )
+@checks.cooldown(1, 3)
 async def _json(ctx, message):
     """
     Get the json code for an existing message
     """
+    await ctx.ack_with_source()
+    await asyncio.sleep(0.2)
+
     channel_id, msg = await _get_message(ctx, message)
     if msg is None:
         await ctx.respond_with_source(**create_message(
@@ -178,10 +184,14 @@ async def _json(ctx, message):
 )
 @has_permissions("manage_messages")
 @bot_has_permissions("manage_webhooks")
+@checks.cooldown(1, 5)
 async def edit(ctx, message):
     """
     Get an existing message directly into the editor
     """
+    await ctx.ack_with_source()
+    await asyncio.sleep(0.2)
+
     channel_id, msg = await _get_message(ctx, message)
     if msg is None:
         await ctx.respond_with_source(**create_message(
@@ -225,16 +235,129 @@ async def format(ctx, text):
     ))
 
 
+@bot.command(
+    extends=dict(
+        title=dict(
+            description="The title for the mini embed"
+        ),
+        description=dict(
+            description="The description for the mini embed"
+        ),
+        url=dict(
+            description="The url to redirect to when clicking on the mini embed"
+        ),
+        site_name=dict(
+            description="The site name to display above the title"
+        ),
+        hex_color=dict(
+            description="The color for the embed (e.g. #32a852)"
+        ),
+        image_url=dict(
+            description="The URL to the image to display inside the embed"
+        ),
+        video_url=dict(
+            description="The URL to the video to display inside the embed"
+        )
+    )
+)
+@checks.cooldown(1, 5)
+async def mini(ctx, title, description, url=None, site_name=None, hex_color=None, image_url=None, video_url=None):
+    """
+    Create a mini embed that you can use everywhere
+    """
+    await ctx.ack_with_source()
+    await asyncio.sleep(0.2)
+
+    mini_id = uuid.uuid4().hex[:8]
+    await db.minis.insert_one({
+        "_id": mini_id,
+        "title": title,
+        "description": description,
+        "url": url,
+        "color": hex_color.strip("#") if hex_color else None,
+        "site_name": site_name,
+        "image_url": image_url,
+        "video_url": video_url
+    })
+    await ctx.respond_with_source(**create_message(
+        f"Successfully **created mini embed**. You can use it by sending this link into the discord chat:\n"
+        f"<https://embed.gg/m/{mini_id}>",
+        f=Format.SUCCESS
+    ))
+
+
+@bot.command(
+    extends=dict(
+        title=dict(
+            description="The title for the mini embed"
+        ),
+        description=dict(
+            description="The description for the mini embed"
+        ),
+        url=dict(
+            description="The url to redirect to when clicking on the mini embed"
+        ),
+        hex_color=dict(
+            description="The color for the embed (e.g. #32a852)"
+        ),
+        image_url=dict(
+            description="The URL to the image to display inside the embed"
+        ),
+    )
+)
+@has_permissions("manage_messages")
+@bot_has_permissions("manage_webhooks")
+@checks.cooldown(1, 5)
+async def embed(ctx, title, description, url=None, hex_color=None, image_url=None):
+    """
+    Create a simple embed and send them under your name
+    """
+    await ctx.ack_with_source()
+    await asyncio.sleep(0.2)
+
+    color = None
+    if hex_color:
+        hex_color = hex_color.strip("#")
+        try:
+            color = int(hex_color, 16)
+        except ValueError:
+            pass
+
+    await ctx.ack()
+    webhooks = await http.get_channel_webhooks(ctx.channel_id)
+    if len(webhooks) == 0:
+        webhook = await http.create_webhook(ctx.channel_id, name="discord.club")
+
+    else:
+        webhook = webhooks[0]
+
+    await http.execute_webhook(
+        webhook,
+        username=ctx.author.name,
+        avatar_url=str(ctx.author.avatar_url),
+        embeds=[{
+            "title": title,
+            "description": description,
+            "url": url,
+            "color": color,
+            "image": {"url": image_url}
+        }]
+    )
+
+
 async def setup(app):
     global http
     global redis
+    global db
     redis = app.redis
     ratelimits = rest.RedisRatelimitHandler(redis)
     http = rest.HTTPClient(env["BOT_TOKEN"], ratelimits)
+    db = app.db
 
     await bot.session.close()
     bot.session = app.session
     bot.http = http
+    bot.redis = redis
     await bot.prepare()
     # await bot.flush_commands()
     await bot.push_commands()
