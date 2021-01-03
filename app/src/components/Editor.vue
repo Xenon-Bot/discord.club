@@ -207,6 +207,9 @@
                                         <div class="col-8 col-sm-10 mb-3">
                                             <input v-model.trim="field.name" type="text" class="form-control"
                                                    placeholder="Name" maxlength="256" required>
+                                            <span v-if="(field.name ? field.name.length : 0) === 0" class="input-error">
+                                                The field name is required
+                                            </span>
                                         </div>
                                         <div class="col-4 col-sm-2 mb-3">
                                             <div class="form-check pt-2">
@@ -218,6 +221,9 @@
                                         <div class="col-12">
                                             <textarea v-model.trim="field.value" rows="2" class="form-control"
                                                       placeholder="Value" maxlength="1024" required/>
+                                            <span v-if="(field.value ? field.value.length : 0) === 0" class="input-error">
+                                                The field value is required
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -620,6 +626,13 @@
     .char-counter {
         font-style: italic;
         font-size: 0.8em;
+    }
+
+    .input-error {
+        font-size: 0.9em;
+        color: red;
+        opacity: 0.9;
+        font-style: italic;
     }
 </style>
 <style>
