@@ -55,3 +55,11 @@ $modal-content-bg: map-get($theme-colors, 'dark');
 .fade-enter, .fade-leave-active {
   opacity: 0
 }
+
+label.required::after {
+  content: " *";
+  vertical-align: bottom;
+  font-size: 1em;
+  font-style: italic;
+  color: red;
+}

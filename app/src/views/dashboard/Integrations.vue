@@ -4,6 +4,7 @@
             <div v-for="(integration, i) in integrations" :key="i" class="card bg-darker mb-3">
                 <div class="card-body">
                     <div class="float-right">
+                        <button class="btn btn-outline-light mr-2" @click="openSetupModal(i)">Setup</button>
                         <button class="btn btn-outline-primary mr-2" @click="openEditModal(i)">Edit</button>
                         <button class="btn btn-outline-secondary" @click="deleteIntegration(i)">Delete</button>
                     </div>
@@ -40,7 +41,8 @@
                             </div>
                             <div class="col-12 col-sm-8 mb-4">
                                 <label class="required">Name</label>
-                                <input type="text" class="form-control" placeholder="Account XY" v-model="name" required>
+                                <input type="text" class="form-control" placeholder="Account XY" v-model="name"
+                                       required>
                             </div>
                         </div>
                         <div v-if="type === 0" class="mb-4">
@@ -60,6 +62,33 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" ref="setupModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Setup Discord Bot</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p v-if="setup && setup.type === 0">
+                            To make bot commands usable go to the
+                            <a :href="`https://discord.com/developers/applications/${setup.values.client_id}/information`">Discord
+                                Dev Portal</a>
+                            and enter <code>https://api.discord.club/triggers/discord/{{setup.values.client_id}}</code> into the Interactions
+                            Endpoint Url.
+                            <br><br>
+                            After clicking "Save Changes" at the bottom discord will validate the interaction endpoint
+                            and save the changes.
+                            <br>
+                            <img src="/img/integrations/setup.png" alt="" width="100%" class="mt-3 rounded">
+                        </p>
+                        <div class="float-right">
+                            <button type="button" class="btn btn-secondary mr-2" data-dismiss="modal">Close</button>
+                            <button class="btn btn-primary" @click="checkSetup">Check</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -71,9 +100,14 @@
             return {
                 integrations: [],
 
+                // edit / add
+                id: null,
                 type: 0,
                 name: '',
-                values: {}
+                values: {},
+
+                // setup
+                setup: null
             }
         },
         mounted() {
@@ -91,6 +125,32 @@
                         this.integrations.splice(i, 1)
                     }
                 })
+            },
+            openSetupModal(i) {
+                this.setup = this.integrations[i]
+                this.$forceUpdate();
+                $(this.$refs.setupModal).modal()
+            },
+            checkSetup() {
+                this.api.getIntegration(this.setup.id)
+                    .then(resp => resp.json())
+                    .then(data => {
+                        if (data.validated) {
+                            this.$notify({
+                                group: 'main',
+                                title: 'Successfully Validated',
+                                text: 'The integration was validated and is ready to be used!',
+                                type: 'success'
+                            })
+                        } else {
+                            this.$notify({
+                                group: 'main',
+                                title: 'Not Validated',
+                                text: 'The integration has not been validated yet. Did you set it up correctly?',
+                                type: 'error'
+                            })
+                        }
+                    })
             },
             openAddModal() {
                 this.name = ''
@@ -151,12 +211,3 @@
         }
     }
 </script>
-<style lang="scss">
-    label.required::after {
-        content: " *";
-        vertical-align: bottom;
-        font-size: 1em;
-        font-style: italic;
-        color: red;
-    }
-</style>

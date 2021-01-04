@@ -6,7 +6,7 @@
                 <div class="card-header">
                     <div class="form-row mb-2">
                         <div class="col-6">
-                            <label>Name</label>
+                            <label class="required">Name</label>
                             <input type="text" class="form-control" v-model="name" placeholder="My Trigger">
                         </div>
                         <div class="col-6">
@@ -21,29 +21,35 @@
                 <div class="card-body">
                     <div class="form-row mt-2" v-if="type === 0">
                         <div class="col-6 mb-3">
-                            <label>Start Time</label>
+                            <label class="required">Start Time</label>
                             <datetime type="datetime" input-class="form-control" v-model.trim="settings.start"/>
                         </div>
                         <div class="col-6 mb-4">
-                            <label>Repeat (hours)</label>
-                            <input type="number" class="form-control" v-model="settings.repeat">
+                            <label class="required">Repeat (hours)</label>
+                            <input type="number" class="form-control" v-model="settings.repeat" required>
                         </div>
                     </div>
                     <div class="form-row mt-2" v-if="type === 1">
                         <div class="col-12 mb-3">
-                            <label>Bot Integration</label>
-                            <router-link to="/dashboard/integrations" class="float-right text-primary" @click="addCommandOption()">
+                            <label class="required">Bot Integration</label>
+                            <router-link to="/dashboard/integrations" class="float-right text-primary"
+                                         @click="addCommandOption()">
                                 <i class="fas fa-plus"/>
                             </router-link>
-                            <select class="custom-select" v-model="settings.integration_id">
-                                <option :value="0">Scheduled</option>
-                                <option :value="1">Custom Command</option>
+                            <select class="custom-select" v-model="settings.integration_id" required>
+                                <option
+                                        :value="integration.id"
+                                        v-for="integration of integrations" :key="integration.id"
+                                        :disabled="integration.type !== 0"
+                                >{{integration.name}}
+                                </option>
                             </select>
                         </div>
                         <div class="col-12 mb-4">
-                            <label>Guild ID</label>
+                            <label class="required">Guild ID</label>
                             <input type="text" class="form-control" v-model.trim="settings.guild_id"
-                                   placeholder="91ed336ce046430857c1353a9886d8662a88a196f4aaf05194006648c645245c">
+                                   placeholder="91ed336ce046430857c1353a9886d8662a88a196f4aaf05194006648c645245c"
+                                   required>
                         </div>
                     </div>
 
@@ -52,15 +58,20 @@
                     </div>
                 </div>
             </div>
-            <div v-if="type === 1 && settings.token">
+            <div v-if="type === 1 && settings.integration_id">
                 <h4 class="mb-3 ml-2">Command</h4>
                 <div class="card bg-darker">
                     <div class="card-body">
-                        <label>Name</label>
-                        <input type="text" class="form-control mb-4" placeholder="ping" v-model="command.name">
-                        <label>Description</label>
+                        <label class="required">Name</label>
+                        <input type="text" class="form-control mb-4" placeholder="ping" v-model="command.name" required>
+                        <label class="required">Description</label>
                         <textarea rows="1" class="form-control mb-4" placeholder="My first ping command (pong!)"
-                                  v-model="command.description"/>
+                                  v-model="command.description" required/>
+                        <label class="required">Show Command</label>
+                        <select class="custom-select mb-4" v-model="command.show_source">
+                            <option :value="true">Yes</option>
+                            <option :value="false">No</option>
+                        </select>
                         <h5 class="mb-3">Options</h5>
                         <div class="form-row mb-2" v-for="(option, o) in command.options" :key="`var${o}`">
                             <div class="col mb-2">
@@ -82,7 +93,7 @@
                                 </div>
                             </div>
                             <div class="col-12 mb-3">
-                                <textarea rows="1" class="form-control" placeholder="Description"/>
+                                <textarea rows="1" class="form-control" placeholder="Description" v-model.trim="option.description"/>
                             </div>
                         </div>
                         <div>
@@ -127,35 +138,28 @@
                                 <label>Type</label>
                                 <select class="custom-select" v-model="action.type">
                                     <option :value="0">Execute Webhook</option>
-                                    <option :value="1">Edit Webhook Message</option>
+                                    <!-- <option :value="1">Edit Webhook Message</option> -->
                                     <option :value="2" :disabled="type !== 1">Command Response</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="col-12 mb-4" v-if="action.type !== 2">
-                                <label>Webhook URL</label>
+                                <label class="required">Webhook URL</label>
                                 <input type="url" class="form-control" v-model.trim="action.webhook_url" required
                                        placeholder="https://discord.com/api/webhooks/423157583646294017/nsFEJfuNKVBRcKcgj0JX3TygdvhX-ItEJhrWVWadw7shUXXuIRwsJHUS_XbDDSA_ILKN">
                             </div>
                             <div class="col-12 mb-4" v-if="action.type === 1">
-                                <label>Message URL / ID</label>
+                                <label class="required">Message URL / ID</label>
                                 <input type="url" class="form-control" v-model.trim="action.message_url" required
                                        placeholder="https://discord.com/channels/410488579140354049/633228954064650250/781981855808487477">
                             </div>
-                            <div class="col-12 mb-4" v-if="action.type === 2">
-                                <label>Response Type</label>
-                                <select class="custom-select" v-model="action.response_type">
-                                    <option :value="3">Respond</option>
-                                    <option :value="4">Respond With Source</option>
-                                    <option :value="2">Acknowledge</option>
-                                    <option :value="5">Acknowledge With Source</option>
-                                </select>
-                            </div>
-                            <div class="col-12 mb-4" v-if="action.type !== 2 || action.response_type === 3 || action.response_type === 4">
-                                <label>Message</label>
+                            <div class="col-12 mb-4"
+                                 v-if="action.type !== 2 || action.response_type === 3 || action.response_type === 4">
+                                <label class="required">Message</label>
                                 <div class="form-check float-right" v-if="action.type === 2">
-                                    <input v-model.trim="action.response_ephemeral" type="checkbox" class="form-check-input">
+                                    <input v-model.trim="action.response_ephemeral" type="checkbox"
+                                           class="form-check-input">
                                     <label class="form-check-label">Ephemeral</label>
                                 </div>
                                 <select class="custom-select" v-model.trim="action.message_id" required>
@@ -219,11 +223,13 @@
                 settings: {},
                 actions: [],
                 messages: [],  // use in actions
+                integrations: [], // use in actions and settings
 
                 command: {
                     name: '',
                     description: '',
-                    options: []
+                    options: [],
+                    show_source: true
                 }  // only used in type 1
             }
         },
@@ -231,6 +237,9 @@
             this.api.getMessages()
                 .then(resp => resp.json())
                 .then(data => this.messages = data)
+            this.api.getIntegrations()
+                .then(resp => resp.json())
+                .then(data => this.integrations = data)
             if (this.id) {
                 this.api.getTrigger(this.id)
                     .then(resp => resp.json())

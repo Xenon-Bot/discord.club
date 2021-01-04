@@ -138,6 +138,10 @@ class Api {
         return this.request('GET', '/integrations')
     }
 
+    getIntegration(id) {
+        return this.request('GET', `/integrations/${id}`)
+    }
+
     deleteIntegration(id) {
         return this.request('DELETE', `/integrations/${id}`)
     }

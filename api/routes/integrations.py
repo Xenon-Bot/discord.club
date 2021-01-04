@@ -1,4 +1,5 @@
 from sanic import Blueprint, response
+from sanic.exceptions import abort
 from enum import IntEnum
 import bson
 
@@ -21,13 +22,13 @@ def validate_values(type, values):
         public_key = values.get("public_key", "")
 
         if len(client_id) == 0:
-            return response.json({"error": "The client id is required"}, status=404)
+            raise abort(400, "The client id is required")
 
         if len(bot_token) == 0:
-            return response.json({"error": "The bot token is required"}, status=404)
+            raise abort(400, "The bot token is required")
 
         if len(public_key) == 0:
-            return response.json({"error": "the public key is required"}, status=404)
+            raise abort(400, "The public key is required")
 
         return {
             "client_id": client_id,
@@ -36,7 +37,7 @@ def validate_values(type, values):
         }
 
     else:
-        return response.json({"error": "Unknown integration type"}, status=404)
+        raise abort(400, "Unknown integration type")
 
 
 @bp.post("/")
@@ -46,17 +47,15 @@ def validate_values(type, values):
 async def create_integration(request, user_id, payload):
     name = payload["name"]
     if len(payload["name"]) < 3:
-        return response.json({"error": "The integration name must be at least 3 characters long"}, status=404)
+        raise abort(400, "The integration name must be at least 3 characters long")
 
     values = validate_values(payload["type"], payload["values"])
-    if isinstance(values, response.HTTPResponse):
-        return values
-
     await request.app.db.integrations.insert_one({
         "user_id": user_id,
         "name": name,
         "type": payload["type"],
-        "values": values
+        "values": values,
+        "validated": False
     })
     return response.json({})
 
@@ -75,6 +74,25 @@ async def get_integrations(request, user_id):
     return response.json(result)
 
 
+@bp.get("/<integration_id>")
+@requires_token
+@ratelimit(limit=5, seconds=5)
+async def get_integration(request, user_id, integration_id):
+    try:
+        integration_id = bson.ObjectId(integration_id)
+    except bson.errors.InvalidId:
+        return response.empty(status=404)
+
+    integration = await request.app.db.integrations.find_one({"_id": integration_id, "user_id": user_id})
+    if integration is None:
+        raise abort(404, "Unknown integration")
+
+    integration["id"] = str(integration.pop("_id"))
+    del integration["user_id"]
+    print(integration)
+    return response.json(integration)
+
+
 @bp.patch("/<integration_id>")
 @requires_body(name=str, type=IntegrationType, values=dict)
 @requires_token
@@ -82,12 +100,9 @@ async def get_integrations(request, user_id):
 async def edit_integration(request, user_id, payload, integration_id):
     name = payload["name"]
     if len(payload["name"]) < 3:
-        return response.json({"error": "The integration name must be at least 3 characters long"}, status=404)
+        raise abort(400, "The integration name must be at least 3 characters long")
 
     values = validate_values(payload["type"], payload["values"])
-    if isinstance(values, response.HTTPResponse):
-        return values
-
     try:
         integration_id = bson.ObjectId(integration_id)
     except bson.errors.InvalidId:
@@ -99,7 +114,7 @@ async def edit_integration(request, user_id, payload, integration_id):
     }, {"$set": {
         "name": name,
         "type": payload["type"],
-        "values": values
+        "values": values,
     }})
     return response.json({})
 

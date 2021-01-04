@@ -1,16 +1,21 @@
 from sanic import Blueprint, response
+from sanic.exceptions import abort
 from enum import IntEnum
-from datetime import datetime
+from datetime import datetime, timedelta
 import bson
 import traceback
+import json
+from nacl.signing import VerifyKey
+from nacl.exceptions import BadSignatureError
+import dc_interactions as dc
+import asyncio
 
 from utils import *
 from stay_fast import *
 from auth import requires_token
-
+from .integrations import IntegrationType
 
 bp = Blueprint(name="api.triggers", url_prefix="/triggers")
-
 
 """
 An trigger is composed of a trigger type (and settings for that trigger type) and a list of actions.
@@ -40,6 +45,7 @@ def parse_settings(type, settings):
     elif type == TriggerType.CUSTOM_COMMAND:
         return {
             "command_id": str(settings["command_id"]),
+            "show_source": bool(settings["show_source"]),
             "integration_id": str(settings["integration_id"])
         }
 
@@ -77,7 +83,6 @@ def parse_actions(actions):
             result.append({
                 "type": type,
                 "response_ephemeral": bool(action["response_ephemeral"]),
-                "response_type": int(action["response_type"]),
                 "message_id": str(action["message_id"]),
                 "message_variables": list(action["message_variables"])
             })
@@ -98,7 +103,7 @@ async def create_trigger(request, user_id, payload):
     try:
         settings = parse_settings(payload["type"], payload.pop("settings"))
     except:
-        return response.json({"error": "Invalid value for field 'settings'"}, status=400)
+        abort(400, "Invalid value for field 'settings'")
 
     result = await request.app.db.triggers.insert_one({
         "user_id": user_id,
@@ -124,19 +129,19 @@ async def update_trigger(request, user_id, trigger_id, payload):
     try:
         settings = parse_settings(payload["type"], payload.pop("settings"))
     except:
-        return response.json({"error": "Invalid value for field 'settings'"}, status=400)
+        raise abort(400, "Invalid value for field 'settings'")
 
     try:
         trigger_id = bson.ObjectId(trigger_id)
     except bson.errors.InvalidId:
-        return response.json({"error": "Invalid trigger ID"}, status=404)
+        raise abort(404, "Invalid trigger ID")
 
     result = await request.app.db.triggers.update_one({"_id": trigger_id, "user_id": user_id}, {"$set": {
         **payload,
         "settings": settings
     }})
     if result.updated_count == 0:
-        return response.json({"error": "Unknown trigger"}, status=400)
+        raise abort(400, "Unknown trigger")
 
     return response.json({})
 
@@ -163,11 +168,11 @@ async def get_trigger(request, user_id, trigger_id):
     try:
         trigger_id = bson.ObjectId(trigger_id)
     except bson.errors.InvalidId:
-        return response.json({"error": "Invalid trigger ID"}, status=404)
+        abort(404, "Invalid trigger ID")
 
     result = await request.app.db.triggers.find_one({"_id": trigger_id, "user_id": user_id})
     if result is None:
-        return response.json({"error": "Unknown trigger"}, status=404)
+        abort(404, "Unknown trigger")
 
     result["id"] = str(result.pop("_id"))
     del result["user_id"]
@@ -181,39 +186,139 @@ async def delete_trigger(request, user_id, trigger_id):
     try:
         trigger_id = bson.ObjectId(trigger_id)
     except bson.errors.InvalidId:
-        return response.json({"error": "Invalid trigger ID"}, status=404)
+        abort(404, "Invalid trigger ID")
 
     await request.app.db.triggers.delete_one({"_id": trigger_id, "user_id": user_id})
     return response.json({})
 
 
-@bp.post("/discord")
-async def discord_entry(req):
-    pass
+@bp.post("/discord/<client_id>")
+@ratelimit(limit=10, seconds=10)
+async def discord_entry(req, client_id):
+    raw_data = req.body.decode("utf-8")
+    signature = req.headers.get("x-signature-ed25519")
+    timestamp = req.headers.get("x-signature-timestamp")
+    if signature is None or timestamp is None:
+        raise abort(401)
+
+    integration = await req.app.db.integrations.find_one({
+        "type": IntegrationType.DISCORD_BOT.value,
+        "values.client_id": client_id
+    })
+    if integration is None:
+        raise abort(404, "Unknown client id")
+
+    values = integration["values"]
+    try:
+        public_key = VerifyKey(bytes.fromhex(values["public_key"]))
+    except:
+        raise abort(401, "Integration public key is invalid")
+
+    try:
+        public_key.verify(f"{timestamp}{raw_data}".encode(), bytes.fromhex(signature))
+    except BadSignatureError:
+        raise abort(401, "Invalid signature")
+
+    if not integration.get("validated"):
+        await req.app.db.integrations.update_one({"_id": integration["_id"]}, {"$set": {"validated": True}})
+
+    data = dc.InteractionPayload(json.loads(raw_data))
+    resp = await discord_interaction_receive(req.app, client_id, data)
+    if resp is None:
+        resp = dc.InteractionResponse.ack()
+
+    return response.json(resp.to_dict())
 
 
-async def run_action(app, action):
-    pass
+async def discord_interaction_receive(app, client_id, payload):
+    if payload.type == dc.InteractionType.PING:
+        return dc.InteractionResponse.pong()
+
+    elif payload.type == dc.InteractionType.APPLICATION_COMMAND:
+        trigger = await app.db.triggers.find_one({"settings.command_id": payload.data.id})
+        if trigger is None:
+            return dc.InteractionResponse.message("Unknown Command! :(", ephemeral=True)
+
+        app.loop.create_task(run_trigger(app, trigger, interaction=payload, client_id=client_id))
+        if trigger["settings"].get("show_source"):
+            return dc.InteractionResponse.ack_with_source()
+
+        return dc.InteractionResponse.ack()
 
 
-async def run_trigger(app, trigger):
-    for action in trigger["actions"]:
+async def outbound_request(app, method, url, data=None):
+    async with app.session.request(
+            method=method,
+            url=url,
+            json=data
+    ) as resp:
+        return resp
+
+
+async def run_action(app, trigger, action, **context):
+    if action["type"] == ActionType.COMMAND_RESPONSE:
+        if trigger["type"] != TriggerType.CUSTOM_COMMAND:
+            return
+
+        interaction = context["interaction"]
+        client_id = context["client_id"]
+        message = await app.db.messages.find_one({"_id": action["message_id"]})
+        await outbound_request(
+            app,
+            "POST",
+            f"https://discord.com/api/webhooks/{client_id}/{interaction.token}",
+            data={
+                "flags": 1 << 6 if action["response_ephemeral"] else 0,
+                **message["json"]
+            }
+        )
+
+    elif action["type"] == ActionType.EXECUTE_WEBHOOK:
+        message = await app.db.messages.find_one({"_id": action["message_id"]})
+        await outbound_request(
+            app,
+            "POST",
+            f"https://discord.com/api/webhooks/{action['webhook_id']}/{action['webhook_token']}",
+            data=message["json"]
+        )
+
+    elif action["type"] == ActionType.EXECUTE_WEBHOOK_EDIT:
+        pass
+
+
+async def run_trigger(app, trigger, **context):
+    log_entries = []
+    for a, action in enumerate(trigger["actions"]):
         try:
-            await run_action(app, action)
-        except Exception as e:
-            await app.triggers.update_one({})
+            await run_action(app, trigger, action, **context)
+        except:
+            traceback.print_exc()
+            log_entries.append(f"Action {a + 1} failed with an error")
 
         else:
-            await app.triggers.update_one({})
+            log_entries.append(f"Action {a + 1} succeeded")
+
+    await app.db.triggers.update_one({"_id": trigger["_id"]}, {
+        "$push": {
+            "logs": {
+                "$each": [{"timestamp": datetime.utcnow(), "entries": log_entries}],
+                "$slice": -10
+            }
+        }
+    })
 
 
 async def schedule_loop(app):
     while True:
+        await asyncio.sleep(10)
         try:
             async for trigger in app.db.triggers.find({
                 "type": TriggerType.SCHEDULED,
                 "settings.next": {"$lte": datetime.utcnow()}
             }):
+                await app.db.triggers.update_one({"_id": trigger["_id"]}, {"$set": {
+                    "settings.next": datetime.utcnow() + timedelta(seconds=trigger["settings"]["repeat"])
+                }})
                 app.loop.create_task(run_trigger(app, trigger))
         except:
             traceback.print_exc()
