@@ -58,3 +58,11 @@ $card-bg: map-get($theme-colors, 'darker');
 .fade-enter, .fade-leave-active {
   opacity: 0
 }
+
+label.required::after {
+  content: " *";
+  vertical-align: bottom;
+  font-size: 1em;
+  font-style: italic;
+  color: red;
+}

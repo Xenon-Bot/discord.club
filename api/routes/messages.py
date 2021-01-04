@@ -1,4 +1,5 @@
 from sanic import Blueprint, response
+from sanic.exceptions import abort
 import bson
 import pymongo
 import gridfs
@@ -18,7 +19,6 @@ bp = Blueprint(name="api.messages", url_prefix="/messages")
 @requires_token
 @ratelimit(limit=2, seconds=5)
 async def save_message(request, user_id):
-    print(request.form)
     data = single_value_form(request.form)
     if "name" not in data or "json" not in data:
         return response.json({}, status=400)
@@ -95,11 +95,11 @@ async def get_message(request, user_id, msg_id):
     try:
         msg_id = bson.ObjectId(msg_id)
     except bson.errors.InvalidId:
-        return response.json({"error": "Invalid message ID"}, status=404)
+        raise abort(404, "Invalid message ID")
 
     result = await request.app.db.messages.find_one({"_id": msg_id, "user_id": user_id})
     if result is None:
-        return response.json({"error": "Unknown message"}, status=404)
+        raise abort(404, "Unknown message")
 
     result["id"] = str(result.pop("_id"))
     result["last_updated"] = result.pop("last_updated").timestamp()
@@ -116,12 +116,12 @@ async def get_file(request, user_id, file_id):
     try:
         file_id = bson.ObjectId(file_id)
     except bson.errors.InvalidId:
-        return response.json({"error": "Invalid file ID"}, status=404)
+        raise abort(404, "Invalid file ID")
 
     try:
         file = await request.app.file_bucket.open_download_stream(file_id)
     except gridfs.errors.NoFile:
-        return response.text("Unknown file_id provided")
+        raise abort(404, "Unknown file ID provided")
 
     meta_data = file.metadata
     content_type = "application/octet-stream"
@@ -169,7 +169,7 @@ async def create_share(request, payload):
 async def get_share(request, share_id):
     raw_share = await request.app.redis.get(f"share:{share_id}")
     if raw_share is None:
-        return response.json({"error": "Share does not exist or has expired"}, status=404)
+        raise abort(404, "Share does not exist or has expired")
 
     data = json.loads(raw_share)
     if "json" in data:

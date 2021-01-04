@@ -1,9 +1,9 @@
 from sanic import Blueprint
 
-from . import oauth, messages, bot, others
+from . import oauth, messages, bot, others, integrations, triggers
 
 
-to_load = {oauth, messages, bot, others}
+to_load = {oauth, messages, bot, others, integrations, triggers}
 bp = Blueprint.group(*[tl.bp for tl in to_load])
 
 

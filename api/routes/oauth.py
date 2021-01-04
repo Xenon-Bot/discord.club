@@ -1,4 +1,5 @@
 from sanic import Blueprint, response
+from sanic.exceptions import abort
 import aiohttp
 
 from utils import *
@@ -17,7 +18,7 @@ async def exchange_token(request, payload):
     try:
         token = await request.app.exchange_token(code)
     except aiohttp.ClientResponseError as e:
-        return response.json({"error": f"Discord Exchange Error: {e.message}"}, status=e.status)
+        raise abort(e.status, f"Discord Exchange Error: '{e.message}'")
 
     if type(token) == bytes:
         token = token.decode()

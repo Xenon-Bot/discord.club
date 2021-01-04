@@ -5,8 +5,15 @@ import hashlib
 __all__ = (
     "requires_body",
     "upload_file",
-    "single_value_form"
+    "single_value_form",
+    "RequestError"
 )
+
+
+class RequestError(Exception):
+    def __init__(self, text, status=400):
+        self.text = text
+        self.status = status
 
 
 def requires_body(*fields, **typed_fields):

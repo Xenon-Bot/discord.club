@@ -133,6 +133,42 @@ class Api {
     getShare(id) {
         return this.request('GET', `/messages/share/${id}`)
     }
+
+    getIntegrations() {
+        return this.request('GET', '/integrations')
+    }
+
+    getIntegration(id) {
+        return this.request('GET', `/integrations/${id}`)
+    }
+
+    deleteIntegration(id) {
+        return this.request('DELETE', `/integrations/${id}`)
+    }
+
+    createIntegration(data) {
+        return this.request('POST', '/integrations', data)
+    }
+
+    editIntegration(id, data) {
+        return this.request('PATCH', `/integrations/${id}`, data)
+    }
+
+    getTriggers() {
+        return this.request('GET', '/triggers')
+    }
+
+    getTrigger(id) {
+        return this.request('GET', `/triggers/${id}`)
+    }
+
+    createTrigger(data) {
+        return this.request('POST', '/triggers', data)
+    }
+
+    editTrigger(id, data) {
+        return this.request('PATCH', `/triggers/${id}`, data)
+    }
 }
 
 

@@ -1,9 +1,9 @@
 <template>
     <div>
         <login-prompt v-if="!api.isAuthenticated()"/>
-        <div v-else>
-            <h1>Coming Soon</h1>
-        </div>
+        <transition name="fade">
+            <router-view/>
+        </transition>
     </div>
 </template>
 
