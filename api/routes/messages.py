@@ -89,8 +89,7 @@ async def delete_message(request, user_id, msg_id):
 
 @bp.get("/<msg_id>")
 @requires_token
-@ratelimit(limit=5, seconds=5)
-# @cache_response(seconds=30)
+@cache_response(seconds=5)
 async def get_message(request, user_id, msg_id):
     try:
         msg_id = bson.ObjectId(msg_id)
@@ -111,7 +110,6 @@ async def get_message(request, user_id, msg_id):
 @bp.get("/files/<file_id>")
 @requires_token
 @ratelimit(limit=5, seconds=5)
-# @cache_response(seconds=60)
 async def get_file(request, user_id, file_id):
     try:
         file_id = bson.ObjectId(file_id)
@@ -137,8 +135,7 @@ async def get_file(request, user_id, file_id):
 
 @bp.get("/")
 @requires_token
-@ratelimit(limit=5, seconds=5)
-# @cache_response(seconds=30)
+@cache_response(seconds=5)
 async def get_messages(request, user_id):
     messages = []
     async for msg in request.app.db.messages.find({"user_id": user_id}, sort=[("last_updated", pymongo.DESCENDING)]):
@@ -165,7 +162,7 @@ async def create_share(request, payload):
 
 
 @bp.get("/share/<share_id>")
-@ratelimit(limit=5, seconds=5, level=RequestBucket.IP)
+@cache_response(level=RequestBucket.GLOBAL, seconds=5)
 async def get_share(request, share_id):
     raw_share = await request.app.redis.get(f"share:{share_id}")
     if raw_share is None:

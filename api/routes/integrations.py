@@ -62,21 +62,20 @@ async def create_integration(request, user_id, payload):
 
 @bp.get("/")
 @requires_token
-@ratelimit(limit=5, seconds=5)
+@cache_response(seconds=5)
 async def get_integrations(request, user_id):
     result = []
     async for integration in request.app.db.integrations.find({"user_id": user_id}):
-        result.append({
-            "id": str(integration.pop("_id")),
-            **integration
-        })
+        del integration["user_id"]
+        integration["values"].pop("bot_token", None)
+        result.append(json_ready(integration))
 
     return response.json(result)
 
 
 @bp.get("/<integration_id>")
 @requires_token
-@ratelimit(limit=5, seconds=5)
+@cache_response(seconds=5)
 async def get_integration(request, user_id, integration_id):
     try:
         integration_id = bson.ObjectId(integration_id)
@@ -87,10 +86,9 @@ async def get_integration(request, user_id, integration_id):
     if integration is None:
         raise abort(404, "Unknown integration")
 
-    integration["id"] = str(integration.pop("_id"))
     del integration["user_id"]
-    print(integration)
-    return response.json(integration)
+    integration["values"].pop("bot_token", None)
+    return response.json(json_ready(integration))
 
 
 @bp.patch("/<integration_id>")
