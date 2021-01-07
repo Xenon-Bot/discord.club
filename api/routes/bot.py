@@ -18,6 +18,8 @@ http = None
 redis = None
 db = None
 
+Format.ERROR.footer = "[Support](https://discord.club/discord) | [FAQ](https://discord.club/faq)"
+
 bp = Blueprint(name="api.bot", url_prefix="/entry")
 
 
@@ -66,6 +68,8 @@ async def website(ctx):
         )
     )
 )
+@has_permissions("manage_webhooks")
+@bot_has_permissions("manage_webhooks")
 @checks.cooldown(1, 3)
 async def webhook(ctx, channel: dc.CommandOptionType.CHANNEL = None):
     """
