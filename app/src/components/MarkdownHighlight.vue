@@ -19,7 +19,7 @@
                 if (!this.partial) {
                     text = text
                         .replace(/```(\S+\n|\n)?([\s\S]+?)\n?```/g, `<span class="highlight-code">$2</span>`)
-                        .replace(/\[([\w\s\d]+)\]\((https?:\/\/[\w\d_\-./?=#&]+)\)/g, `<a class="highlight-link" href="$2" target="_blank">$1</a>`)
+                        .replace(/\[(.+)\]\((https?:\/\/[\w\d_\-./?=#&]+)\)/g, `<a class="highlight-link" href="$2" target="_blank">$1</a>`)
                         .replace(/(\s)(&lt;)?(https?:\/\/[\w\d_\-./?=#&]+)(&gt;)?(\s)/g, `<a class="highlight-link" href="$3" target="_blank">$1$3$5</a>`)
                         .replace(/(&lt;(?:@|@!|@&amp;|#)[0-9]+&gt;)/g, `<span class="highlight-mention">$1</span>`)
                         .replace(/(@everyone|@here)/g, `<span class="highlight-mention">$1</span>`)
