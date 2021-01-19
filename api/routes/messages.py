@@ -19,6 +19,10 @@ bp = Blueprint(name="api.messages", url_prefix="/messages")
 @requires_token
 @ratelimit(limit=2, seconds=5)
 async def save_message(request, user_id):
+    message_count = await request.app.db.messages.count_documents({"user_id": user_id})
+    if message_count >= 20:
+        return response.json({"error": "You can't save more than 20 messages"}, status=400)
+
     data = single_value_form(request.form)
     if "name" not in data or "json" not in data:
         return response.json({}, status=400)
