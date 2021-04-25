@@ -24,7 +24,7 @@
                                     </span>
                                 </label>
                                 <input v-model.trim.lazy="webhookAvatarUrl" type="url" class="form-control"
-                                       placeholder="https://i.imgur.com/yed5Zfk.png">
+                                       placeholder="https://example.com/banner.png">
                             </div>
                             <div class="col-12 mb-4">
                                 <label>Content</label>
@@ -104,7 +104,7 @@
                                     </span>
                                         </label>
                                         <input v-model.trim.lazy="embed.authorIconUrl" type="url" class="form-control"
-                                               placeholder="https://i.imgur.com/yed5Zfk.png">
+                                               placeholder="https://example.com/banner.png">
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -143,7 +143,7 @@
                                         </span>
                                         </label>
                                         <input v-model.trim.lazy="embed.imageUrl" type="url" class="form-control"
-                                               placeholder="https://i.imgur.com/yed5Zfk.png">
+                                               placeholder="https://example.com/banner.png">
                                     </div>
                                     <div class="col-12 col-lg-6 mb-4">
                                         <label>Thumbnail URL
@@ -156,7 +156,7 @@
                                         </span>
                                         </label>
                                         <input v-model.trim.lazy="embed.thumbnailUrl" type="url" class="form-control"
-                                               placeholder="https://i.imgur.com/yed5Zfk.png">
+                                               placeholder="https://example.com/banner.png">
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -192,7 +192,7 @@
                                         </span>
                                         </label>
                                         <input v-model.trim.lazy="embed.footerIconUrl" type="url" class="form-control"
-                                               placeholder="https://i.imgur.com/yed5Zfk.png">
+                                               placeholder="https://example.com/banner.png">
                                     </div>
                                 </div>
                                 <h5>Fields <span class="text-muted ml-2 char-counter">{{ embed.fields ? embed.fields.length : 0 }} / 25</span>
