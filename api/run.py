@@ -1,5 +1,5 @@
 from sanic import Sanic, response
-from sanic.exceptions import SanicException, MethodNotSupported
+from sanic.exceptions import SanicException, MethodNotSupported, NotFound
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorGridFSBucket
 import aiohttp
 import aioredis
@@ -24,7 +24,7 @@ async def multi_middleware(_, response):
 
 
 async def error_handler(request, e):
-    if isinstance(e, MethodNotSupported) and request.method == "OPTIONS":
+    if (isinstance(e, MethodNotSupported) or isinstance(e, NotFound)) and request.method == "OPTIONS":
         return response.HTTPResponse(headers=CORS_HEADERS)
 
     return response.json({"error": str(e)}, status=e.status_code)
