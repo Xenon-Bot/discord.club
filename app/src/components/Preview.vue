@@ -61,7 +61,8 @@
                     <div class="embed" v-bind:style="{borderColor: '#' + embed.color.toString(16)}">
                         <div class="embed-body">
                             <div class="author" v-if="embed.author && embed.author.name">
-                                <img v-if="applyProxy(embed.author.icon_url)" v-bind:src="embed.author.icon_url" alt="Icon"
+                                <img v-if="applyProxy(embed.author.icon_url)" v-bind:src="embed.author.icon_url"
+                                     alt="Icon"
                                      class="author-icon">
                                 <a v-if="embed.author.url" v-bind:href="embed.author.url" class="author-name"
                                    target="_blank">{{ embed.author.name }}</a>
@@ -94,11 +95,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <img v-if="embed.image && embed.image.url" v-bind:src="applyProxy(embed.image.url)" alt="image"
+                            <img v-if="embed.image && embed.image.url" v-bind:src="applyProxy(embed.image.url)"
+                                 alt="image"
                                  class="image">
                             <div class="footer"
                                  v-if="embed.timestamp || (embed.footer && (embed.footer.text || embed.footer.icon_url))">
-                                <img v-if="embed.footer.icon_url" v-bind:src="applyProxy(embed.footer.icon_url)" alt="Icon"
+                                <img v-if="embed.footer.icon_url" v-bind:src="applyProxy(embed.footer.icon_url)"
+                                     alt="Icon"
                                      class="footer-icon">
                                 <span class="footer-text">
                             {{embed.footer.text}}
@@ -113,6 +116,19 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div v-for="(row, r) in json.components" :key="r" class="buttons">
+                    <a v-for="(button, b) in row.components" :key="b" class="button" :href="button.url" target="_blank">
+                        <div class="button-content">
+                            <div class="button-label">{{button.label}}</div>
+                            <svg class="button-icon" aria-hidden="false" width="16" height="16" viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                      d="M10 5V3H5.375C4.06519 3 3 4.06519 3 5.375V18.625C3 19.936 4.06519 21 5.375 21H18.625C19.936 21 21 19.936 21 18.625V14H19V19H5V5H10Z"></path>
+                                <path fill="currentColor"
+                                      d="M21 2.99902H14V4.99902H17.586L9.29297 13.292L10.707 14.706L19 6.41302V9.99902H21V2.99902Z"></path>
+                            </svg>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -489,6 +505,58 @@
                         fill: currentcolor;
                     }
                 }
+            }
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+
+            .button {
+                display: flex;
+                background-color: #4f545c;
+                cursor: pointer;
+                margin: 5px 8px 5px 0;
+                width: auto;
+                height: 32px;
+                min-width: 32px;
+                min-height: 32px;
+                box-sizing: border-box;
+                border: none;
+                border-radius: 3px;
+                font-size: 14px;
+                font-weight: 500;
+                line-height: 16px;
+                padding: 2px 16px;
+                position: relative;
+                color: white;
+
+                .button-content {
+                    margin: 0 auto;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    outline: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    min-width: 32px;
+                    flex-direction: row;
+
+                    .button-label {
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        flex-shrink: 1;
+                    }
+
+                    .button-icon {
+                        margin-left: 8px;
+                    }
+                }
+            }
+
+            .button:hover {
+                text-decoration: none;
             }
         }
     }
