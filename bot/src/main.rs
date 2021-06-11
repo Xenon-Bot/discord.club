@@ -125,8 +125,8 @@ async fn handle_command(http: HttpClient, msg: Box<MessageCreate>) -> Result<(),
         "embed" => Some(String::from("embed")),
         "edit" =>  Some(String::from("edit")),
         "json" => Some(String::from("json")),
-        "webhook" => Some(String::from("json")),
-        "format" => Some(String::from("json")),
+        "webhook" => Some(String::from("webhook")),
+        "format" => Some(String::from("format")),
         "help" => Some(String::from("help")),
         _ => None
     };
