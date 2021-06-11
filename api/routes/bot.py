@@ -1,21 +1,16 @@
-import dc_interactions as dc
-from xenon import rest
-from xenon.cmd import *
+from dbots.cmd import *
+from dbots import rest, WebhookType
 from sanic import Blueprint
 from os import environ as env
 import re
 import json
 import uuid
-import asyncio
 
-bot = dc.InteractionBot(
+bot = InteractionBot(
     token=env["BOT_TOKEN"],
     public_key=env["BOT_PUBLIC_KEY"],
     guild_id=env.get("BOT_GUILD_ID"),
-    ctx_klass=CustomContext
 )
-http = None
-redis = None
 db = None
 
 Format.ERROR.footer = "[Support](https://discord.club/discord) | [FAQ](https://discord.club/faq)"
@@ -26,6 +21,22 @@ bp = Blueprint(name="api.bot", url_prefix="/entry")
 @bp.post("/")
 async def bot_entry(req):
     return await bot.sanic_entry(req)
+
+
+@bot.command()
+async def help(ctx):
+    """
+    Information about Embed Generator and discord.club
+    """
+    await ctx.respond(
+        "**The best way to generate embeds and improve the look of your discord server!**\n​",
+        components=[ActionRow(
+            Button(label="Website", url="https://discord.club", style=ButtonStyle.LINK),
+            Button(label="Invite", url="https://discord.club/invite", style=ButtonStyle.LINK),
+            Button(label="Support Discord", url="https://discord.club/discord", style=ButtonStyle.LINK)
+        )],
+        ephemeral=True
+    )
 
 
 @bot.command()
@@ -70,32 +81,32 @@ async def website(ctx):
 )
 @has_permissions("manage_webhooks")
 @bot_has_permissions("manage_webhooks")
-@checks.cooldown(1, 3)
-async def webhook(ctx, channel: dc.CommandOptionType.CHANNEL = None):
+@cooldown(1, 3)
+async def webhook(ctx, channel: CommandOptionType.CHANNEL = None):
     """
     Get a valid webhook URL for this or another channel
     """
     channel_id = channel or ctx.channel_id
     try:
-        channel = await http.get_channel(channel_id)
+        channel = await ctx.bot.http.get_channel(channel_id)
     except rest.HTTPNotFound:
-        await ctx.respond_with_source(**create_message(
+        await ctx.respond(**create_message(
             "Unknown channel",
             f=Format.ERROR
         ))
         return
 
-    webhooks = await http.get_channel_webhooks(channel)
+    webhooks = await ctx.bot.http.get_channel_webhooks(channel)
     if len(webhooks) > 0:
-        await ctx.respond_with_source(**create_message(
+        await ctx.respond(**create_message(
             f"<{webhooks[0].url}>",
             title="Existing Webhook",
             f=Format.SUCCESS
         ))
         return
 
-    webhook = await http.create_webhook(channel, name="discord.club")
-    await ctx.respond_with_source(**create_message(
+    webhook = await ctx.bot.http.create_webhook(channel, name="discord.club")
+    await ctx.respond(**create_message(
         f"<{webhook.url}>",
         title="New Webhook",
         f=Format.SUCCESS
@@ -113,7 +124,7 @@ async def _get_message(ctx, message):
         message_id = url_match.group(4)
 
     try:
-        msg = await http.get_channel_message(channel_id, message_id)
+        msg = await ctx.bot.http.get_channel_message(channel_id, message_id)
     except rest.HTTPNotFound:
         return None, None
 
@@ -132,7 +143,7 @@ def _message_to_json(msg):
 
 async def _create_share_link(data):
     share_id = uuid.uuid4().hex[:8]
-    await redis.setex(f"share:{share_id}", 60 * 60 * 24, json.dumps(data))
+    await bot.redis.setex(f"share:{share_id}", 60 * 60 * 24, json.dumps(data))
     return f"https://discord.club/share/{share_id}"
 
 
@@ -149,30 +160,24 @@ async def _json(ctx, message):
     """
     Get the json code for an existing message
     """
-    await ctx.ack_with_source()
-    await asyncio.sleep(0.2)
-
     channel_id, msg = await _get_message(ctx, message)
     if msg is None:
-        await ctx.respond_with_source(**create_message(
+        await ctx.respond(**create_message(
             f"**Unknown message**. The message must be in a channel that belongs to this server.",
             f=Format.ERROR
         ))
         return
 
-    await ctx.ack_with_source()
-    await asyncio.sleep(0.2)
-
     msg_data = _message_to_json(msg)
     try:
-        await ctx.respond_with_source(embeds=[dict(
+        await ctx.respond(embeds=[dict(
             title="JSON Code",
             color=Format.INFO.color,
             description=f"```js\n{json.dumps(msg_data)}\n```"
         )])
     except:
         share_link = await _create_share_link({"json": msg_data})
-        await ctx.respond_with_source(**create_message(
+        await ctx.respond(**create_message(
             f"The message is too big to send here. You can edit it using this link: {share_link}",
             title="Edit Message",
             f=Format.INFO
@@ -193,12 +198,9 @@ async def edit(ctx, message):
     """
     Get an existing message directly into the editor
     """
-    await ctx.ack_with_source()
-    await asyncio.sleep(0.2)
-
     channel_id, msg = await _get_message(ctx, message)
     if msg is None:
-        await ctx.respond_with_source(**create_message(
+        await ctx.respond(**create_message(
             f"**Unknown message**. The message must be in a channel that belongs to this server.",
             f=Format.ERROR
         ))
@@ -207,7 +209,7 @@ async def edit(ctx, message):
     message_url = None
     webhook_url = None
     if msg.webhook_id is not None:
-        webhooks = await http.get_channel_webhooks(channel_id)
+        webhooks = await ctx.bot.http.get_channel_webhooks(channel_id)
         for webhook in webhooks:
             if webhook.id == msg.webhook_id:
                 webhook_url = webhook.url
@@ -219,7 +221,7 @@ async def edit(ctx, message):
         "message_url": message_url,
         "webhook_url": webhook_url
     })
-    await ctx.respond_with_source(**create_message(
+    await ctx.respond(**create_message(
         f"You can edit it using this link: {share_link}",
         title="Edit Message",
         f=Format.INFO
@@ -232,68 +234,11 @@ async def format(ctx, text):
     Format the given text as the API format (emojis & mentions)
     """
     text = text.replace(">", "\u200b>")
-    await ctx.respond_with_source(**create_message(
+    await ctx.respond(**create_message(
         f"```{text}```",
         title="API Format",
         f=Format.INFO
     ))
-
-
-@bot.command(
-    extends=dict(
-        title=dict(
-            description="The title for the mini embed"
-        ),
-        description=dict(
-            description="The description for the mini embed"
-        ),
-        url=dict(
-            description="The url to redirect to when clicking on the mini embed"
-        ),
-        site_name=dict(
-            description="The site name to display above the title"
-        ),
-        hex_color=dict(
-            description="The color for the embed (e.g. #32a852)"
-        ),
-        image_url=dict(
-            description="The URL to the image to display inside the embed"
-        ),
-        video_url=dict(
-            description="The URL to the video to display inside the embed"
-        )
-    )
-)
-@checks.cooldown(1, 5)
-async def mini(ctx, title, description, url=None, site_name=None, hex_color=None, image_url=None, video_url=None):
-    """
-    Create a mini embed that you can use everywhere
-    """
-    await ctx.ack_with_source()
-    await asyncio.sleep(0.2)
-
-    data = {
-        "title": title,
-        "description": description,
-        "url": url,
-        "color": hex_color,
-        "site_name": site_name,
-        "image": image_url,
-        "video": video_url
-    }
-    async with ctx.bot.session.post("https://embed.gg", json=data) as resp:
-        if resp.status != 200:
-            await ctx.respond_with_source(**create_message(
-                f"Failed to create a mini embed, try to use [embed.gg](https://embed.gg) instead.",
-                f=Format.ERROR
-            ))
-
-        result = await resp.json()
-        await ctx.respond_with_source(**create_message(
-            f"Successfully **created mini embed**. You can use it by sending this link into the discord chat:\n"
-            f"<https://embed.gg/{result['id']}>",
-            f=Format.SUCCESS
-        ))
 
 
 @bot.command(
@@ -322,9 +267,6 @@ async def embed(ctx, title, description, url=None, hex_color=None, image_url=Non
     """
     Create a simple embed and send them under your name
     """
-    await ctx.ack_with_source()
-    await asyncio.sleep(0.2)
-
     color = None
     if hex_color:
         hex_color = hex_color.strip("#")
@@ -333,15 +275,15 @@ async def embed(ctx, title, description, url=None, hex_color=None, image_url=Non
         except ValueError:
             pass
 
-    await ctx.ack()
-    webhooks = await http.get_channel_webhooks(ctx.channel_id)
-    if len(webhooks) == 0:
-        webhook = await http.create_webhook(ctx.channel_id, name="discord.club")
+    webhooks = await ctx.bot.http.get_channel_webhooks(ctx.channel_id)
+    available_webhooks = [w for w in webhooks if w.type == WebhookType.INCOMING]
+    if len(available_webhooks) == 0:
+        webhook = await ctx.bot.http.create_webhook(ctx.channel_id, name="discord.club")
 
     else:
-        webhook = webhooks[0]
+        webhook = available_webhooks[0]
 
-    await http.execute_webhook(
+    await ctx.bot.http.create_webhook_message(
         webhook,
         username=ctx.author.name,
         avatar_url=str(ctx.author.avatar_url),
@@ -353,21 +295,13 @@ async def embed(ctx, title, description, url=None, hex_color=None, image_url=Non
             "image": {"url": image_url}
         }]
     )
+    await ctx.respond("There is your embed!", ephemeral=True)
 
 
 async def setup(app):
-    global http
-    global redis
     global db
-    redis = app.redis
-    ratelimits = rest.RedisRatelimitHandler(redis)
-    http = rest.HTTPClient(env["BOT_TOKEN"], ratelimits)
-    db = app.db
+    await bot.setup("redis://localhost")
 
-    await bot.session.close()
-    bot.session = app.session
-    bot.http = http
-    bot.redis = redis
-    await bot.prepare()
+    db = app.db
     # await bot.flush_commands()
-    await bot.push_commands()
+    # await bot.push_commands()
