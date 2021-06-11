@@ -128,7 +128,10 @@
                                     <div class="col-12 col-lg-6 mb-4">
                                         <label>Color</label>
                                         <!-- TODO: Replace with third-party color picker -->
-                                        <input v-model="embed.color" type="color" class="form-control">
+                                        <div class="input-group">
+                                            <input v-model="embed.color" type="color" class="form-control">
+                                            <input type="text" v-model.trim="embed.color" class="form-control">
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-row">
