@@ -526,12 +526,12 @@
                 },
                 {
                     title: 'Hoe bewerk ik een bestaand bericht?',
-                    text: `Om een bestaand bericht te bewerken heb je de URL en ID van het bericht nodig, zowel als de
+                    text: `Om een bestaand bericht te bewerken heb je de URL (link) en ID van het bericht nodig, zowel als de
                                 URL (link) van de webhook die gebruikt was om het bericht te creeëren. Als het bericht
-                                niet verstuurd was via een webhook of de webhook die hiervoor gebruikt was verwijderd is
+                                niet verstuurd was via een webhook of de webhook die hiervoor gebruikt was verwijderd is,
                                 is er geen manier meer om het bericht aan te passen. Je kan de webhook URL (link) verkrijgen
-                                door of naar de kanaal instellingen te gaan en deze hier kopieëren, of door met je rechter
-                                muisknop op het bericht te klikken (hier opent dan een 'context menu') en hierna op
+                                door of naar de kanaal instellingen te gaan en deze hier te kopieëren, of door met je rechtermuisknop 
+                                op het bericht te klikken (hier opent dan een 'context menu') en hierna op
                                 <code>kopieer berichtenlink</code> te klikken. 
                                 <img src="/img/faq/get_message_url.png" alt="Get message URL" class="faq-image">
                                 Je kan ook <a href="/invite" target="_blank">deze bot inviten</a> en de
@@ -561,7 +561,7 @@
                                 de gegeven tekst.
                                 <img src="/img/faq/api_format_cmd.png" alt="API format cmd" class="faq-image">
                                 Bedenk wel dat de <code>@everyone</code> rol de "Externe emoji gebruiken" permissie nodig heeft
-                                als je een emoij van een andere server wilt gebruiken in een webhook bericht.`
+                                als je een emoji van een andere server wilt gebruiken in een webhook bericht.`
                 },
                 {
                     title: 'Zijn er andere manieren om mijn bericht een andere style (markdown) te geven?',
