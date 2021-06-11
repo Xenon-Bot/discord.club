@@ -9,6 +9,11 @@
                     </div>
                 </div>
             </template>
+            <template v-slot:save>
+                <button class="btn btn-outline-secondary" v-on:click="onSave" type="button">
+                    Save Message
+                </button>
+            </template>
         </editor>
         <div class="modal fade" id="saveModal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
@@ -56,7 +61,7 @@
             return {
                 saveName: "",
                 initData: null,
-                lastData: null
+                lastData: {}
             }
         },
         methods: {

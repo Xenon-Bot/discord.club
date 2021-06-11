@@ -276,10 +276,7 @@
                             <button class="btn btn-outline-light mr-2" v-on:click="exportJSON" type="button">
                                 Download
                             </button>
-                            <button class="btn btn-outline-secondary" v-on:click="$emit('save', fullData)"
-                                    :class="{disabled: jsonIsEmpty}" :disabled="jsonIsEmpty" type="button">
-                                Save Message
-                            </button>
+                            <slot name="save"/>
                         </div>
                     </div>
                 </div>
@@ -302,7 +299,7 @@
                         <a :href="lastShareLink" target="_blank">{{lastShareLink}}</a>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" v-on:click="copySaveLink">Copy Link</button>
+                        <button type="button" class="btn btn-primary" v-on:click="copyShareLink">Copy Link</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -342,6 +339,7 @@
             if (this.initData) {
                 this.fullData = this.initData
             }
+            this.$emit('dataUpdate', this.fullData)
         },
         mounted() {
             const shareid = this.$route.query.share
@@ -586,7 +584,7 @@
                         $('#shareModal').modal()
                     })
             },
-            copySaveLink() {
+            copyShareLink() {
                 navigator.clipboard.writeText(this.lastShareLink)
             }
         },
