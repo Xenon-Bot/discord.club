@@ -511,6 +511,124 @@
                 }
             ]
         },
+        nl: {
+            author: 'Mark',
+            questions: [
+                {
+                    title: 'Hoe creeër je een webhook?',
+                    text: `Je hebt een webhook URL nodig om een bericht te versturen. Als je de desktop of web versie van Discord gebruikt
+                                kun je naar de kanaal instellingen gaan en daar een webhook creeëren.
+                                <img src="/img/faq/create_webhook_desktop.png" alt="Create a webhook desktop" class="faq-image">
+                                Als je de mobiele app gebruikt kun je
+                                <a href="/invite" target="_blank">deze bot inviten</a> en de <code>&gt;webhook</code>
+                                commando gebruiken om een geldige webhook link te krijgen voor het kanaal.
+                                <img src="/img/faq/create_webhook_mobile.png" alt="Create a webhook mobile" class="faq-image">`
+                },
+                {
+                    title: 'Hoe bewerk ik een bestaand bericht?',
+                    text: `Om een bestaand bericht te bewerken heb je de URL (link) en ID van het bericht nodig, zowel als de
+                                URL (link) van de webhook die gebruikt was om het bericht te creeëren. Als het bericht
+                                niet verstuurd was via een webhook of de webhook die hiervoor gebruikt was verwijderd is,
+                                is er geen manier meer om het bericht aan te passen. Je kan de webhook URL (link) verkrijgen
+                                door of naar de kanaal instellingen te gaan en deze hier te kopieëren, of door met je rechtermuisknop 
+                                op het bericht te klikken (hier opent dan een 'context menu') en hierna op
+                                <code>kopieer berichtenlink</code> te klikken. 
+                                <img src="/img/faq/get_message_url.png" alt="Get message URL" class="faq-image">
+                                Je kan ook <a href="/invite" target="_blank">deze bot inviten</a> en de
+                                <code>&gt;edit &lt;message-url-or-id&gt;</code> commando gebruiken om een ingevulde URL (link) terug
+                                te krijgen met de webhook en bericht URL (link).
+                                <img src="/img/faq/edit_message_cmd.png" alt="Edit message cmd" class="faq-image">`,
+                },
+                {
+                    title: 'Hoe vermeld ik een gebruiker, kanaal of role?',
+                    text: `Om een gebruiker, kanaal of role te vermelden moet je het volgende
+                                <a href="https://discord.com/developers/docs/reference#message-formatting">API format</a> gebruiken.
+                                Klik <a href="https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID">hier</a>
+                                om te zien hoe je het ID van een bericht kan vinden. <br>
+                                Je kan ook <a href="/invite" target="_blank">deze bot inviten</a> en de
+                                <code>&gt;format &lt;text&gt;</code> commando gebruiken om het goede API format te krijgen voor de
+                                gegeven text.
+                                <img src="/img/faq/api_format_cmd.png" alt="API format cmd" class="faq-image">`,
+                },
+                {
+                    title: 'Hoe gebruik ik een aangepaste emoji?',
+                    text: `Om een aangepaste emoji te gebruiken moet je het volgende
+                                <a href="https://discord.com/developers/docs/reference#message-formatting">API format</a> gebruiken.
+                                Je kan de correcte format krijgen door een backslash (terugstreep) (<code>\\</code>) 
+                                voor een emoji in Discord te doen. <br>
+                                Je kan ook <a href="/invite" target="_blank">deze bot inviten</a> en de
+                                <code>&gt;format &lt;text&gt;</code> commando gebruiken om het goede API format te krijgen voor
+                                de gegeven tekst.
+                                <img src="/img/faq/api_format_cmd.png" alt="API format cmd" class="faq-image">
+                                Bedenk wel dat de <code>@everyone</code> rol de "Externe emoji gebruiken" permissie nodig heeft
+                                als je een emoji van een andere server wilt gebruiken in een webhook bericht.`
+                },
+                {
+                    title: 'Zijn er andere manieren om mijn bericht een andere style (markdown) te geven?',
+                    text: `Discord ondersteund een gelimiteerd aantal styling opties (markdown) in ingesloten links (embeds) en webhook berichten.
+                                Styling opties (markdown) worden alleen ondersteund in berichtinhoud, embed beschrijving (description) en in embed velden (field values).
+                                <div class="faq-table mt-3 rounded">
+                                <table class="table table-dark">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Style</th>
+                                            <th>Resultaat</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <td>Vetgedrukt</td>
+                                        <td><code>**tekst**</code></td>
+                                        <td><b>tekst</b></td>
+                                    </tbody>
+                                    <tbody>
+                                        <td>Cursief (schuingedrukt)</td>
+                                        <td><code>*tekst*</code></td>
+                                        <td><i>tekst</i></td>
+                                    </tbody>
+                                    <tbody>
+                                        <td>Onderstrepen</td>
+                                        <td><code>__tekst__</code></td>
+                                        <td><u>tekst</u></td>
+                                    </tbody>
+                                    <tbody>
+                                        <td>Doorgehaald</td>
+                                        <td><code>~~tekst~~</code></td>
+                                        <td><strike>tekst</strike></td>
+                                    </tbody>
+                                    <tbody>
+                                        <td>Hyperlink (koppeling)</td>
+                                        <td><code>[Xenon Bot](https://xenon.bot)</code></td>
+                                        <td><a href="https://xenon.bot" target="_blank">Xenon Bot</a></td>
+                                    </tbody>
+                                    <tbody>
+                                        <td>Vermijd ingesloten links (embed)</td>
+                                        <td><code>&lt;https://xenon.bot&gt;</code></td>
+                                        <td>De ingesloten link (berichtinhoud) wordt niet weergeven door Discord</td>
+                                    </tbody>
+                                </table>
+                                </div>
+                                Je kan ook meerdere stylen combineren: <code>**tekst**</code> zal als resultaat <b><u>text</u></b> geven.`
+                },
+                {
+                    title: 'Hoe sla ik een bericht op?',
+                    text: `Je moet inloggen via Discord om berichten op te slaan op de server. <br>
+                                In de "Quick Message" sectie, klik op "Save Message" onder de JSON-code en klik op het Discord
+                                icoon als je nog niet ingelogd bent. <br>
+                                Nadat je ingelogd bent kun je op "Save Message" klikken, geef het bericht een naam en klik op "Save".
+                                Je wordt doorgestuurd naar de bewerkings pagina van het nieuwe opgeslaagde bericht.
+                                <img src="/img/faq/save_message.png" alt="Save message" class="faq-image">`
+                },
+                {
+                    title: 'Hoe bewerk en gebruik ik een opgeslagen bericht',
+                    text: `Je kan je opgeslagen berichten vinden door op "Messages" te klikken in het menu aan de linkerkant.
+                            Selecteer het bericht dat je wilt bewerken of gebruiken en klik op "View". Je opgeslagen bericht
+                            zou moeten verschijnen en je kan het nu ook bewerken. Je kan het het bewerkte bericht opslaan door op
+                            "Save Messsage" te klikken.
+                            <img src="/img/faq/edit_saved.png" alt="Edit saved message" class="faq-image"/>`
+                }
+            ]
+        },
         fr: {
             author: '',
             questions: []
