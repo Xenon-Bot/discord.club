@@ -201,8 +201,17 @@
                                     <label>Field {{ f + 1 }}</label>
                                     <span class="text-muted ml-2 char-counter">{{ field.name ? field.name.length : 0 }} / 256</span>
                                     <span class="text-muted ml-2 char-counter">{{ field.value ? field.value.length : 0 }} / 1024</span>
-                                    <span class="c-pointer float-right" v-on:click="deleteField(e, f)"><i
-                                            class="fas fa-minus"/></span>
+                                    <div class="float-right">
+                                        <span class="mr-3 c-pointer" v-if="f !== 0" v-on:click="moveFieldUp(e, f)"><i
+                                                class="fas fa-chevron-up"/></span>
+                                        <span class="mr-3 c-pointer" v-if="f !== embed.fields.length - 1"
+                                              v-on:click="moveFieldDown(e, f)"><i class="fas fa-chevron-down"/></span>
+                                        <span class="mr-3 c-pointer" v-if="embed.fields.length < 25"
+                                              v-on:click="cloneField(e, f)"><i
+                                                class="far fa-copy"/></span>
+                                        <span class="c-pointer" v-on:click="deleteField(e, f)"><i
+                                                class="fas fa-minus"/></span>
+                                    </div>
                                     <div class="form-row mb-3">
                                         <div class="col-8 col-sm-10 mb-3">
                                             <input v-model.trim="field.name" type="text" class="form-control"
@@ -221,7 +230,8 @@
                                         <div class="col-12">
                                             <textarea v-model.trim="field.value" rows="2" class="form-control"
                                                       placeholder="Value" maxlength="1024" required/>
-                                            <span v-if="(field.value ? field.value.length : 0) === 0" class="input-error">
+                                            <span v-if="(field.value ? field.value.length : 0) === 0"
+                                                  class="input-error">
                                                 The field value is required
                                             </span>
                                         </div>
@@ -469,7 +479,6 @@
                 this.embeds.splice(i, 1)
             },
             moveEmbedUp(i) {
-                console.log(i)
                 this.embeds.splice(i - 1, 0, this.embeds.splice(i, 1)[0])
             },
             moveEmbedDown(i) {
@@ -503,6 +512,24 @@
                     embed.fields.splice(i, 1)
                 }
                 this.$forceUpdate() // idk why it doesn't work without this (maybe too much nesting)
+            },
+            moveFieldUp(e, i) {
+                let embed = this.embeds[e];
+                embed.fields.splice(i - 1, 0, embed.fields.splice(i, 1)[0])
+                this.$forceUpdate()
+            },
+            moveFieldDown(e, i) {
+                let embed = this.embeds[e];
+                embed.fields.splice(i + 1, 0, embed.fields.splice(i, 1)[0])
+                this.$forceUpdate()
+            },
+            cloneField(e, i) {
+                let embed = this.embeds[e];
+                if (embed.fields.length >= 25) {
+                    return
+                }
+                embed.fields.splice(i + 1, 0, JSON.parse(JSON.stringify(embed.fields[i])))
+                this.$forceUpdate()
             },
             addFile(file) {
                 let reader = new FileReader()
