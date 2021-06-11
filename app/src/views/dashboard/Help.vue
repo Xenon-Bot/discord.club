@@ -24,6 +24,7 @@
             <!-- <img src="@/assets/locales/fr.svg" alt="French" class="locale" @click="setLocale('fr')"> -->
             <img src="@/assets/locales/ar.svg" alt="Arabic" class="locale" @click="setLocale('ar')">
             <!-- <img src="@/assets/locales/pt.svg" alt="Portuguese" class="locale" @click="setLocale('pt')"> -->
+            <img src="@/assets/locales/nl.png" alt="Dutch" class="locale" @click="setLocale('nl')">
             <h6 class="text-right mt-2">Translated by {{faq.author}}</h6>
         </span>
     </div>
@@ -681,5 +682,6 @@
         height: 2.5em;
         margin-left: 1em;
         cursor: pointer;
+        border-radius: 10px;
     }
 </style>
