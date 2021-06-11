@@ -59,7 +59,7 @@
                 <h4 class="ml-2 mb-3">Embeds <span
                         class="text-muted ml-2 char-counter h6">{{ embeds.length }} / 10</span></h4>
                 <div class="mb-5">
-                    <div v-for="(embed, e) in embeds" v-bind:key="`embed${e}`" class="card tex-light mb-3 bg-darker"
+                    <div v-for="(embed, e) in embeds" v-bind:key="`embed${e}`" class="card text-light mb-3 bg-darker"
                          v-bind:style="{borderLeft: '5px solid' + embed.color}">
                         <div class="card-body">
                             <div class="float-right" style="font-size: 1.1rem">
@@ -255,6 +255,49 @@
                         <i class="fas fa-plus"/>
                     </div>
                 </div>
+                <h4 class="ml-2 mb-3">Buttons <span
+                        class="text-muted ml-2 char-counter h6">{{ buttons.length }} / 5</span></h4>
+                <div class="mb-5">
+                    <div v-for="(button, b) in buttons" :key="b" class="card text-light mb-2 bg-darker">
+                        <div class="card-body">
+                            <div class="float-right">
+                                <span class="c-pointer" v-on:click="deleteButton(b)"><i
+                                        class="fas fa-minus"/></span>
+                            </div>
+                            <h5 class="overflow-auto text-nowrap mb-3">
+                                Button {{ b + 1 }}
+                            </h5>
+                            <div class="form-row mb-1">
+                                <div class="col-12 mb-3">
+                                    <label>Label</label>
+                                    <span class="text-muted ml-2 char-counter">{{ button.label ? button.label.length : 0 }} / 80</span>
+                                    <input v-model.trim="button.label" type="text" class="form-control"
+                                           placeholder="Doctor Who" maxlength="80">
+                                    <span v-if="(button.label ? button.label.length : 0) === 0" class="input-error">
+                                                The button label is required
+                                            </span>
+                                </div>
+                                <div class="col-12">
+                                    <label>Url</label>
+                                    <input v-model.trim="button.url" type="url" class="form-control"
+                                           placeholder="https://discord.club">
+                                    <span v-if="(button.url ? button.url.length : 0) === 0" class="input-error">
+                                                The button url is required
+                                            </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="btn btn-sm btn-outline-secondary mr-2" v-on:click="clearButtons">
+                            <i class="fas fa-trash"/>
+                        </div>
+                        <div class="btn btn-sm btn-outline-primary" v-on:click="addButton"
+                             v-bind:class="{disabled: buttons.length >= 5}">
+                            <i class="fas fa-plus"/>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-12 col-xl-6">
                 <h4 class="ml-2 mb-3">Preview</h4>
@@ -330,6 +373,8 @@
                 tts: undefined,
                 files: [],
                 embeds: [],
+                buttons: [],
+
                 jsonError: "",
 
                 lastShareId: ""
@@ -400,17 +445,34 @@
                     });
                 }
 
+                let components = []
+                let buttons = []
+                for (let button of this.buttons) {
+                    buttons.push({
+                        type: 2,
+                        style: 5,
+                        label: button.label,
+                        url: button.url
+                    })
+                }
+
+                if (buttons.length > 0) {
+                    components.push({type: 1, components: buttons})
+                }
+
                 const data = {
                     username: this.webhookUsername,
                     avatar_url: this.webhookAvatarUrl,
                     content: formatFix(this.content),
                     tts: this.tts,
-                    embeds: embeds
+                    embeds: embeds,
+                    components: components
                 }
                 return data
             },
             setJSON(data) {
                 let embeds = []
+                let buttons = []
 
                 // Legacy support
                 if (data.embed) {
@@ -456,10 +518,23 @@
                     }
                 }
 
+                if (data.components && data.components.length > 0) {
+                    let row = data.components[0]
+                    if (row && row.components) {
+                        for (let button of row.components) {
+                            buttons.push({
+                                label: button.label,
+                                url: button.url
+                            })
+                        }
+                    }
+                }
+
                 this.webhookUsername = data.username;
                 this.webhookAvatarUrl = data.avatar_url;
                 this.content = data.content;
                 this.embeds = embeds;
+                this.buttons = buttons
             },
             addEmbed() {
                 if (this.embeds.length >= 10) {
@@ -566,6 +641,16 @@
             },
             clearFiles() {
                 this.files = []
+            },
+            addButton() {
+                if (this.buttons.length >= 5) return
+                this.buttons.push({})
+            },
+            clearButtons() {
+                this.buttons.splice(0, this.buttons.length)
+            },
+            deleteButton(b) {
+                this.buttons.splice(b, 1)
             },
             exportJSON() {
                 let element = document.createElement('a');
