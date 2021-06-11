@@ -272,22 +272,28 @@ async def mini(ctx, title, description, url=None, site_name=None, hex_color=None
     await ctx.ack_with_source()
     await asyncio.sleep(0.2)
 
-    mini_id = uuid.uuid4().hex[:8]
-    await db.minis.insert_one({
-        "_id": mini_id,
+    data = {
         "title": title,
         "description": description,
         "url": url,
-        "color": hex_color.strip("#") if hex_color else None,
+        "color": hex_color,
         "site_name": site_name,
-        "image_url": image_url,
-        "video_url": video_url
-    })
-    await ctx.respond_with_source(**create_message(
-        f"Successfully **created mini embed**. You can use it by sending this link into the discord chat:\n"
-        f"<https://embed.gg/m/{mini_id}>",
-        f=Format.SUCCESS
-    ))
+        "image": image_url,
+        "video": video_url
+    }
+    async with ctx.bot.session.post("https://embed.gg", json=data) as resp:
+        if resp.status != 200:
+            await ctx.respond_with_source(**create_message(
+                f"Failed to create a mini embed, try to use [embed.gg](https://embed.gg) instead.",
+                f=Format.ERROR
+            ))
+
+        result = await resp.json()
+        await ctx.respond_with_source(**create_message(
+            f"Successfully **created mini embed**. You can use it by sending this link into the discord chat:\n"
+            f"<https://embed.gg/{result['id']}>",
+            f=Format.SUCCESS
+        ))
 
 
 @bot.command(

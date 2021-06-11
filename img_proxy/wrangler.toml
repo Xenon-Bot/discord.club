@@ -1,6 +1,6 @@
-name = "discord_club_proxy"
+name = "discord_club_img_proxy"
 type = "javascript"
 account_id = "42459c568b12d0902eeac887235b0c41"
 workers_dev = false
-route = "proxy.discord.club/*"
+route = "img.discord.club/*"
 zone_id = "395adc5acb390afadb8494deeff28691"

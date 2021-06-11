@@ -20,7 +20,7 @@
             <img src="@/assets/locales/en.svg" alt="English" class="locale" @click="setLocale('en')">
             <img src="@/assets/locales/de.svg" alt="German" class="locale" @click="setLocale('de')">
             <img src="@/assets/locales/ru.svg" alt="Russian" class="locale" @click="setLocale('ru')">
-            <!-- <img src="@/assets/locales/es.svg" alt="Spanish" class="locale" @click="setLocale('es')"> -->
+            <img src="@/assets/locales/es.svg" alt="Spanish" class="locale" @click="setLocale('es')">
             <!-- <img src="@/assets/locales/fr.svg" alt="French" class="locale" @click="setLocale('fr')"> -->
             <img src="@/assets/locales/ar.svg" alt="Arabic" class="locale" @click="setLocale('ar')">
             <!-- <img src="@/assets/locales/pt.svg" alt="Portuguese" class="locale" @click="setLocale('pt')"> -->

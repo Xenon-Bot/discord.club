@@ -7,7 +7,7 @@ bp = Blueprint(name="api.others", url_prefix="/")
 
 
 @bp.get("/mini/<mini_id>")
-@ratelimit(limit=5, seconds=5, level=RequestBucket.IP)
+@cache_response(seconds=5)
 async def mini_embed(req, mini_id):
     mini = await req.app.db.minis.find_one({"_id": mini_id})
 
